@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "TrueRep",
+    "slug": "truerep",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "truerep",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.truerep.app",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "TrueRep uses the camera to record exercise videos for AI form feedback.",
+        "NSPhotoLibraryUsageDescription": "TrueRep accesses your photo library to upload exercise videos."
+      }
+    },
+    "android": {
+      "package": "com.truerep.app",
+      "permissions": ["CAMERA", "READ_MEDIA_VIDEO"]
+    },
+    "plugins": ["expo-router", "expo-camera", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,0 +1,188 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                       String              @id @default(cuid())
+  email                    String              @unique
+  clerk_id                 String              @unique
+  username                 String
+  avatar_url               String?
+  role                     Role                @default(USER)
+  subscription_status      SubscriptionStatus  @default(FREE)
+  subscription_id          String?
+  subscription_plan        SubscriptionPlan?
+  subscription_expires_at  DateTime?
+  xp                       Int                 @default(0)
+  streak                   Int                 @default(0)
+  streak_last_workout_date DateTime?
+  created_at               DateTime            @default(now())
+  updated_at               DateTime            @updatedAt
+
+  routines               Routine[]
+  workouts               Workout[]
+  achievements           UserAchievement[]
+  challenge_participants ChallengeParticipant[]
+  video_feedback         VideoFeedback[]
+
+  @@index([xp])
+  @@map("users")
+}
+
+model Routine {
+  id                String     @id @default(cuid())
+  trainer_id        String
+  trainer           User       @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  title             String
+  description       String     @db.Text
+  difficulty        Difficulty
+  duration_minutes  Int
+  exercises         Json // Array: [{id, name, reps/duration_seconds, technique_video_url, description}]
+  preview_video_url String?
+  is_published      Boolean    @default(false)
+  deleted_at        DateTime? // soft delete
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  workouts   Workout[]
+  challenges Challenge[]
+
+  @@index([trainer_id])
+  @@index([difficulty, is_published])
+  @@map("routines")
+}
+
+model Workout {
+  id                  String   @id @default(cuid())
+  user_id             String
+  user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  routine_id          String
+  routine             Routine  @relation(fields: [routine_id], references: [id], onDelete: Cascade)
+  completed_at        DateTime
+  duration_minutes    Int
+  exercises_completed Json // Array: [{exercise_id, reps_done, felt_like}]
+  xp_earned           Int
+  notes               String?  @db.Text
+  created_at          DateTime @default(now())
+
+  @@index([user_id, completed_at])
+  @@index([routine_id])
+  @@map("workouts")
+}
+
+model Achievement {
+  id               String               @id @default(cuid())
+  name             String
+  description      String               @db.Text
+  icon_url         String
+  unlock_condition AchievementCondition @unique
+  created_at       DateTime             @default(now())
+
+  user_achievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id             String      @id @default(cuid())
+  user_id        String
+  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  achievement_id String
+  achievement    Achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
+  unlocked_at    DateTime    @default(now())
+
+  @@unique([user_id, achievement_id])
+  @@map("user_achievements")
+}
+
+model Challenge {
+  id               String     @id @default(cuid())
+  title            String
+  description      String     @db.Text
+  routine_id       String?
+  routine          Routine?   @relation(fields: [routine_id], references: [id], onDelete: SetNull)
+  difficulty       Difficulty
+  starts_at        DateTime
+  ends_at          DateTime
+  max_participants Int?
+  xp_reward        Int
+  created_at       DateTime   @default(now())
+
+  participants ChallengeParticipant[]
+
+  @@index([starts_at, ends_at])
+  @@map("challenges")
+}
+
+model ChallengeParticipant {
+  id           String    @id @default(cuid())
+  challenge_id String
+  challenge    Challenge @relation(fields: [challenge_id], references: [id], onDelete: Cascade)
+  user_id      String
+  user         User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  joined_at    DateTime  @default(now())
+  completed_at DateTime?
+  rank         Int?
+
+  @@unique([challenge_id, user_id])
+  @@index([challenge_id, completed_at])
+  @@map("challenge_participants")
+}
+
+model VideoFeedback {
+  id              String         @id @default(cuid())
+  user_id         String
+  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  exercise_name   String
+  video_url       String
+  analysis_status AnalysisStatus @default(PENDING)
+  feedback_text   String?        @db.Text
+  created_at      DateTime       @default(now())
+  analyzed_at     DateTime?
+
+  @@index([user_id])
+  @@map("video_feedback")
+}
+
+enum Role {
+  USER
+  TRAINER
+}
+
+enum SubscriptionStatus {
+  FREE
+  ACTIVE
+  CANCELLED
+}
+
+enum SubscriptionPlan {
+  MONTHLY
+  ANNUAL
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum AchievementCondition {
+  FIRST_WORKOUT
+  STREAK_7
+  STREAK_30
+  XP_100
+  XP_500
+  COMPLETE_ROUTINE
+  CHALLENGE_WIN
+}
+
+enum AnalysisStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
