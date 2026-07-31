@@ -220,7 +220,7 @@ export function RoutineBuilder({
 
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-6 lg:flex-row">
         {/* Panel izquierdo: la rutina */}
         <div className="flex-1 space-y-4">
           <input
@@ -308,7 +308,7 @@ export function RoutineBuilder({
         </div>
 
         {/* Panel derecho: librería */}
-        <aside className="w-80 shrink-0 space-y-3 rounded-xl border border-[#ddd] bg-surface p-4">
+        <aside className="w-full space-y-3 rounded-xl border border-[#ddd] bg-surface p-4 lg:w-80 lg:shrink-0">
           <h2 className="font-semibold">Librería de ejercicios</h2>
           <input
             value={search}

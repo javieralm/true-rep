@@ -7,20 +7,27 @@ import { api } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { colors, spacing } from "@/constants/colors";
-
-interface LogResult {
-  xp_earned: number;
-  user: { xp: number; streak: number };
-  unlocked_achievements: string[];
-}
+import type { LogWorkoutResponse } from "@truerep/shared";
 
 export default function WorkoutSessionScreen() {
   const router = useRouter();
   const qc = useQueryClient();
   const { activeRoutine, startedAt, completed, toggleExercise, setWeight, reset } = useWorkoutStore();
   const [saving, setSaving] = useState(false);
+  const [result, setResult] = useState<LogWorkoutResponse | null>(null);
 
-  if (!activeRoutine) return <Text style={styles.loading}>No active workout.</Text>;
+  if (result) {
+    return <CompletionScreen result={result} onDone={() => router.back()} />;
+  }
+
+  if (!activeRoutine) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.loading}>No active workout.</Text>
+        <Button title="Back to routines" variant="outline" onPress={() => router.back()} />
+      </View>
+    );
+  }
 
   async function onFinish() {
     if (!activeRoutine || completed.length === 0) {
@@ -29,7 +36,7 @@ export default function WorkoutSessionScreen() {
     }
     setSaving(true);
     try {
-      const result = await api<LogResult>("/workouts/log", {
+      const res = await api<LogWorkoutResponse>("/workouts/log", {
         method: "POST",
         body: JSON.stringify({
           routine_id: activeRoutine.id,
@@ -40,12 +47,7 @@ export default function WorkoutSessionScreen() {
       // Un workout nuevo afecta a me, schedule, stats e historial — invalida todo
       qc.invalidateQueries();
       reset();
-      const badges = result.unlocked_achievements.length
-        ? `\n🏆 Unlocked: ${result.unlocked_achievements.join(", ")}`
-        : "";
-      Alert.alert("Workout complete!", `+${result.xp_earned} XP · 🔥 ${result.user.streak}-day streak${badges}`, [
-        { text: "Nice!", onPress: () => router.back() },
-      ]);
+      setResult(res);
     } catch (e) {
       Alert.alert("Error", e instanceof Error ? e.message : "Could not log workout");
     } finally {
@@ -92,9 +94,48 @@ export default function WorkoutSessionScreen() {
   );
 }
 
+/** Pico emocional del flujo: reemplaza el Alert.alert de sistema por una
+ * pantalla que celebra XP/racha/logros antes de volver al inicio. */
+function CompletionScreen({ result, onDone }: { result: LogWorkoutResponse; onDone: () => void }) {
+  return (
+    <View style={styles.completionContainer}>
+      <Text style={styles.completionEmoji}>🎉</Text>
+      <Text style={styles.completionTitle}>Workout complete!</Text>
+      <View style={styles.completionStatsRow}>
+        <View style={styles.completionStat}>
+          <Text style={styles.completionStatValue}>+{result.xp_earned}</Text>
+          <Text style={styles.completionStatLabel}>XP</Text>
+        </View>
+        <View style={styles.completionStat}>
+          <Text style={styles.completionStatValue}>🔥 {result.user.streak}</Text>
+          <Text style={styles.completionStatLabel}>day streak</Text>
+        </View>
+      </View>
+      {result.unlocked_achievements.length > 0 && (
+        <Card style={styles.achievementsCard}>
+          <Text style={styles.achievementsTitle}>Achievements unlocked</Text>
+          {result.unlocked_achievements.map((name) => (
+            <Text key={name} style={styles.achievementItem}>
+              🏆 {name}
+            </Text>
+          ))}
+        </Card>
+      )}
+      <Button title="Back to home" onPress={onDone} />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  loading: { padding: spacing.xl, textAlign: "center", color: colors.textMuted },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: spacing.md,
+    padding: spacing.xl,
+  },
+  loading: { textAlign: "center", color: colors.textMuted },
   title: { fontSize: 22, fontWeight: "700", color: colors.textPrimary },
   hint: { fontSize: 13, color: colors.textMuted },
   done: { borderColor: colors.success, backgroundColor: "#f0fdf4" },
@@ -112,4 +153,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.textPrimary,
   },
+  completionContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: spacing.lg,
+    padding: spacing.xl,
+    backgroundColor: colors.background,
+  },
+  completionEmoji: { fontSize: 56 },
+  completionTitle: { fontSize: 26, fontWeight: "800", color: colors.textPrimary },
+  completionStatsRow: { flexDirection: "row", gap: spacing.xl },
+  completionStat: { alignItems: "center" },
+  completionStatValue: { fontSize: 28, fontWeight: "800", color: colors.primary },
+  completionStatLabel: { fontSize: 13, color: colors.textSecondary },
+  achievementsCard: { width: "100%", gap: spacing.xs },
+  achievementsTitle: { fontSize: 14, fontWeight: "700", color: colors.textPrimary },
+  achievementItem: { fontSize: 14, color: colors.textPrimary },
 });

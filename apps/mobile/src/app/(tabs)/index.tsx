@@ -75,15 +75,57 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
 
 export default function Dashboard() {
   const router = useRouter();
-  const { data: user } = useUser();
-  const { data: routines } = useRoutines();
+  const { data: user, isLoading: isUserLoading } = useUser();
+  const { data: routines, isLoading: isRoutinesLoading } = useRoutines();
   const isPremium = user?.subscription_status === "ACTIVE" && user?.subscription_plan === "PREMIUM";
-  const { data: schedule } = useSchedule(isPremium);
+  const { data: schedule, isLoading: isScheduleLoading } = useSchedule(isPremium);
   const recommended = routines?.[0];
+
+  // Un usuario con progreso real no debe ver "0 XP" mientras carga: loading
+  // y "de verdad no tiene datos" son estados distintos, se muestran distinto.
+  if (isUserLoading) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.empty}>Loading…</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg }}>
       <Text style={styles.greeting}>Hey {user?.username ?? "athlete"} 👋</Text>
+
+      {/* Acción dominante primero: la rutina/tarea de hoy es lo que el
+          usuario vino a hacer. Las stats son contexto de apoyo, no lo primero
+          que se ve (jerarquía invertida señalada en el Design Review). */}
+      {isScheduleLoading ? (
+        <Text style={styles.empty}>Loading today&apos;s plan…</Text>
+      ) : schedule && schedule.tasks.length > 0 ? (
+        <>
+          <Text style={styles.section}>
+            Hoy · {schedule.program_name} (semana {schedule.week})
+          </Text>
+          <View style={{ gap: spacing.sm, marginBottom: spacing.lg }}>
+            {schedule.tasks.map((task, i) => (
+              <TodayTask key={i} task={task} router={router} />
+            ))}
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={styles.section}>Today&apos;s Recommendation</Text>
+          {isRoutinesLoading ? (
+            <Text style={styles.empty}>Loading routines…</Text>
+          ) : recommended ? (
+            <RoutineCard
+              routine={recommended}
+              onPress={() => router.push({ pathname: "/routine-detail", params: { id: recommended.id } })}
+            />
+          ) : (
+            <Text style={styles.empty}>No routines available yet.</Text>
+          )}
+        </>
+      )}
 
       <View style={styles.statsRow}>
         <Card style={styles.stat}>
@@ -99,37 +141,15 @@ export default function Dashboard() {
           <Text style={styles.statLabel}>Level</Text>
         </Card>
       </View>
-
-      {schedule && schedule.tasks.length > 0 && (
-        <>
-          <Text style={styles.section}>
-            Hoy · {schedule.program_name} (semana {schedule.week})
-          </Text>
-          <View style={{ gap: spacing.sm, marginBottom: spacing.xl }}>
-            {schedule.tasks.map((task, i) => (
-              <TodayTask key={i} task={task} router={router} />
-            ))}
-          </View>
-        </>
-      )}
-
-      <Text style={styles.section}>Today&apos;s Recommendation</Text>
-      {recommended ? (
-        <RoutineCard
-          routine={recommended}
-          onPress={() => router.push({ pathname: "/routine-detail", params: { id: recommended.id } })}
-        />
-      ) : (
-        <Text style={styles.empty}>No routines available yet.</Text>
-      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
+  centerContainer: { flex: 1, backgroundColor: colors.surface, justifyContent: "center", alignItems: "center" },
   greeting: { fontSize: 24, fontWeight: "700", color: colors.textPrimary, marginBottom: spacing.lg },
-  statsRow: { flexDirection: "row", gap: spacing.md, marginBottom: spacing.xl },
+  statsRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.lg },
   stat: { flex: 1, alignItems: "center" },
   statValue: { fontSize: 20, fontWeight: "700", color: colors.primary },
   statLabel: { fontSize: 12, color: colors.textSecondary, marginTop: spacing.xs },
