@@ -7,6 +7,7 @@ interface WorkoutState {
   completed: ExerciseCompleted[];
   start: (routine: Routine) => void;
   toggleExercise: (exerciseId: string, feltLike?: ExerciseCompleted["felt_like"]) => void;
+  setWeight: (exerciseId: string, weightKg: number | undefined) => void;
   reset: () => void;
 }
 
@@ -22,6 +23,13 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
       completed: exists
         ? completed.filter((c) => c.exercise_id !== exerciseId)
         : [...completed, { exercise_id: exerciseId, reps_done: 1, felt_like: feltLike }],
+    });
+  },
+  setWeight: (exerciseId, weightKg) => {
+    set({
+      completed: get().completed.map((c) =>
+        c.exercise_id === exerciseId ? { ...c, weight_kg: weightKg } : c
+      ),
     });
   },
   reset: () => set({ activeRoutine: null, startedAt: null, completed: [] }),

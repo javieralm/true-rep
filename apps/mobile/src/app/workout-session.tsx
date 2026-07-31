@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, Pressable, StyleSheet, Alert } from "react-native";
+import { ScrollView, Text, TextInput, View, Pressable, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useWorkoutStore } from "@/state/workoutStore";
@@ -17,7 +17,7 @@ interface LogResult {
 export default function WorkoutSessionScreen() {
   const router = useRouter();
   const qc = useQueryClient();
-  const { activeRoutine, startedAt, completed, toggleExercise, reset } = useWorkoutStore();
+  const { activeRoutine, startedAt, completed, toggleExercise, setWeight, reset } = useWorkoutStore();
   const [saving, setSaving] = useState(false);
 
   if (!activeRoutine) return <Text style={styles.loading}>No active workout.</Text>;
@@ -37,7 +37,8 @@ export default function WorkoutSessionScreen() {
           exercises_completed: completed,
         }),
       });
-      qc.invalidateQueries({ queryKey: ["me"] });
+      // Un workout nuevo afecta a me, schedule, stats e historial — invalida todo
+      qc.invalidateQueries();
       reset();
       const badges = result.unlocked_achievements.length
         ? `\n🏆 Unlocked: ${result.unlocked_achievements.join(", ")}`
@@ -57,7 +58,8 @@ export default function WorkoutSessionScreen() {
       <Text style={styles.title}>{activeRoutine.title}</Text>
       <Text style={styles.hint}>Tap exercises as you complete them.</Text>
       {activeRoutine.exercises.map((ex) => {
-        const done = completed.some((c) => c.exercise_id === ex.id);
+        const entry = completed.find((c) => c.exercise_id === ex.id);
+        const done = !!entry;
         return (
           <Pressable key={ex.id} onPress={() => toggleExercise(ex.id)}>
             <Card style={done ? styles.done : undefined}>
@@ -66,6 +68,21 @@ export default function WorkoutSessionScreen() {
                 {ex.name}
               </Text>
               <Text style={styles.exMeta}>{ex.reps ?? (ex.duration_seconds ? `${ex.duration_seconds}s` : "")}</Text>
+              {done && (
+                <View style={styles.weightRow}>
+                  <Text style={styles.weightLabel}>Peso (kg, opcional)</Text>
+                  <TextInput
+                    keyboardType="decimal-pad"
+                    placeholder="—"
+                    defaultValue={entry.weight_kg?.toString() ?? ""}
+                    onChangeText={(v) => {
+                      const n = parseFloat(v.replace(",", "."));
+                      setWeight(ex.id, Number.isFinite(n) && n >= 0 ? n : undefined);
+                    }}
+                    style={styles.weightInput}
+                  />
+                </View>
+              )}
             </Card>
           </Pressable>
         );
@@ -83,4 +100,16 @@ const styles = StyleSheet.create({
   done: { borderColor: colors.success, backgroundColor: "#f0fdf4" },
   exName: { fontSize: 16, fontWeight: "600", color: colors.textPrimary },
   exMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
+  weightRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginTop: spacing.sm },
+  weightLabel: { fontSize: 12, color: colors.textSecondary },
+  weightInput: {
+    minWidth: 64,
+    minHeight: 44, // accesibilidad: touch target mínimo
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: spacing.sm,
+    fontSize: 14,
+    color: colors.textPrimary,
+  },
 });
