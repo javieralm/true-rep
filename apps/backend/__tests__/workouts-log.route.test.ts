@@ -160,6 +160,33 @@ describe("POST /api/workouts/log", () => {
     expect(tx.workout.create).not.toHaveBeenCalled();
   });
 
+  it("dedupes by idempotency_key regardless of time window, when the client sends one", async () => {
+    tx.workout.findFirst.mockResolvedValue({
+      id: "w-existing",
+      user_id: "u1",
+      routine_id: "r1",
+      idempotency_key: "11111111-1111-1111-1111-111111111111",
+      completed_at: new Date("2020-01-01T00:00:00Z"), // way outside the 60s window
+    });
+    const res = await POST(req({ ...validBody, idempotency_key: "11111111-1111-1111-1111-111111111111" }));
+    const body = await res.json();
+    expect(res.status).toBe(201);
+    expect(body.data.deduped).toBe(true);
+    expect(tx.workout.findFirst).toHaveBeenCalledWith({
+      where: { user_id: "u1", idempotency_key: "11111111-1111-1111-1111-111111111111" },
+    });
+    expect(tx.workout.create).not.toHaveBeenCalled();
+  });
+
+  it("persists the idempotency_key on a new workout when the client sends one", async () => {
+    await POST(req({ ...validBody, idempotency_key: "22222222-2222-2222-2222-222222222222" }));
+    expect(tx.workout.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ idempotency_key: "22222222-2222-2222-2222-222222222222" }),
+      })
+    );
+  });
+
   it("acquires a per-user advisory lock (with a lock timeout) before the dedupe check", async () => {
     await POST(req(validBody));
     expect(tx.$executeRawUnsafe).toHaveBeenCalledTimes(1);

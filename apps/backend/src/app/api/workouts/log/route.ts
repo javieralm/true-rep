@@ -79,14 +79,21 @@ export const POST = handler(async (req: Request) => {
     // reciente que sí llegó a tiempo.
     const [{ now }] = await tx.$queryRaw<{ now: Date }[]>`SELECT now() as now`;
 
-    const recentDuplicate = await tx.workout.findFirst({
-      where: {
-        user_id: user.id,
-        routine_id: input.routine_id,
-        completed_at: { gte: new Date(now.getTime() - RETRY_DEDUPE_WINDOW_MS) },
-      },
-      orderBy: { completed_at: "desc" },
-    });
+    // Idempotencia real cuando el cliente manda una key: un reintento con la
+    // MISMA key siempre encuentra el workout ya creado, sin depender de una
+    // ventana de tiempo (que fusionaría dos workouts legítimos del mismo
+    // usuario+rutina en <60s, o dejaría pasar un reintento a los 61s).
+    // Sin key (clientes viejos): cae al dedupe por ventana de tiempo.
+    const recentDuplicate = input.idempotency_key
+      ? await tx.workout.findFirst({ where: { user_id: user.id, idempotency_key: input.idempotency_key } })
+      : await tx.workout.findFirst({
+          where: {
+            user_id: user.id,
+            routine_id: input.routine_id,
+            completed_at: { gte: new Date(now.getTime() - RETRY_DEDUPE_WINDOW_MS) },
+          },
+          orderBy: { completed_at: "desc" },
+        });
     if (recentDuplicate) {
       const currentUser = await tx.user.findUniqueOrThrow({ where: { id: user.id } });
       return { workout: recentDuplicate, updatedUser: currentUser, deduped: true };
@@ -121,6 +128,7 @@ export const POST = handler(async (req: Request) => {
         exercises_completed: input.exercises_completed,
         xp_earned: xpEarned,
         notes: input.notes,
+        idempotency_key: input.idempotency_key,
       },
     });
     const updatedUser = await tx.user.update({
