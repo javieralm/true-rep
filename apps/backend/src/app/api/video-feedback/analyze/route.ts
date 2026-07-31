@@ -1,15 +1,13 @@
 import { after } from "next/server";
 import { db } from "@/lib/db";
-import { ok, fail, parseBody, handler } from "@/lib/api";
-import { requireUser } from "@/lib/auth";
+import { ok, parseBody, handler } from "@/lib/api";
+import { requirePremium } from "@/lib/auth";
 import { keyframeUrls } from "@/lib/cloudinary";
 import { analyzeForm } from "@/lib/openai";
 import { analyzeVideoSchema } from "@truerep/shared";
 
 export const POST = handler(async (req: Request) => {
-  const user = await requireUser();
-  if (user.subscription_status !== "ACTIVE")
-    return fail("Premium subscription required for video feedback", 402);
+  const user = await requirePremium();
 
   const input = await parseBody(req, analyzeVideoSchema);
 

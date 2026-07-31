@@ -1,10 +1,11 @@
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
-import { requireUser } from "@/lib/auth";
+import { requireActiveSubscription } from "@/lib/auth";
 
 export const POST = handler(async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  const user = await requireUser();
+  // Tier Base: la comunidad/retos requiere suscripción activa
+  const user = await requireActiveSubscription();
 
   const challenge = await db.challenge.findUnique({
     where: { id },
@@ -13,6 +14,7 @@ export const POST = handler(async (_req: Request, { params }: { params: Promise<
   if (!challenge) return fail("Challenge not found", 404);
 
   const now = new Date();
+  if (now < challenge.starts_at) return fail("Challenge has not started yet", 400);
   if (now > challenge.ends_at) return fail("Challenge has ended", 400);
   if (challenge.max_participants && challenge._count.participants >= challenge.max_participants)
     return fail("Challenge is full", 400);
