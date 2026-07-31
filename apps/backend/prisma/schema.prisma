@@ -155,9 +155,8 @@ model Workout {
   created_at          DateTime @default(now())
   // Idempotencia real: el cliente envía un UUID por intento de guardado; un
   // reintento con la MISMA key nunca duplica el workout, sin depender de una
-  // ventana de tiempo. Nullable por compatibilidad con clientes viejos que
-  // no la envíen (esos caen de vuelta al dedupe por ventana de tiempo).
-  idempotency_key     String?
+  // ventana de tiempo.
+  idempotency_key     String
 
   @@index([user_id, completed_at])
   @@index([routine_id])

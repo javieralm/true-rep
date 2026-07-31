@@ -75,6 +75,7 @@ const validBody = {
   routine_id: "r1",
   duration_minutes: 20,
   exercises_completed: [{ exercise_id: "ex1", reps_done: 10, felt_like: "medium" }],
+  idempotency_key: "00000000-0000-0000-0000-000000000000",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -146,27 +147,13 @@ describe("POST /api/workouts/log", () => {
     expect(res.status).toBe(201);
   });
 
-  it("dedupes a retried request within the idempotency window instead of creating a second workout", async () => {
-    tx.workout.findFirst.mockResolvedValue({
-      id: "w-existing",
-      user_id: "u1",
-      routine_id: "r1",
-      completed_at: new Date(),
-    });
-    const res = await POST(req(validBody));
-    const body = await res.json();
-    expect(res.status).toBe(201);
-    expect(body.data.deduped).toBe(true);
-    expect(tx.workout.create).not.toHaveBeenCalled();
-  });
-
-  it("dedupes by idempotency_key regardless of time window, when the client sends one", async () => {
+  it("dedupes by idempotency_key regardless of how much time has passed", async () => {
     tx.workout.findFirst.mockResolvedValue({
       id: "w-existing",
       user_id: "u1",
       routine_id: "r1",
       idempotency_key: "11111111-1111-1111-1111-111111111111",
-      completed_at: new Date("2020-01-01T00:00:00Z"), // way outside the 60s window
+      completed_at: new Date("2020-01-01T00:00:00Z"), // long before "now" — no time window applies
     });
     const res = await POST(req({ ...validBody, idempotency_key: "11111111-1111-1111-1111-111111111111" }));
     const body = await res.json();

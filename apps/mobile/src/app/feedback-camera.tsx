@@ -55,13 +55,14 @@ export default function FeedbackCameraScreen() {
       });
 
       // Un trainer tiene que aprobar el análisis antes de que corra (gate
-      // manual, ver TODOS.md) — puede tardar horas, no segundos. Unos pocos
-      // polls cortos alcanzan para el caso "ya lo aprobó mientras subías";
-      // si sigue pendiente, dejamos de esperar en vivo y el usuario revisa
-      // más tarde en su historial en vez de bloquear la pantalla.
+      // manual, ver TODOS.md) — puede tardar horas, no segundos. Un solo
+      // sondeo cubre ambas esperas: si sigue "awaiting_review" al agotar los
+      // intentos, el usuario revisa más tarde en su historial en vez de
+      // bloquear la pantalla; una vez aprobado ("pending"), sí esperamos el
+      // análisis real y solo ahí un timeout es un error.
       setStatus("awaiting_review");
-      let approved = false;
-      for (let i = 0; i < 3; i++) {
+      let phase: "awaiting_review" | "analyzing" = "awaiting_review";
+      for (let i = 0; i < 23; i++) {
         await new Promise((r) => setTimeout(r, 3000));
         const result = await api<{ status: string; feedback_text: string | null }>(
           `/video-feedback/${job.feedback_id}/status`
@@ -72,28 +73,12 @@ export default function FeedbackCameraScreen() {
           return;
         }
         if (result.status === "failed") throw new Error("Analysis failed — try another video");
-        if (result.status === "pending") {
-          approved = true;
+        if (result.status === "pending" && phase === "awaiting_review") {
+          phase = "analyzing";
           setStatus("analyzing");
-          break;
         }
       }
-      if (!approved) return; // sigue awaiting_review: se queda ahí, sin error
-
-      // El trainer ya aprobó (status "pending") — ahora sí esperamos el análisis.
-      for (let i = 0; i < 20; i++) {
-        await new Promise((r) => setTimeout(r, 3000));
-        const result = await api<{ status: string; feedback_text: string | null }>(
-          `/video-feedback/${job.feedback_id}/status`
-        );
-        if (result.status === "completed") {
-          setFeedback(result.feedback_text);
-          setStatus("done");
-          return;
-        }
-        if (result.status === "failed") throw new Error("Analysis failed — try another video");
-      }
-      throw new Error("Analysis timed out — check your history later");
+      if (phase === "analyzing") throw new Error("Analysis timed out — check your history later");
     } catch (e) {
       setStatus("idle");
       Alert.alert("Error", e instanceof Error ? e.message : "Something went wrong");
