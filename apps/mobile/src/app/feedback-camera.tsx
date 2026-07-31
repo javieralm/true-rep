@@ -14,9 +14,11 @@ interface UploadParams {
   api_key: string;
 }
 
+type Status = "idle" | "uploading" | "awaiting_review" | "analyzing" | "done";
+
 export default function FeedbackCameraScreen() {
   const [exerciseName, setExerciseName] = useState("");
-  const [status, setStatus] = useState<"idle" | "uploading" | "analyzing" | "done">("idle");
+  const [status, setStatus] = useState<Status>("idle");
   const [feedback, setFeedback] = useState<string | null>(null);
 
   async function pickAndAnalyze() {
@@ -47,13 +49,38 @@ export default function FeedbackCameraScreen() {
       const uploaded = (await uploadRes.json()) as { secure_url?: string };
       if (!uploaded.secure_url) throw new Error("Video upload failed");
 
-      setStatus("analyzing");
       const job = await api<{ feedback_id: string }>("/video-feedback/analyze", {
         method: "POST",
         body: JSON.stringify({ video_url: uploaded.secure_url, exercise_name: exerciseName }),
       });
 
-      // ponytail: polling cada 3s; sustituir por evento Supabase Realtime al pulir
+      // Un trainer tiene que aprobar el análisis antes de que corra (gate
+      // manual, ver TODOS.md) — puede tardar horas, no segundos. Unos pocos
+      // polls cortos alcanzan para el caso "ya lo aprobó mientras subías";
+      // si sigue pendiente, dejamos de esperar en vivo y el usuario revisa
+      // más tarde en su historial en vez de bloquear la pantalla.
+      setStatus("awaiting_review");
+      let approved = false;
+      for (let i = 0; i < 3; i++) {
+        await new Promise((r) => setTimeout(r, 3000));
+        const result = await api<{ status: string; feedback_text: string | null }>(
+          `/video-feedback/${job.feedback_id}/status`
+        );
+        if (result.status === "completed") {
+          setFeedback(result.feedback_text);
+          setStatus("done");
+          return;
+        }
+        if (result.status === "failed") throw new Error("Analysis failed — try another video");
+        if (result.status === "pending") {
+          approved = true;
+          setStatus("analyzing");
+          break;
+        }
+      }
+      if (!approved) return; // sigue awaiting_review: se queda ahí, sin error
+
+      // El trainer ya aprobó (status "pending") — ahora sí esperamos el análisis.
       for (let i = 0; i < 20; i++) {
         await new Promise((r) => setTimeout(r, 3000));
         const result = await api<{ status: string; feedback_text: string | null }>(
@@ -73,11 +100,21 @@ export default function FeedbackCameraScreen() {
     }
   }
 
+  const buttonTitle =
+    status === "uploading"
+      ? "Uploading…"
+      : status === "awaiting_review"
+        ? "Waiting for trainer…"
+        : status === "analyzing"
+          ? "Analyzing…"
+          : "Pick Video & Analyze";
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}>
       <Text style={styles.title}>AI Form Feedback</Text>
       <Text style={styles.hint}>
-        Upload a short video (≤30s) of your exercise and get 3 specific form corrections.
+        Upload a short video (≤30s) of your exercise. Your trainer reviews it before the AI
+        analysis runs, so this can take a bit — check back later if it's not ready right away.
       </Text>
       <TextInput
         style={styles.input}
@@ -86,12 +123,16 @@ export default function FeedbackCameraScreen() {
         onChangeText={setExerciseName}
       />
       <Button
-        title={
-          status === "uploading" ? "Uploading…" : status === "analyzing" ? "Analyzing…" : "Pick Video & Analyze"
-        }
-        disabled={status === "uploading" || status === "analyzing"}
+        title={buttonTitle}
+        disabled={status === "uploading" || status === "awaiting_review" || status === "analyzing"}
         onPress={pickAndAnalyze}
       />
+      {status === "awaiting_review" && (
+        <Text style={styles.hint}>
+          Your trainer hasn&apos;t reviewed this yet. Feel free to close this screen — you&apos;ll
+          find the result in your history once it&apos;s ready.
+        </Text>
+      )}
       {feedback && (
         <Card>
           <Text style={styles.feedbackTitle}>💡 Feedback</Text>

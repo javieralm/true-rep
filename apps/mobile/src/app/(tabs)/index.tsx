@@ -1,5 +1,6 @@
 import { ScrollView, Text, View, StyleSheet, Pressable, Linking } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import type { ScheduleTask } from "@truerep/shared";
 import { useUser } from "@/hooks/useUser";
 import { useRoutines } from "@/hooks/useRoutines";
@@ -8,27 +9,45 @@ import { RoutineCard } from "@/components/workout/RoutineCard";
 import { Card } from "@/components/ui/Card";
 import { colors, spacing } from "@/constants/colors";
 
-const TASK_ICON: Record<ScheduleTask["type"], string> = {
-  ROUTINE: "🏋",
-  MESSAGE: "💬",
-  VIDEO: "🎬",
-  NOTE: "📝",
-  SESSION: "📅",
+const TASK_ICON: Record<ScheduleTask["type"], keyof typeof Ionicons.glyphMap> = {
+  ROUTINE: "barbell",
+  MESSAGE: "chatbubble",
+  VIDEO: "videocam",
+  NOTE: "document-text",
+  SESSION: "calendar",
 };
 
-function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<typeof useRouter> }) {
-  const icon = TASK_ICON[task.type];
+const TASK_LABEL: Record<ScheduleTask["type"], string> = {
+  ROUTINE: "Rutina",
+  MESSAGE: "Mensaje",
+  VIDEO: "Vídeo",
+  NOTE: "Nota",
+  SESSION: "Sesión",
+};
 
+function TaskTitle({ type, done, children }: { type: ScheduleTask["type"]; done?: boolean; children: string }) {
+  return (
+    <View style={styles.taskTitleRow} accessibilityLabel={`${TASK_LABEL[type]}: ${children}`}>
+      {done ? (
+        <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+      ) : (
+        <Ionicons name={TASK_ICON[type]} size={16} color={colors.primary} />
+      )}
+      <Text style={styles.todayTitle}>{children}</Text>
+    </View>
+  );
+}
+
+function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<typeof useRouter> }) {
   // Rutina: navegable al detalle, con estado de completada
   if (task.type === "ROUTINE" && task.routine) {
     const r = task.routine;
     return (
       <Pressable onPress={() => router.push({ pathname: "/routine-detail", params: { id: r.id } })}>
         <Card style={r.completed ? styles.todayDone : styles.today}>
-          <Text style={styles.todayTitle}>
-            {r.completed ? "✓ " : `${icon} `}
+          <TaskTitle type="ROUTINE" done={r.completed}>
             {r.title}
-          </Text>
+          </TaskTitle>
           <Text style={styles.todayMeta}>
             {r.difficulty.toLowerCase()} · {r.duration_minutes} min
             {r.completed ? " · completada" : ""}
@@ -39,14 +58,14 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
   }
 
   const d = task.data ?? {};
-  const title = d.title || TASK_ICON[task.type];
+  const title = d.title || TASK_LABEL[task.type];
 
   // Vídeo: abre la URL externa
   if (task.type === "VIDEO" && d.url) {
     return (
       <Pressable onPress={() => Linking.openURL(d.url!)}>
         <Card style={styles.today}>
-          <Text style={styles.todayTitle}>{icon} {d.title || "Vídeo"}</Text>
+          <TaskTitle type="VIDEO">{d.title || "Vídeo"}</TaskTitle>
           <Text style={styles.todayMeta}>Ver vídeo</Text>
         </Card>
       </Pressable>
@@ -58,7 +77,7 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
     const meta = [d.mode, d.location, d.time].filter(Boolean).join(" · ");
     return (
       <Card style={styles.today}>
-        <Text style={styles.todayTitle}>{icon} {d.title || "Sesión"}</Text>
+        <TaskTitle type="SESSION">{d.title || "Sesión"}</TaskTitle>
         {meta ? <Text style={styles.todayMeta}>{meta}</Text> : null}
       </Card>
     );
@@ -67,7 +86,7 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
   // Mensaje / Nota: título + cuerpo
   return (
     <Card style={styles.today}>
-      <Text style={styles.todayTitle}>{icon} {title}</Text>
+      <TaskTitle type={task.type}>{title}</TaskTitle>
       {d.body ? <Text style={styles.todayMeta}>{d.body}</Text> : null}
     </Card>
   );
@@ -157,6 +176,7 @@ const styles = StyleSheet.create({
   empty: { color: colors.textMuted },
   today: { borderColor: colors.primary, borderWidth: 1.5 },
   todayDone: { borderColor: colors.success, borderWidth: 1.5, opacity: 0.7 },
+  taskTitleRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs },
   todayTitle: { fontSize: 16, fontWeight: "600", color: colors.textPrimary },
   todayMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
 });

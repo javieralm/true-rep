@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { Redirect, Tabs } from "expo-router";
-import { Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/clerk-expo";
 import { registerForPushNotifications } from "@/lib/push";
 import { colors } from "@/constants/colors";
 
-// ponytail: emojis como iconos de tab; cambiar a @expo/vector-icons al pulir UI
-function icon(emoji: string) {
-  return () => <Text style={{ fontSize: 20 }}>{emoji}</Text>;
+function icon(name: keyof typeof Ionicons.glyphMap) {
+  return ({ color, size }: { color: string; size: number }) => (
+    <Ionicons name={name} color={color} size={size} />
+  );
 }
 
 export default function TabsLayout() {
@@ -21,11 +22,11 @@ export default function TabsLayout() {
 
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: colors.primary }}>
-      <Tabs.Screen name="index" options={{ title: "Home", tabBarIcon: icon("🏠") }} />
-      <Tabs.Screen name="workouts" options={{ title: "Workouts", tabBarIcon: icon("💪") }} />
-      <Tabs.Screen name="progress" options={{ title: "Progreso", tabBarIcon: icon("📈") }} />
-      <Tabs.Screen name="challenges" options={{ title: "Challenges", tabBarIcon: icon("🏆") }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile", tabBarIcon: icon("👤") }} />
+      <Tabs.Screen name="index" options={{ title: "Home", tabBarIcon: icon("home") }} />
+      <Tabs.Screen name="workouts" options={{ title: "Workouts", tabBarIcon: icon("barbell") }} />
+      <Tabs.Screen name="progress" options={{ title: "Progreso", tabBarIcon: icon("trending-up") }} />
+      <Tabs.Screen name="challenges" options={{ title: "Challenges", tabBarIcon: icon("trophy") }} />
+      <Tabs.Screen name="profile" options={{ title: "Profile", tabBarIcon: icon("person") }} />
     </Tabs>
   );
 }

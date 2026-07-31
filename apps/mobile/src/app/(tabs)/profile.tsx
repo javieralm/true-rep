@@ -89,8 +89,15 @@ export default function ProfileScreen() {
       <Text style={styles.section}>Achievements ({unlocked.length}/{achievements?.length ?? 0})</Text>
       <View style={styles.badges}>
         {(achievements ?? []).map((a) => (
-          <Card key={a.id} style={[styles.badge, !a.unlocked_at && { opacity: 0.35 }]}>
-            <Text style={styles.badgeName}>{a.name}</Text>
+          <Card
+            key={a.id}
+            style={[styles.badge, !a.unlocked_at && { opacity: 0.35 }]}
+            accessibilityLabel={`${a.name}: ${a.unlocked_at ? "unlocked" : "locked"}`}
+          >
+            <Text style={styles.badgeName}>
+              {a.name}
+              {!a.unlocked_at ? " (locked)" : ""}
+            </Text>
             <Text style={styles.badgeDesc}>{a.description}</Text>
           </Card>
         ))}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ScrollView, Text, TextInput, View, Pressable, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,10 @@ export default function WorkoutSessionScreen() {
   const { activeRoutine, startedAt, completed, toggleExercise, setWeight, reset } = useWorkoutStore();
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<LogWorkoutResponse | null>(null);
+  // Misma key en cada reintento del mismo intento de guardado (error de red,
+  // doble-tap) — solo cambia si el usuario empieza una rutina distinta.
+  // Sin esto, un reintento genera un workout duplicado en vez de deduplicar.
+  const idempotencyKeyRef = useRef<{ routineId: string; key: string } | null>(null);
 
   if (result) {
     return <CompletionScreen result={result} onDone={() => router.back()} />;
@@ -36,12 +40,16 @@ export default function WorkoutSessionScreen() {
     }
     setSaving(true);
     try {
+      if (idempotencyKeyRef.current?.routineId !== activeRoutine.id) {
+        idempotencyKeyRef.current = { routineId: activeRoutine.id, key: crypto.randomUUID() };
+      }
       const res = await api<LogWorkoutResponse>("/workouts/log", {
         method: "POST",
         body: JSON.stringify({
           routine_id: activeRoutine.id,
           duration_minutes: Math.max(1, Math.round((Date.now() - (startedAt ?? Date.now())) / 60000)),
           exercises_completed: completed,
+          idempotency_key: idempotencyKeyRef.current.key,
         }),
       });
       // Un workout nuevo afecta a me, schedule, stats e historial — invalida todo

@@ -86,6 +86,9 @@ importers:
       '@clerk/clerk-expo':
         specifier: ^2.0.0
         version: 2.19.31(59e21e3809423d36bb105a9a54b6bc70)
+      '@expo/vector-icons':
+        specifier: ^14.0.4
+        version: 14.0.4
       '@supabase/supabase-js':
         specifier: ^2.45.0
         version: 2.110.2
