@@ -16,19 +16,29 @@ export function fail(message: string, status = 400) {
   );
 }
 
-/** Valida body con Zod; lanza respuesta 400 legible en vez de 500 */
-export async function parseBody<T>(req: Request, schema: ZodSchema<T>): Promise<T> {
-  const json = await req.json().catch(() => {
-    throw fail("Invalid JSON body", 400);
-  });
+/** Compartido por parseBody/parseQuery: Zod -> respuesta 400 legible en vez de 500 */
+function parseWithSchema<T>(input: unknown, schema: ZodSchema<T>): T {
   try {
-    return schema.parse(json);
+    return schema.parse(input);
   } catch (e) {
     if (e instanceof ZodError) {
       throw fail(e.errors.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "), 400);
     }
     throw e;
   }
+}
+
+/** Valida body con Zod; lanza respuesta 400 legible en vez de 500 */
+export async function parseBody<T>(req: Request, schema: ZodSchema<T>): Promise<T> {
+  const json = await req.json().catch(() => {
+    throw fail("Invalid JSON body", 400);
+  });
+  return parseWithSchema(json, schema);
+}
+
+/** Igual que parseBody pero para query params (URLSearchParams ya convertido a objeto) */
+export function parseQuery<T>(params: Record<string, string>, schema: ZodSchema<T>): T {
+  return parseWithSchema(params, schema);
 }
 
 /** Envuelve un handler: los `throw fail(...)` se devuelven como respuesta */

@@ -1,18 +1,22 @@
 import { db } from "@/lib/db";
-import { ok, fail, parseBody, handler } from "@/lib/api";
+import { ok, fail, parseBody, parseQuery, handler } from "@/lib/api";
 import { requireTrainer } from "@/lib/auth";
 import { createRoutineSchema, paginationSchema, difficultySchema } from "@truerep/shared";
 
 export const GET = handler(async (req: Request) => {
   const url = new URL(req.url);
-  const { limit, offset } = paginationSchema.parse(Object.fromEntries(url.searchParams));
+  const { limit, offset } = parseQuery(Object.fromEntries(url.searchParams), paginationSchema);
   const difficultyParam = url.searchParams.get("difficulty")?.toUpperCase();
   const difficulty = difficultyParam ? difficultySchema.safeParse(difficultyParam) : null;
   if (difficulty && !difficulty.success) return fail("Invalid difficulty", 400);
 
+  // ?mine=true → el trainer ve todas sus rutinas, incluidos borradores
+  const mine = url.searchParams.get("mine") === "true";
+  const trainer = mine ? await requireTrainer() : null;
+
   const routines = await db.routine.findMany({
     where: {
-      is_published: true,
+      ...(trainer ? { trainer_id: trainer.id } : { is_published: true }),
       deleted_at: null,
       ...(difficulty?.success ? { difficulty: difficulty.data } : {}),
     },

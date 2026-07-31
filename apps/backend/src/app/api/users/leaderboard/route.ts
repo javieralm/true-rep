@@ -1,7 +1,9 @@
 import { db } from "@/lib/db";
 import { ok, handler } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
 
 export const GET = handler(async () => {
+  await requireUser();
   const top = await db.user.findMany({
     orderBy: { xp: "desc" },
     take: 100,

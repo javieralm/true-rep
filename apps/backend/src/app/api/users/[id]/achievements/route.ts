@@ -1,7 +1,9 @@
 import { db } from "@/lib/db";
 import { ok, handler } from "@/lib/api";
+import { requireUser } from "@/lib/auth";
 
 export const GET = handler(async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
+  await requireUser();
   const { id } = await params;
   const [all, unlocked] = await Promise.all([
     db.achievement.findMany({ orderBy: { created_at: "asc" } }),

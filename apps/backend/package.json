@@ -18,6 +18,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.0.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@prisma/client": "^5.22.0",
     "@supabase/supabase-js": "^2.45.0",
     "@truerep/shared": "workspace:*",
@@ -34,8 +37,8 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
-    "tailwindcss": "^4.0.0",
     "prisma": "^5.22.0",
+    "tailwindcss": "^4.0.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.0",
     "vitest": "^2.1.0"

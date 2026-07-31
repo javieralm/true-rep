@@ -30,6 +30,7 @@ export default function RootLayout() {
           <Stack.Screen name="workout-session" options={{ presentation: "modal", headerShown: true, title: "Workout" }} />
           <Stack.Screen name="challenge-detail" options={{ presentation: "modal", headerShown: true, title: "Challenge" }} />
           <Stack.Screen name="feedback-camera" options={{ presentation: "modal", headerShown: true, title: "Form Feedback" }} />
+          <Stack.Screen name="paywall" options={{ presentation: "modal", headerShown: true, title: "Suscripción" }} />
         </Stack>
       </QueryClientProvider>
     </ClerkProvider>

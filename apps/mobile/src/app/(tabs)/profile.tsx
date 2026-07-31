@@ -1,8 +1,10 @@
-import { ScrollView, Text, View, StyleSheet } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Switch, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
 import { useAchievements } from "@/hooks/useAchievements";
+import { api } from "@/lib/api";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { colors, spacing } from "@/constants/colors";
@@ -14,14 +16,74 @@ export default function ProfileScreen() {
   const { data: achievements } = useAchievements(user?.id);
   const unlocked = achievements?.filter((a) => a.unlocked_at) ?? [];
 
+  const isActive = user?.subscription_status === "ACTIVE";
+  const isPremium = isActive && user?.subscription_plan === "PREMIUM";
+  const planLabel = !isActive ? "Sin plan" : isPremium ? "Premium ⭐" : "Base";
+
+  const qc = useQueryClient();
+  const updatePrefs = useMutation({
+    mutationFn: (prefs: { reminder_enabled?: boolean; reminder_hour?: number }) =>
+      api("/me/preferences", { method: "PATCH", body: JSON.stringify(prefs) }),
+    onSettled: () => qc.invalidateQueries({ queryKey: ["me"] }),
+  });
+  const reminderHour = user?.reminder_hour ?? 8;
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}>
       <Card style={styles.header}>
         <Text style={styles.username}>{user?.username ?? "…"}</Text>
         <Text style={styles.meta}>
-          {user?.xp ?? 0} XP · 🔥 {user?.streak ?? 0} day streak ·{" "}
-          {user?.subscription_status === "ACTIVE" ? "Premium ⭐" : "Free plan"}
+          {user?.xp ?? 0} XP · 🔥 {user?.streak ?? 0} day streak · {planLabel}
         </Text>
+      </Card>
+
+      <Card style={styles.planCard}>
+        <Text style={styles.section}>Tu plan: {planLabel}</Text>
+        {!isActive ? (
+          <Button title="Suscríbete" onPress={() => router.push("/paywall")} />
+        ) : (
+          <>
+            {!isPremium && (
+              <Button title="Mejorar a Premium" onPress={() => router.push("/paywall")} />
+            )}
+            <Button
+              title="Gestionar suscripción"
+              variant="outline"
+              onPress={() => router.push("/paywall")}
+            />
+          </>
+        )}
+      </Card>
+
+      <Card style={styles.planCard}>
+        <View style={styles.prefRow}>
+          <Text style={styles.section}>Recordatorio diario</Text>
+          <Switch
+            value={user?.reminder_enabled ?? true}
+            onValueChange={(v) => updatePrefs.mutate({ reminder_enabled: v })}
+            trackColor={{ true: colors.primary }}
+          />
+        </View>
+        {(user?.reminder_enabled ?? true) && (
+          <View style={styles.prefRow}>
+            <Text style={styles.prefLabel}>Hora del recordatorio</Text>
+            <View style={styles.hourStepper}>
+              <Pressable
+                onPress={() => updatePrefs.mutate({ reminder_hour: (reminderHour + 23) % 24 })}
+                style={styles.hourBtn}
+              >
+                <Text style={styles.hourBtnText}>−</Text>
+              </Pressable>
+              <Text style={styles.hourValue}>{String(reminderHour).padStart(2, "0")}:00</Text>
+              <Pressable
+                onPress={() => updatePrefs.mutate({ reminder_hour: (reminderHour + 1) % 24 })}
+                style={styles.hourBtn}
+              >
+                <Text style={styles.hourBtnText}>+</Text>
+              </Pressable>
+            </View>
+          </View>
+        )}
       </Card>
 
       <Text style={styles.section}>Achievements ({unlocked.length}/{achievements?.length ?? 0})</Text>
@@ -34,8 +96,14 @@ export default function ProfileScreen() {
         ))}
       </View>
 
-      {user?.subscription_status === "ACTIVE" && (
+      {isPremium ? (
         <Button title="Get AI Form Feedback" onPress={() => router.push("/feedback-camera")} />
+      ) : (
+        <Button
+          title="Análisis de vídeo con IA (Premium)"
+          variant="outline"
+          onPress={() => router.push("/paywall")}
+        />
       )}
       <Button title="Sign Out" variant="outline" onPress={() => signOut()} />
     </ScrollView>
@@ -45,6 +113,21 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
   header: { alignItems: "center", gap: spacing.sm },
+  planCard: { gap: spacing.sm },
+  prefRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  prefLabel: { fontSize: 14, color: colors.textSecondary },
+  hourStepper: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+  hourBtn: {
+    minWidth: 44,
+    minHeight: 44, // accesibilidad: touch target mínimo
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hourBtnText: { fontSize: 18, color: colors.textPrimary },
+  hourValue: { fontSize: 16, fontWeight: "600", color: colors.textPrimary, minWidth: 52, textAlign: "center" },
   username: { fontSize: 22, fontWeight: "700", color: colors.textPrimary },
   meta: { fontSize: 14, color: colors.textSecondary },
   section: { fontSize: 18, fontWeight: "600", color: colors.textPrimary },

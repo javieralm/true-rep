@@ -34,6 +34,9 @@ export default async function RoutinesPage() {
                   {r.is_published ? "published" : "draft"}
                 </p>
               </div>
+              <Link href={`/routines/${r.id}/edit`} className="text-sm text-secondary underline">
+                Editar
+              </Link>
             </div>
           </li>
         ))}

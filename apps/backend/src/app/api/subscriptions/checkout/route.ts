@@ -5,6 +5,9 @@ import { checkoutSchema } from "@truerep/shared";
 
 export const POST = handler(async (req: Request) => {
   const user = await requireUser();
+  // Upgrades/downgrades se hacen desde el Billing Portal, no con un checkout nuevo
+  if (user.subscription_status === "ACTIVE")
+    return fail("Already subscribed — use the billing portal to change plan", 409);
   const { plan } = await parseBody(req, checkoutSchema);
   const price = PLAN_PRICES[plan];
   if (!price) return fail("Plan not configured", 500);

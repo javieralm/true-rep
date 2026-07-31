@@ -47,9 +47,19 @@ export const POST = handler(async (req: Request) => {
       });
       break;
     }
-    case "user.deleted":
+    case "user.deleted": {
+      const target = await db.user.findUnique({
+        where: { clerk_id: data.id },
+        select: { id: true, _count: { select: { workouts: true, video_feedback: true } } },
+      });
+      if (!target) break; // already deleted or never synced
+      console.warn(
+        `user.deleted: removing user ${target.id} (clerk: ${data.id}) — ` +
+        `${target._count.workouts} workouts, ${target._count.video_feedback} feedback records will cascade-delete`
+      );
       await db.user.deleteMany({ where: { clerk_id: data.id } });
       break;
+    }
   }
 
   return ok({ received: true });
