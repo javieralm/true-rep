@@ -14,6 +14,7 @@ model User {
   username                 String
   avatar_url               String?
   role                     Role                @default(USER)
+  is_superadmin            Boolean             @default(false) // promueve trainers desde /admin
   subscription_status      SubscriptionStatus  @default(FREE)
   subscription_id          String?
   subscription_plan        SubscriptionPlan?
@@ -21,6 +22,10 @@ model User {
   xp                       Int                 @default(0)
   streak                   Int                 @default(0)
   streak_last_workout_date DateTime?
+  reminder_enabled         Boolean             @default(true)
+  reminder_hour            Int                 @default(8) // hora local 0-23
+  timezone                 String              @default("Europe/Madrid")
+  last_reminder_sent_at    DateTime?
   created_at               DateTime            @default(now())
   updated_at               DateTime            @updatedAt
 
@@ -29,6 +34,10 @@ model User {
   achievements           UserAchievement[]
   challenge_participants ChallengeParticipant[]
   video_feedback         VideoFeedback[]
+  exercises              Exercise[]
+  programs               Program[]
+  program_assignments    ProgramAssignment[]
+  push_tokens            PushToken[]
 
   @@index([xp])
   @@map("users")
@@ -49,12 +58,79 @@ model Routine {
   created_at        DateTime   @default(now())
   updated_at        DateTime   @updatedAt
 
-  workouts   Workout[]
-  challenges Challenge[]
+  workouts      Workout[]
+  challenges    Challenge[]
+  program_items ProgramItem[]
 
   @@index([trainer_id])
   @@index([difficulty, is_published])
   @@map("routines")
+}
+
+model Exercise {
+  id            String    @id @default(cuid())
+  trainer_id    String
+  trainer       User      @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  name          String
+  muscle_group  String? // "Tracción", "Empuje", "Pierna", "Core"...
+  equipment     String? // "Barra de dominadas", "Anillas", "Goma elástica"...
+  video_url     String?
+  thumbnail_url String?
+  description   String?   @db.Text
+  deleted_at    DateTime? // soft delete
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  @@index([trainer_id, name])
+  @@map("exercises")
+}
+
+model Program {
+  id          String    @id @default(cuid())
+  trainer_id  String
+  trainer     User      @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  name        String
+  description String?   @db.Text
+  deleted_at  DateTime? // soft delete
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  items       ProgramItem[]
+  assignments ProgramAssignment[]
+
+  @@index([trainer_id])
+  @@map("programs")
+}
+
+model ProgramItem {
+  id         String          @id @default(cuid())
+  program_id String
+  program    Program         @relation(fields: [program_id], references: [id], onDelete: Cascade)
+  week       Int // 1-based
+  day        Int // 1-7 (lunes-domingo)
+  order      Int             @default(0)
+  type       ProgramItemType @default(ROUTINE)
+  routine_id String? // solo tareas ROUTINE
+  routine    Routine?        @relation(fields: [routine_id], references: [id], onDelete: Cascade)
+  data       Json? // payload por tipo: {title, body, url, mode, location, time}
+
+  @@index([program_id, week, day])
+  @@map("program_items")
+}
+
+model ProgramAssignment {
+  id         String   @id @default(cuid())
+  program_id String
+  program    Program  @relation(fields: [program_id], references: [id], onDelete: Cascade)
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  start_date DateTime // lunes de la semana 1
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  @@unique([user_id, program_id])
+  @@index([user_id, is_active])
+  @@map("program_assignments")
 }
 
 model Workout {
@@ -65,9 +141,11 @@ model Workout {
   routine             Routine  @relation(fields: [routine_id], references: [id], onDelete: Cascade)
   completed_at        DateTime
   duration_minutes    Int
-  exercises_completed Json // Array: [{exercise_id, reps_done, felt_like}]
+  exercises_completed Json // Array: [{exercise_id, reps_done, weight_kg?, felt_like}]
   xp_earned           Int
   notes               String?  @db.Text
+  trainer_feedback    String?  @db.Text // comentario del coach (Fase 5)
+  feedback_at         DateTime?
   created_at          DateTime @default(now())
 
   @@index([user_id, completed_at])
@@ -149,6 +227,28 @@ model VideoFeedback {
   @@map("video_feedback")
 }
 
+model PushToken {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  token      String   @unique // ExponentPushToken[...]
+  platform   String? // 'ios' | 'android'
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id, is_active])
+  @@map("push_tokens")
+}
+
+enum ProgramItemType {
+  ROUTINE // rutina/workout
+  MESSAGE // mensaje programado (push el día N)
+  VIDEO // contenido de vídeo
+  NOTE // nota/actividad libre (cardio, movilidad…)
+  SESSION // sesión presencial u online
+}
+
 enum Role {
   USER
   TRAINER
@@ -161,8 +261,8 @@ enum SubscriptionStatus {
 }
 
 enum SubscriptionPlan {
-  MONTHLY
-  ANNUAL
+  BASE
+  PREMIUM
 }
 
 enum Difficulty {

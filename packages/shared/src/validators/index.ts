@@ -4,11 +4,95 @@ export const difficultySchema = z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"])
 
 export const exerciseSchema = z.object({
   id: z.string().min(1),
+  exercise_id: z.string().optional(), // referencia a la librería si viene de ella
   name: z.string().min(1).max(100),
   reps: z.string().optional(),
+  sets: z.number().int().min(1).max(20).optional(),
+  rest_seconds: z.number().int().min(0).max(600).optional(),
+  target_weight_kg: z.number().min(0).max(500).optional(),
   duration_seconds: z.number().int().positive().optional(),
   technique_video_url: z.string().url().optional(),
   description: z.string().max(500).optional(),
+});
+
+// ─── Librería de ejercicios ───
+export const createExerciseSchema = z.object({
+  name: z.string().min(2).max(100),
+  muscle_group: z.string().max(50).optional(),
+  equipment: z.string().max(100).optional(),
+  video_url: z.string().url().optional(),
+  thumbnail_url: z.string().url().optional(),
+  description: z.string().max(2000).optional(),
+});
+
+export const updateExerciseSchema = createExerciseSchema.partial();
+
+// ─── Programas semanales ───
+export const createProgramSchema = z.object({
+  name: z.string().min(2).max(100),
+  description: z.string().max(2000).optional(),
+});
+
+export const programItemTypeSchema = z.enum(["ROUTINE", "MESSAGE", "VIDEO", "NOTE", "SESSION"]);
+
+// Payload flexible por tipo (se guarda en ProgramItem.data Json)
+export const programTaskDataSchema = z.object({
+  title: z.string().max(120).optional(),
+  body: z.string().max(2000).optional(),
+  url: z.string().url().optional(),
+  mode: z.enum(["presencial", "online"]).optional(),
+  location: z.string().max(200).optional(),
+  time: z.string().max(20).optional(), // "18:30"
+});
+
+export const programItemSchema = z
+  .object({
+    week: z.number().int().min(1).max(52),
+    day: z.number().int().min(1).max(7),
+    order: z.number().int().min(0).default(0),
+    type: programItemTypeSchema.default("ROUTINE"),
+    routine_id: z.string().min(1).nullish(),
+    data: programTaskDataSchema.nullish(),
+  })
+  .superRefine((it, ctx) => {
+    if (it.type === "ROUTINE" && !it.routine_id)
+      ctx.addIssue({ code: "custom", message: "routine_id requerido para ROUTINE", path: ["routine_id"] });
+    if (it.type === "VIDEO" && !it.data?.url)
+      ctx.addIssue({ code: "custom", message: "url requerida para VIDEO", path: ["data", "url"] });
+    if (
+      (it.type === "MESSAGE" || it.type === "NOTE" || it.type === "SESSION") &&
+      !it.data?.title &&
+      !it.data?.body
+    )
+      ctx.addIssue({ code: "custom", message: "título o texto requerido", path: ["data"] });
+  });
+
+export const updateProgramSchema = z.object({
+  name: z.string().min(2).max(100).optional(),
+  description: z.string().max(2000).optional(),
+  items: z.array(programItemSchema).max(500).optional(), // replace completo
+});
+
+export const assignProgramSchema = z.object({
+  user_id: z.string().min(1),
+  start_date: z.string().datetime(),
+});
+
+// ─── Coach feedback ───
+export const workoutFeedbackSchema = z.object({
+  feedback: z.string().min(3).max(2000),
+});
+
+// ─── Push notifications ───
+export const pushTokenSchema = z.object({
+  token: z.string().startsWith("ExponentPushToken"),
+  platform: z.enum(["ios", "android"]).optional(),
+});
+
+export const preferencesSchema = z.object({
+  reminder_enabled: z.boolean().optional(),
+  reminder_hour: z.number().int().min(0).max(23).optional(),
+  timezone: z.string().max(50).optional(),
 });
 
 export const createRoutineSchema = z.object({
@@ -31,6 +115,7 @@ export const logWorkoutSchema = z.object({
       z.object({
         exercise_id: z.string().min(1),
         reps_done: z.number().int().min(0),
+        weight_kg: z.number().min(0).max(500).optional(),
         felt_like: z.enum(["easy", "medium", "hard"]),
       })
     )
@@ -59,11 +144,16 @@ export const createChallengeSchema = z
   });
 
 export const checkoutSchema = z.object({
-  plan: z.enum(["monthly", "annual"]),
+  plan: z.enum(["base", "premium"]),
 });
 
 export const analyzeVideoSchema = z.object({
-  video_url: z.string().url(),
+  video_url: z
+    .string()
+    .url()
+    .refine((url) => url.startsWith("https://res.cloudinary.com/"), {
+      message: "video_url must be a Cloudinary URL",
+    }),
   exercise_name: z.string().min(1).max(100),
 });
 

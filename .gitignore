@@ -11,3 +11,5 @@ build/
 .vercel
 coverage/
 *.tsbuildinfo
+.claude/settings.local.json
+graphify-out/cache/
