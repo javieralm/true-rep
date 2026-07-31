@@ -1,6 +1,7 @@
 {
   "name": "truerep",
   "private": true,
+  "packageManager": "pnpm@11.2.2",
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
