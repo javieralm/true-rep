@@ -35,7 +35,7 @@ export const PLAN_FEATURES = {
   },
 } as const;
 export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-export type AnalysisStatus = "PENDING" | "COMPLETED" | "FAILED";
+export type AnalysisStatus = "PENDING_TRAINER_REVIEW" | "PENDING" | "COMPLETED" | "FAILED";
 
 /** Ejercicio dentro de una rutina (Json en Routine.exercises) */
 export interface Exercise {
@@ -228,6 +228,11 @@ export interface VideoFeedback {
   analysis_status: AnalysisStatus;
   feedback_text: string | null;
   created_at: string;
+}
+
+/** GET /api/video-feedback/pending-review — cola de aprobación manual del trainer */
+export interface PendingReviewFeedback extends VideoFeedback {
+  user: { id: string; username: string; avatar_url: string | null };
 }
 
 /** Regla no negociable #2: forma de respuesta API consistente */

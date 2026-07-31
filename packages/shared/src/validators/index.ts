@@ -130,6 +130,10 @@ export const logWorkoutSchema = z.object({
     )
     .min(1),
   notes: z.string().max(2000).optional(),
+  // Idempotencia real: un UUID por intento de guardado, generado por el
+  // cliente. Opcional por compatibilidad — sin ella, el servidor cae de
+  // vuelta al dedupe por ventana de tiempo (menos preciso).
+  idempotency_key: z.string().uuid().optional(),
 });
 
 export const updateProfileSchema = z.object({

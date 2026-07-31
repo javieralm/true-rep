@@ -67,6 +67,18 @@ describe("logWorkoutSchema", () => {
       })
     ).toThrow();
   });
+  it("idempotency_key is optional but must be a UUID when present", () => {
+    const base = {
+      routine_id: "r1",
+      duration_minutes: 42,
+      exercises_completed: [{ exercise_id: "e1", reps_done: 12, felt_like: "hard" }],
+    };
+    expect(() => logWorkoutSchema.parse(base)).not.toThrow();
+    expect(() =>
+      logWorkoutSchema.parse({ ...base, idempotency_key: "11111111-1111-1111-1111-111111111111" })
+    ).not.toThrow();
+    expect(() => logWorkoutSchema.parse({ ...base, idempotency_key: "not-a-uuid" })).toThrow();
+  });
 });
 
 describe("logWorkoutSchema weight_kg", () => {
