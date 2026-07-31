@@ -182,6 +182,15 @@ export interface Workout {
   feedback_at?: string | null;
 }
 
+/** Payload real de POST /api/workouts/log — distinto de Workout: agrega
+ * user (xp/streak actualizados), logros desbloqueados, y si fue un
+ * duplicado deduplicado en vez de un workout nuevo. */
+export interface LogWorkoutResponse extends Workout {
+  user: { xp: number; streak: number };
+  unlocked_achievements: string[];
+  deduped: boolean;
+}
+
 export interface Achievement {
   id: string;
   name: string;

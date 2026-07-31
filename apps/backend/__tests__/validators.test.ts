@@ -35,6 +35,17 @@ describe("createRoutineSchema", () => {
   it("rejects invalid difficulty", () => {
     expect(() => createRoutineSchema.parse({ ...validRoutine, difficulty: "expert" })).toThrow();
   });
+  it("rejects duplicate exercise ids", () => {
+    expect(() =>
+      createRoutineSchema.parse({
+        ...validRoutine,
+        exercises: [
+          { id: "push-ups-1", name: "Push-ups", reps: "3x12" },
+          { id: "push-ups-1", name: "Push-ups (again)", reps: "3x10" },
+        ],
+      })
+    ).toThrow();
+  });
 });
 
 describe("logWorkoutSchema", () => {

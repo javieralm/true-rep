@@ -100,7 +100,16 @@ export const createRoutineSchema = z.object({
   description: z.string().min(1).max(2000),
   difficulty: difficultySchema,
   duration_minutes: z.number().int().min(5).max(180),
-  exercises: z.array(exerciseSchema).min(1).max(20),
+  exercises: z
+    .array(exerciseSchema)
+    .min(1)
+    .max(20)
+    // Integridad del JSON: el `id` de cada ejercicio es lo que workouts/log
+    // usa para validar exercises_completed contra esta rutina — un duplicado
+    // dejaría esa validación ambigua.
+    .refine((exs) => new Set(exs.map((e) => e.id)).size === exs.length, {
+      message: "exercises must not contain duplicate ids",
+    }),
   preview_video_url: z.string().url().optional(),
   is_published: z.boolean().optional(),
 });

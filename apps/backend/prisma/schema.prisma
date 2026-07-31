@@ -17,6 +17,7 @@ model User {
   is_superadmin            Boolean             @default(false) // promueve trainers desde /admin
   subscription_status      SubscriptionStatus  @default(FREE)
   subscription_id          String?
+  stripe_customer_id       String? // reusado entre checkouts para no fragmentar el historial de pago
   subscription_plan        SubscriptionPlan?
   subscription_expires_at  DateTime?
   xp                       Int                 @default(0)
@@ -40,13 +41,18 @@ model User {
   push_tokens            PushToken[]
 
   @@index([xp])
+  @@index([subscription_id])
   @@map("users")
 }
 
 model Routine {
   id                String     @id @default(cuid())
   trainer_id        String
-  trainer           User       @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  // Restrict, no Cascade: borrar un trainer NUNCA debe arrastrar en cascada
+  // el historial de workouts de sus suscriptores (ver Workout.routine abajo).
+  // El webhook de Clerk (user.deleted) anonimiza al trainer en vez de
+  // borrarlo cuando tiene rutinas — ver apps/backend/src/app/api/webhooks/clerk/route.ts.
+  trainer           User       @relation(fields: [trainer_id], references: [id], onDelete: Restrict)
   title             String
   description       String     @db.Text
   difficulty        Difficulty
@@ -209,6 +215,7 @@ model ChallengeParticipant {
 
   @@unique([challenge_id, user_id])
   @@index([challenge_id, completed_at])
+  @@index([user_id, completed_at])
   @@map("challenge_participants")
 }
 
