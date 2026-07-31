@@ -15,8 +15,12 @@ export async function getOrSyncUser(): Promise<User | null> {
   if (existing) return existing;
 
   const cu = await currentUser();
-  const email = cu?.emailAddresses?.[0]?.emailAddress;
-  if (!cu || !email) return null;
+  if (!cu) return null;
+  // Preferir el email primario/verificado de Clerk; el primero de la lista
+  // no siempre lo es (ej. tras vincular un segundo email).
+  const primary = cu.emailAddresses?.find((e) => e.id === cu.primaryEmailAddressId);
+  const email = primary?.emailAddress ?? cu.emailAddresses?.[0]?.emailAddress;
+  if (!email) return null;
   // upsert (no plain create): dos requests concurrentes del mismo usuario nuevo
   // pueden pasar ambas el `existing === null` de arriba; sin upsert, la segunda
   // create() fallaría por el unique constraint de clerk_id.
@@ -72,9 +76,9 @@ export async function requirePremium(): Promise<User> {
   return user;
 }
 
-/** Usuario autenticado si hay token, null si es anónimo (rutas públicas) */
+/** Usuario autenticado si hay token, null si es anónimo (rutas públicas).
+ * Usa el mismo lazy-sync que requireUser() — de lo contrario, una sesión
+ * válida cuyo webhook de Clerk aún no llegó vería un anónimo por error. */
 export async function optionalUser(): Promise<User | null> {
-  const { userId } = await auth();
-  if (!userId) return null;
-  return db.user.findUnique({ where: { clerk_id: userId } });
+  return getOrSyncUser();
 }

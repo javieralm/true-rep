@@ -48,7 +48,11 @@ export function handler(fn: (...args: any[]) => Promise<Response>) {
       return await fn(...args);
     } catch (e) {
       if (e instanceof Response) return e;
-      console.error(e);
+      // Contexto mínimo para poder reconstruir qué pasó desde los logs solos:
+      // el primer arg de un route handler de Next.js es el Request.
+      const req = args[0] instanceof Request ? args[0] : null;
+      const context = req ? `${req.method} ${new URL(req.url).pathname}` : "unknown route";
+      console.error(`[${context}]`, e);
       return fail("Internal server error", 500);
     }
   };
