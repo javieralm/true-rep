@@ -25,6 +25,7 @@ export const POST = handler(async (req: Request) => {
       const userId = session.metadata?.user_id ?? session.client_reference_id;
       if (!userId) break;
       const subscriptionId = typeof session.subscription === "string" ? session.subscription : null;
+      const customerId = typeof session.customer === "string" ? session.customer : null;
       // Idempotency: skip if already processed for this subscription
       const existing = await db.user.findUnique({ where: { id: userId }, select: { subscription_id: true } });
       if (subscriptionId && existing?.subscription_id === subscriptionId) break;
@@ -33,6 +34,9 @@ export const POST = handler(async (req: Request) => {
         data: {
           subscription_status: "ACTIVE",
           subscription_id: subscriptionId,
+          // Persistido para reusarlo en el próximo checkout (evita fragmentar
+          // el historial de pago del usuario en un Customer nuevo cada vez).
+          ...(customerId ? { stripe_customer_id: customerId } : {}),
           subscription_plan: session.metadata?.plan === "premium" ? "PREMIUM" : "BASE",
         },
       });

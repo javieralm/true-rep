@@ -50,12 +50,35 @@ export const POST = handler(async (req: Request) => {
     case "user.deleted": {
       const target = await db.user.findUnique({
         where: { clerk_id: data.id },
-        select: { id: true, _count: { select: { workouts: true, video_feedback: true } } },
+        select: { id: true, _count: { select: { workouts: true, video_feedback: true, routines: true } } },
       });
       if (!target) break; // already deleted or never synced
+
+      // Un trainer con rutinas no se borra: la FK routines.trainer_id es
+      // Restrict, así que borrarlo fallaría de todos modos — y aunque no
+      // fallara, borrarlo arrastraría en cascada el historial de workouts de
+      // sus suscriptores. Se anonimiza en su lugar (cumple "elimina mi cuenta"
+      // sin destruir el historial de terceros).
+      if (target._count.routines > 0) {
+        console.warn(
+          `user.deleted: anonymizing trainer ${target.id} (clerk: ${data.id}) instead of deleting — ` +
+            `${target._count.routines} routines depend on it`
+        );
+        await db.user.update({
+          where: { id: target.id },
+          data: {
+            clerk_id: `deleted-${target.id}`,
+            email: `deleted-${target.id}@deleted.truerep.invalid`,
+            username: "deleted-trainer",
+            avatar_url: null,
+          },
+        });
+        break;
+      }
+
       console.warn(
         `user.deleted: removing user ${target.id} (clerk: ${data.id}) — ` +
-        `${target._count.workouts} workouts, ${target._count.video_feedback} feedback records will cascade-delete`
+          `${target._count.workouts} workouts, ${target._count.video_feedback} feedback records will cascade-delete`
       );
       await db.user.deleteMany({ where: { clerk_id: data.id } });
       break;

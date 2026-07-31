@@ -15,7 +15,11 @@ export const POST = handler(async (req: Request) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      customer_email: user.email,
+      // Reusar el Customer de Stripe si ya existe (ex-suscriptor que vuelve)
+      // para no fragmentar su historial de pago/métodos en un Customer nuevo.
+      ...(user.stripe_customer_id
+        ? { customer: user.stripe_customer_id }
+        : { customer_email: user.email }),
       client_reference_id: user.id,
       line_items: [{ price, quantity: 1 }],
       metadata: { user_id: user.id, plan },
