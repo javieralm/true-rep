@@ -14,7 +14,7 @@ export function nextStreak(current: number, lastWorkoutDate: Date | null, now = 
   if (!lastWorkoutDate) return 1;
   const day = (d: Date) => Math.floor(d.getTime() / 86_400_000);
   const diff = day(now) - day(lastWorkoutDate);
-  if (diff === 0) return current || 1;
+  if (diff === 0) return current;
   if (diff === 1) return current + 1;
   return 1;
 }
@@ -24,7 +24,8 @@ export async function checkAchievements(user: User): Promise<string[]> {
   const conditions: string[] = [];
   const workoutCount = await db.workout.count({ where: { user_id: user.id } });
 
-  if (workoutCount >= 1) conditions.push("FIRST_WORKOUT", "COMPLETE_ROUTINE");
+  if (workoutCount >= 1) conditions.push("FIRST_WORKOUT");
+  if (workoutCount >= 10) conditions.push("COMPLETE_ROUTINE");
   if (user.streak >= 7) conditions.push("STREAK_7");
   if (user.streak >= 30) conditions.push("STREAK_30");
   if (user.xp >= 100) conditions.push("XP_100");
