@@ -225,6 +225,13 @@ TrueRep/
 
 ## 4. Data Model
 
+> **Note (2026-07-31):** enum values below are written lowercase for readability
+> (this is the original blueprint's documentation style throughout). The actual
+> Prisma schema and Zod validators use UPPERCASE (`"BEGINNER"`, `"ACTIVE"`,
+> `"TRAINER"`, etc.) — see `apps/backend/prisma/schema.prisma` and
+> `packages/shared/src/validators/index.ts` for the literal values to copy into
+> code. Don't paste the lowercase examples below directly into a request body.
+
 ### Entities
 
 **users**
@@ -551,7 +558,7 @@ enum AnalysisStatus {
 | GET | `/api/users/[id]/leaderboard-rank` | User's rank globally | None | Public rank + XP |
 | **Subscriptions** | | | | |
 | GET | `/api/users/subscriptions/current` | Active subscription details | User | Plan, expiry, status |
-| POST | `/api/subscriptions/checkout` | Create Stripe checkout | User | Request: {plan: 'monthly' \| 'annual'} |
+| POST | `/api/subscriptions/checkout` | Create Stripe checkout | User | Request: {plan: 'base' \| 'premium'} (superseded the original monthly/annual plan naming — see `checkoutSchema` in `packages/shared`) |
 | **Challenges** | | | | |
 | GET | `/api/challenges` | List active + upcoming challenges | None | Pagination, filter by difficulty |
 | POST | `/api/challenges` | Create challenge (trainer only) | User (Trainer) | Request: {title, description, routine_id, difficulty, starts_at, ends_at, xp_reward} |
