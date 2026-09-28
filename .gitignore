@@ -4,13 +4,11 @@ node_modules/
 dist/
 build/
 *.log
-.env
-.env.local
-.env*.local
-# Cualquier variante de .env (backups, .env.bak.123, .env.production…): los
-# patrones de arriba solo cubren nombres exactos y *.local, así que una copia
-# como .env.bak.1790587952 se colaba al commit con las claves dentro.
-.env.*
+# Cualquier fichero .env queda fuera: los nombres exactos no bastan, una copia
+# como .env.bak.1790587952 se colaba al commit con las claves dentro. La
+# excepción va AL FINAL a propósito — en .gitignore gana la última regla que
+# coincide, así que puesta antes de `.env*` no sirve de nada.
+.env*
 !.env.example
 .DS_Store
 .vercel

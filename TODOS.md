@@ -124,11 +124,12 @@ las migraciones apuntasen a bases distintas.
   `prisma migrate deploy` va a petar ahí: usa una base limpia o borra esas filas.
   No he reescrito la migración a propósito — reescribir una migración ya aplicada
   en algún entorno es peor que el problema.
-- **`vercel.json` está en la raíz del repo, no en `apps/backend/`.** Si en Vercel
-  configuras Root Directory = `apps/backend`, Vercel busca el `vercel.json`
-  *dentro* de ese directorio y el de la raíz se ignora — el cron horario de
-  `/api/cron/reminders` no se programaría nunca y no avisa de nada. Verifica en
-  el dashboard que el cron aparece después del primer deploy.
+- ~~`vercel.json` está en la raíz del repo~~ **Corregido el 2026-09-28: era
+  falso.** `vercel.json` está en `apps/backend/vercel.json`, que es exactamente
+  donde Vercel lo busca con Root Directory = `apps/backend`. El cron horario de
+  `/api/cron/reminders` está bien colocado. Aun así, confirma en el dashboard
+  que el cron aparece tras el primer deploy: es la única forma de saber que
+  Vercel lo registró.
 - **No hay icono ni splash de la app** (no existe `apps/mobile/assets/`, y
   `app.json` no referencia ninguno). Expo usará el placeholder por defecto y
   App Store lo rechaza. Hace falta un icono 1024×1024 sin transparencia.
