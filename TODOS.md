@@ -149,8 +149,14 @@ las migraciones apuntasen a bases distintas.
 - **No hay icono ni splash de la app** (no existe `apps/mobile/assets/`, y
   `app.json` no referencia ninguno). Expo usará el placeholder por defecto y
   App Store lo rechaza. Hace falta un icono 1024×1024 sin transparencia.
-- **`eas.json` lleva URLs de ejemplo** (`truerep.vercel.app`). Cámbialas por el
-  dominio real antes del primer build de producción.
+- ~~`eas.json` lleva URLs de ejemplo~~ **Corregido el 2026-09-28**, y llevaba
+  dos errores propios: dominios inventados (`truerep.vercel.app`, que no
+  existe; el real es `true-rep-backend.vercel.app`) y un `/api` de más al final
+  de `EXPO_PUBLIC_API_URL`. Ese segundo era el peor: `src/lib/api.ts` hace
+  `${API_URL}/api${path}`, así que la URL habría quedado `/api/api/routines` y
+  todas las peticiones del móvil habrían dado 404 con una causa nada evidente.
+  Los tres perfiles llevan ya la publishable key de Clerk, que el build de EAS
+  necesita incrustada o la app compila pero no autentica.
 - **Los 7 logros apuntan a `/badges/*.png` y no existe `public/`.** Hoy no se
   nota porque la UI muestra nombre y descripción, no la imagen. Si algún día se
   renderizan como iconos, hay que crear los assets.

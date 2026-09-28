@@ -8,7 +8,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://localhost:3000/api"
+        "EXPO_PUBLIC_API_URL": "http://localhost:3000",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZnVua3ktZ2VsZGluZy04NTIwLmNsZXJrLmFjY291bnRzLmRldiQ"
       }
     },
     "preview": {
@@ -16,14 +17,16 @@
       "channel": "preview",
       "ios": { "simulator": false },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://truerep-staging.vercel.app/api"
+        "EXPO_PUBLIC_API_URL": "https://true-rep-backend.vercel.app",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZnVua3ktZ2VsZGluZy04NTIwLmNsZXJrLmFjY291bnRzLmRldiQ"
       }
     },
     "production": {
       "channel": "production",
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://truerep.vercel.app/api"
+        "EXPO_PUBLIC_API_URL": "https://true-rep-backend.vercel.app",
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZnVua3ktZ2VsZGluZy04NTIwLmNsZXJrLmFjY291bnRzLmRldiQ"
       }
     }
   },
