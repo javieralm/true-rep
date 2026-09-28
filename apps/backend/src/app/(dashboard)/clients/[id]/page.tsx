@@ -88,6 +88,13 @@ export default function ClientTrackingPage({ params }: { params: Promise<{ id: s
           </p>
         </div>
         <div className="flex items-center gap-2 text-sm">
+          <a
+            href={`/api/clients/${id}/export`}
+            download
+            className="rounded-full border border-[#ddd] px-3 py-1"
+          >
+            ⬇ Exportar CSV
+          </a>
           <button
             onClick={() => setWeek(Math.max(1, data.week - 1))}
             disabled={data.week <= 1}

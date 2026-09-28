@@ -21,12 +21,19 @@ export default function TabsLayout() {
   if (isLoaded && !isSignedIn) return <Redirect href="/(auth)/login" />;
 
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: colors.primary }}>
-      <Tabs.Screen name="index" options={{ title: "Home", tabBarIcon: icon("home") }} />
-      <Tabs.Screen name="workouts" options={{ title: "Workouts", tabBarIcon: icon("barbell") }} />
+    // Etiquetas por su contenido ("Hoy", "Rutinas"), no paraguas genéricos
+    // ("Home"): el usuario predice mejor lo que hay detrás de cada pestaña.
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+      }}
+    >
+      <Tabs.Screen name="index" options={{ title: "Hoy", tabBarIcon: icon("today") }} />
+      <Tabs.Screen name="workouts" options={{ title: "Rutinas", tabBarIcon: icon("barbell") }} />
       <Tabs.Screen name="progress" options={{ title: "Progreso", tabBarIcon: icon("trending-up") }} />
-      <Tabs.Screen name="challenges" options={{ title: "Challenges", tabBarIcon: icon("trophy") }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile", tabBarIcon: icon("person") }} />
+      <Tabs.Screen name="challenges" options={{ title: "Retos", tabBarIcon: icon("trophy") }} />
+      <Tabs.Screen name="profile" options={{ title: "Perfil", tabBarIcon: icon("person") }} />
     </Tabs>
   );
 }

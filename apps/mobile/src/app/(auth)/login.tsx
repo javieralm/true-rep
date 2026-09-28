@@ -4,6 +4,7 @@ import { Link, useRouter } from "expo-router";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Button } from "@/components/ui/Button";
 import { colors, spacing, radius } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
 
 export default function LoginScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -22,7 +23,7 @@ export default function LoginScreen() {
         router.replace("/(tabs)");
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Sign in failed");
+      setError(e instanceof Error ? e.message : "No hemos podido iniciar sesión");
     }
   }
 
@@ -33,23 +34,27 @@ export default function LoginScreen() {
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Correo electrónico"
+        placeholderTextColor={colors.textMuted}
         autoCapitalize="none"
+        autoComplete="email"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Contraseña"
+        placeholderTextColor={colors.textMuted}
+        autoComplete="password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
       {error && <Text style={styles.error}>{error}</Text>}
-      <Button title="Sign In" onPress={onLogin} />
+      <Button title="Iniciar sesión" onPress={onLogin} />
       <Link href="/(auth)/signup" style={styles.link}>
-        No account? Sign up
+        ¿No tienes cuenta? Regístrate
       </Link>
     </View>
   );
@@ -57,8 +62,33 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: spacing.xl, gap: spacing.lg, backgroundColor: colors.background },
-  title: { fontSize: 32, fontWeight: "700", textAlign: "center", marginBottom: spacing.xl },
-  input: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: spacing.lg, fontSize: 16 },
-  error: { color: colors.danger, fontSize: 13 },
-  link: { textAlign: "center", color: colors.secondary, marginTop: spacing.md },
+  // 32px pide tracking negativo: a este tamaño las letras se leen demasiado
+  // separadas si mantienen el tracking del cuerpo de texto.
+  title: {
+    fontSize: 32,
+    lineHeight: 36,
+    letterSpacing: -0.8,
+    fontWeight: "700",
+    color: colors.textPrimary,
+    textAlign: "center",
+    marginBottom: spacing.xl,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: spacing.lg,
+    ...typo.body,
+    fontSize: 16,
+    color: colors.textPrimary,
+  },
+  error: { ...typo.meta, color: colors.danger },
+  // Enlace con altura de touch target real: antes era solo la caja del texto (~20px).
+  link: {
+    ...typo.body,
+    textAlign: "center",
+    color: colors.secondary,
+    marginTop: spacing.md,
+    paddingVertical: spacing.md,
+  },
 });

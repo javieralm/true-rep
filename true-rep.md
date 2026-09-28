@@ -1958,6 +1958,44 @@ These are hard constraints the builder MUST follow:
 - Professional integrations: link to Strava, Apple Health, Google Fit
 - Monetization v2: affiliate trainers, sponsored workouts, ads (freemium)
 - Analytics: detailed progress tracking, injury prevention alerts
+- Automatizaciones para el coach: webhooks salientes + integración
+  Notion/Google Calendar/Zapier (programa asignado → notifica al cliente por
+  el canal que prefiera). Alcance nuevo real (auth de terceros, superficie de
+  API adicional), no una adaptación menor — se construye como su propio
+  proyecto cuando haya demanda, no junto a los items de abajo.
+
+### Estado de features evaluadas del resumen de coaching SaaS (2026-09-28)
+
+Comparando TrueRep contra un resumen externo de una app de coaching (Excel →
+SaaS, estilo Harbiz). Arquitectura (panel coach web + cliente mobile +
+backend común) ya coincidía 1:1, no requirió cambios. De los diferenciadores
+propuestos:
+
+- **Shipped:** auto-escalado de peso — `ExerciseCompleted.felt_like` (ya
+  existía en el schema pero la UI nunca lo capturaba; el cliente siempre
+  mandaba `"medium"` fijo) ahora se recoge de verdad en
+  `workout-session.tsx`, junto con `reps_done` real (antes hardcodeado a
+  `1`). `GET /api/routines/[id]` devuelve `weight_suggestions`
+  (`lib/progression.ts`): si el último set logueado de un ejercicio se sintió
+  "fácil", sugiere +1kg — el cliente ve la sugerencia en `routine-detail.tsx`
+  y decide si la usa. Sin flujo de aprobación del coach (fuera de alcance por
+  ahora, se puede añadir si hace falta).
+- **Shipped:** export CSV crudo del historial de un cliente para el coach —
+  botón en `(dashboard)/clients/[id]/page.tsx`, ruta
+  `GET /api/clients/[id]/export`. Sin PDF: CSV cubre el mismo caso de uso
+  (se abre directo en Excel/Sheets) sin añadir una dependencia nueva.
+- **Deferred (scope nuevo, no adaptación):** webhooks/Zapier/Notion (ver
+  arriba) y la integración con Health apps (ya estaba en Phase 4 como Strava/
+  Apple Health/Google Fit).
+- **Rechazado:** PWA para el cliente — TrueRep ya decidió React Native +
+  Expo (distribución en stores vía EAS); adoptar PWA revertiría esa decisión
+  sin una razón nueva para hacerlo.
+- **Feedback postural con IA (no viene del resumen, decisión separada):**
+  deprioritizado por costo de OpenAI Vision + Cloudinary por uso. El pipeline
+  sigue construido y funcional (`VideoFeedback`, `/api/video-feedback/*`,
+  `feedback-camera.tsx`, `/video-review`) pero sin entry point en la UI —
+  quitado de `profile.tsx` y del nav del dashboard. Reactivarlo es solo
+  volver a poner esos dos links, no reconstruir nada.
 
 ---
 

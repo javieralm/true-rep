@@ -4,6 +4,7 @@ import { Link, useRouter } from "expo-router";
 import { useSignUp } from "@clerk/clerk-expo";
 import { Button } from "@/components/ui/Button";
 import { colors, spacing, radius } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
 
 export default function SignupScreen() {
   const { signUp, setActive, isLoaded } = useSignUp();
@@ -22,7 +23,7 @@ export default function SignupScreen() {
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Sign up failed");
+      setError(e instanceof Error ? e.message : "No hemos podido crear la cuenta");
     }
   }
 
@@ -36,29 +37,54 @@ export default function SignupScreen() {
         router.replace("/(tabs)");
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Verification failed");
+      setError(e instanceof Error ? e.message : "No hemos podido verificar el código");
     }
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create account</Text>
+      <Text style={styles.title}>Crea tu cuenta</Text>
       {!pendingVerification ? (
         <>
-          <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
-          <TextInput style={styles.input} placeholder="Password" secureTextEntry value={password} onChangeText={setPassword} />
+          <TextInput
+            style={styles.input}
+            placeholder="Correo electrónico"
+            placeholderTextColor={colors.textMuted}
+            autoCapitalize="none"
+            autoComplete="email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            placeholderTextColor={colors.textMuted}
+            autoComplete="new-password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
           {error && <Text style={styles.error}>{error}</Text>}
-          <Button title="Sign Up" onPress={onSignUp} />
+          <Button title="Crear cuenta" onPress={onSignUp} />
           <Link href="/(auth)/login" style={styles.link}>
-            Already have an account? Sign in
+            ¿Ya tienes cuenta? Inicia sesión
           </Link>
         </>
       ) : (
         <>
-          <Text>Enter the code we emailed you.</Text>
-          <TextInput style={styles.input} placeholder="Verification code" keyboardType="number-pad" value={code} onChangeText={setCode} />
+          <Text style={styles.body}>Introduce el código que te hemos enviado por correo.</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Código de verificación"
+            placeholderTextColor={colors.textMuted}
+            autoComplete="one-time-code"
+            keyboardType="number-pad"
+            value={code}
+            onChangeText={setCode}
+          />
           {error && <Text style={styles.error}>{error}</Text>}
-          <Button title="Verify" onPress={onVerify} />
+          <Button title="Verificar" onPress={onVerify} />
         </>
       )}
     </View>
@@ -67,8 +93,24 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: spacing.xl, gap: spacing.lg, backgroundColor: colors.background },
-  title: { fontSize: 24, fontWeight: "700", textAlign: "center", marginBottom: spacing.lg },
-  input: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: spacing.lg, fontSize: 16 },
-  error: { color: colors.danger, fontSize: 13 },
-  link: { textAlign: "center", color: colors.secondary, marginTop: spacing.md },
+  title: { ...typo.display, color: colors.textPrimary, textAlign: "center", marginBottom: spacing.lg },
+  body: { ...typo.body, color: colors.textSecondary },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    padding: spacing.lg,
+    ...typo.body,
+    fontSize: 16,
+    color: colors.textPrimary,
+  },
+  error: { ...typo.meta, color: colors.danger },
+  // Enlace con altura de touch target real: antes era solo la caja del texto (~20px).
+  link: {
+    ...typo.body,
+    textAlign: "center",
+    color: colors.secondary,
+    marginTop: spacing.md,
+    paddingVertical: spacing.md,
+  },
 });

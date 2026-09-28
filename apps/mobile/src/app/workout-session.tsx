@@ -6,13 +6,16 @@ import { useWorkoutStore } from "@/state/workoutStore";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { colors, spacing } from "@/constants/colors";
+import { PressableCard } from "@/components/ui/PressableCard";
+import { colors, spacing, radius } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
 import type { LogWorkoutResponse } from "@truerep/shared";
 
 export default function WorkoutSessionScreen() {
   const router = useRouter();
   const qc = useQueryClient();
-  const { activeRoutine, startedAt, completed, toggleExercise, setWeight, reset } = useWorkoutStore();
+  const { activeRoutine, startedAt, completed, toggleExercise, setWeight, setReps, setFeltLike, reset } =
+    useWorkoutStore();
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<LogWorkoutResponse | null>(null);
   // Misma key en cada reintento del mismo intento de guardado (error de red,
@@ -27,15 +30,15 @@ export default function WorkoutSessionScreen() {
   if (!activeRoutine) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.loading}>No active workout.</Text>
-        <Button title="Back to routines" variant="outline" onPress={() => router.back()} />
+        <Text style={styles.loading}>No hay ningún entrenamiento en curso.</Text>
+        <Button title="Volver a las rutinas" variant="outline" onPress={() => router.back()} />
       </View>
     );
   }
 
   async function onFinish() {
     if (!activeRoutine || completed.length === 0) {
-      Alert.alert("Mark at least one exercise as done");
+      Alert.alert("Marca al menos un ejercicio como hecho");
       return;
     }
     setSaving(true);
@@ -57,7 +60,7 @@ export default function WorkoutSessionScreen() {
       reset();
       setResult(res);
     } catch (e) {
-      Alert.alert("Error", e instanceof Error ? e.message : "Could not log workout");
+      Alert.alert("Error", e instanceof Error ? e.message : "No hemos podido guardar el entrenamiento");
     } finally {
       setSaving(false);
     }
@@ -66,20 +69,35 @@ export default function WorkoutSessionScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}>
       <Text style={styles.title}>{activeRoutine.title}</Text>
-      <Text style={styles.hint}>Tap exercises as you complete them.</Text>
+      <Text style={styles.hint}>Toca cada ejercicio a medida que lo completes.</Text>
       {activeRoutine.exercises.map((ex) => {
         const entry = completed.find((c) => c.exercise_id === ex.id);
         const done = !!entry;
         return (
-          <Pressable key={ex.id} onPress={() => toggleExercise(ex.id)}>
-            <Card style={done ? styles.done : undefined}>
-              <Text style={[styles.exName, done && { color: colors.success }]}>
-                {done ? "✓ " : "○ "}
-                {ex.name}
-              </Text>
-              <Text style={styles.exMeta}>{ex.reps ?? (ex.duration_seconds ? `${ex.duration_seconds}s` : "")}</Text>
-              {done && (
+          <PressableCard
+            key={ex.id}
+            onPress={() => toggleExercise(ex.id)}
+            accessibilityState={{ checked: done }}
+            cardStyle={done ? styles.done : undefined}
+          >
+            <Text style={[styles.exName, done && { color: colors.success }]}>
+              {done ? "✓ " : "○ "}
+              {ex.name}
+            </Text>
+            <Text style={styles.exMeta}>{ex.reps ?? (ex.duration_seconds ? `${ex.duration_seconds}s` : "")}</Text>
+            {done && (
+              <>
                 <View style={styles.weightRow}>
+                  <Text style={styles.weightLabel}>Reps</Text>
+                  <TextInput
+                    keyboardType="number-pad"
+                    defaultValue={entry.reps_done.toString()}
+                    onChangeText={(v) => {
+                      const n = parseInt(v, 10);
+                      setReps(ex.id, Number.isFinite(n) && n > 0 ? n : 1);
+                    }}
+                    style={styles.weightInput}
+                  />
                   <Text style={styles.weightLabel}>Peso (kg, opcional)</Text>
                   <TextInput
                     keyboardType="decimal-pad"
@@ -92,12 +110,35 @@ export default function WorkoutSessionScreen() {
                     style={styles.weightInput}
                   />
                 </View>
-              )}
-            </Card>
-          </Pressable>
+                <View style={styles.feltRow}>
+                  {(["easy", "medium", "hard"] as const).map((f) => (
+                    <Pressable
+                      key={f}
+                      onPress={() => setFeltLike(ex.id, f)}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: entry.felt_like === f }}
+                      style={({ pressed }) => [
+                        styles.feltChip,
+                        entry.felt_like === f && styles.feltChipActive,
+                        pressed && styles.feltChipPressed,
+                      ]}
+                    >
+                      <Text style={[styles.feltChipText, entry.felt_like === f && styles.feltChipTextActive]}>
+                        {f === "easy" ? "😌 Fácil" : f === "medium" ? "🙂 Normal" : "😅 Difícil"}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </>
+            )}
+          </PressableCard>
         );
       })}
-      <Button title={saving ? "Saving…" : "Finish Workout"} onPress={onFinish} disabled={saving} />
+      <Button
+        title={saving ? "Guardando…" : "Terminar entrenamiento"}
+        onPress={onFinish}
+        disabled={saving}
+      />
     </ScrollView>
   );
 }
@@ -108,7 +149,7 @@ function CompletionScreen({ result, onDone }: { result: LogWorkoutResponse; onDo
   return (
     <View style={styles.completionContainer}>
       <Text style={styles.completionEmoji}>🎉</Text>
-      <Text style={styles.completionTitle}>Workout complete!</Text>
+      <Text style={styles.completionTitle}>¡Entrenamiento completado!</Text>
       <View style={styles.completionStatsRow}>
         <View style={styles.completionStat}>
           <Text style={styles.completionStatValue}>+{result.xp_earned}</Text>
@@ -116,12 +157,14 @@ function CompletionScreen({ result, onDone }: { result: LogWorkoutResponse; onDo
         </View>
         <View style={styles.completionStat}>
           <Text style={styles.completionStatValue}>🔥 {result.user.streak}</Text>
-          <Text style={styles.completionStatLabel}>day streak</Text>
+          <Text style={styles.completionStatLabel}>
+            {result.user.streak === 1 ? "día de racha" : "días de racha"}
+          </Text>
         </View>
       </View>
       {result.unlocked_achievements.length > 0 && (
         <Card style={styles.achievementsCard}>
-          <Text style={styles.achievementsTitle}>Achievements unlocked</Text>
+          <Text style={styles.achievementsTitle}>Logros desbloqueados</Text>
           {result.unlocked_achievements.map((name) => (
             <Text key={name} style={styles.achievementItem}>
               🏆 {name}
@@ -129,7 +172,7 @@ function CompletionScreen({ result, onDone }: { result: LogWorkoutResponse; onDo
           ))}
         </Card>
       )}
-      <Button title="Back to home" onPress={onDone} />
+      <Button title="Volver al inicio" onPress={onDone} />
     </View>
   );
 }
@@ -143,24 +186,39 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.xl,
   },
-  loading: { textAlign: "center", color: colors.textMuted },
-  title: { fontSize: 22, fontWeight: "700", color: colors.textPrimary },
-  hint: { fontSize: 13, color: colors.textMuted },
+  loading: { ...typo.body, textAlign: "center", color: colors.textMuted },
+  title: { ...typo.title, color: colors.textPrimary },
+  hint: { ...typo.meta, color: colors.textMuted },
   done: { borderColor: colors.success, backgroundColor: "#f0fdf4" },
-  exName: { fontSize: 16, fontWeight: "600", color: colors.textPrimary },
-  exMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
+  exName: { ...typo.cardTitle, color: colors.textPrimary },
+  exMeta: { ...typo.meta, color: colors.textSecondary, marginTop: 2 },
   weightRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm, marginTop: spacing.sm },
-  weightLabel: { fontSize: 12, color: colors.textSecondary },
+  weightLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary },
   weightInput: {
     minWidth: 64,
     minHeight: 44, // accesibilidad: touch target mínimo
     borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
+    borderColor: colors.border,
+    borderRadius: radius.sm,
     paddingHorizontal: spacing.sm,
-    fontSize: 14,
+    ...typo.body,
     color: colors.textPrimary,
   },
+  feltRow: { flexDirection: "row", gap: spacing.xs, marginTop: spacing.sm },
+  feltChip: {
+    flex: 1,
+    minHeight: 44, // accesibilidad: touch target mínimo
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: spacing.xs,
+  },
+  feltChipActive: { borderColor: colors.primary, backgroundColor: "#FFF3ED" },
+  feltChipPressed: { transform: [{ scale: 0.97 }], opacity: 0.9 },
+  feltChipText: { ...typo.label, fontWeight: "400", color: colors.textSecondary },
+  feltChipTextActive: { color: colors.primary, fontWeight: "700" },
   completionContainer: {
     flex: 1,
     justifyContent: "center",
@@ -170,12 +228,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   completionEmoji: { fontSize: 56 },
-  completionTitle: { fontSize: 26, fontWeight: "800", color: colors.textPrimary },
+  completionTitle: {
+    ...typo.display,
+    fontWeight: "800",
+    color: colors.textPrimary,
+    textAlign: "center",
+  },
   completionStatsRow: { flexDirection: "row", gap: spacing.xl },
-  completionStat: { alignItems: "center" },
-  completionStatValue: { fontSize: 28, fontWeight: "800", color: colors.primary },
-  completionStatLabel: { fontSize: 13, color: colors.textSecondary },
+  completionStat: { alignItems: "center", gap: spacing.xs },
+  completionStatValue: { fontSize: 28, lineHeight: 30, letterSpacing: -0.7, fontWeight: "800", color: colors.primary },
+  completionStatLabel: { ...typo.meta, color: colors.textSecondary },
   achievementsCard: { width: "100%", gap: spacing.xs },
-  achievementsTitle: { fontSize: 14, fontWeight: "700", color: colors.textPrimary },
+  achievementsTitle: { ...typo.cardTitle, fontSize: 14, color: colors.textPrimary },
   achievementItem: { fontSize: 14, color: colors.textPrimary },
 });

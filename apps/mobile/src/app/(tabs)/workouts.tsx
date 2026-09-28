@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import { useRoutines } from "@/hooks/useRoutines";
 import { RoutineCard } from "@/components/workout/RoutineCard";
 import { colors, spacing, radius } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
+import { DIFFICULTY_LABEL } from "@/constants/labels";
 import type { Difficulty } from "@truerep/shared";
 
 const filters: (Difficulty | null)[] = [null, "BEGINNER", "INTERMEDIATE", "ADVANCED"];
@@ -20,15 +22,21 @@ export default function WorkoutsScreen() {
           <Pressable
             key={f ?? "all"}
             onPress={() => setDifficulty(f)}
-            style={[styles.chip, difficulty === f && styles.chipActive]}
+            accessibilityRole="button"
+            accessibilityState={{ selected: difficulty === f }}
+            style={({ pressed }) => [
+              styles.chip,
+              difficulty === f && styles.chipActive,
+              pressed && styles.chipPressed,
+            ]}
           >
-            <Text style={[styles.chipText, difficulty === f && { color: "#fff" }]}>
-              {f ? f.toLowerCase() : "all"}
+            <Text style={[styles.chipText, difficulty === f && styles.chipTextActive]}>
+              {f ? DIFFICULTY_LABEL[f] : "Todas"}
             </Text>
           </Pressable>
         ))}
       </View>
-      {error && <Text style={styles.error}>Could not load routines.</Text>}
+      {error && <Text style={styles.error}>No hemos podido cargar las rutinas.</Text>}
       <FlatList
         data={routines ?? []}
         keyExtractor={(r) => r.id}
@@ -40,7 +48,11 @@ export default function WorkoutsScreen() {
           />
         )}
         ListEmptyComponent={
-          !isLoading ? <Text style={styles.empty}>No routines match this filter.</Text> : null
+          !isLoading ? (
+            <Text style={styles.empty}>Ninguna rutina coincide con este filtro.</Text>
+          ) : (
+            <Text style={styles.empty}>Cargando rutinas…</Text>
+          )
         }
       />
     </View>
@@ -51,15 +63,18 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
   filters: { flexDirection: "row", gap: spacing.sm, padding: spacing.lg, paddingBottom: 0 },
   chip: {
+    minHeight: 44, // accesibilidad: touch target mínimo (antes ~32px)
+    justifyContent: "center",
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
     borderRadius: radius.full,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.background,
   },
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, color: colors.textSecondary },
-  empty: { textAlign: "center", color: colors.textMuted, marginTop: spacing.xxl },
-  error: { color: colors.danger, padding: spacing.lg },
+  chipPressed: { transform: [{ scale: 0.97 }], opacity: 0.9 },
+  chipText: { ...typo.meta, color: colors.textSecondary },
+  chipTextActive: { color: "#fff", fontWeight: "600" },
+  empty: { ...typo.body, textAlign: "center", color: colors.textMuted, marginTop: spacing.xxl },
+  error: { ...typo.body, color: colors.danger, padding: spacing.lg },
 });

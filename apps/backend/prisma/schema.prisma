@@ -1,6 +1,12 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // En serverless cada instancia abre sus propias conexiones, así que
+  // DATABASE_URL apunta al pooler de Supabase (puerto 6543, pgbouncer) para no
+  // agotar el límite de conexiones. Pero las migraciones no pueden pasar por
+  // pgbouncer en modo transaction: DIRECT_URL es la conexión directa (5432) y
+  // es la que usa `prisma migrate`.
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {

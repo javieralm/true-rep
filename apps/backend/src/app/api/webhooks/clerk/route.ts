@@ -1,6 +1,7 @@
 import { Webhook } from "svix";
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
+import { requireEnv } from "@/lib/env";
 
 type ClerkUserEvent = {
   type: "user.created" | "user.updated" | "user.deleted";
@@ -16,7 +17,10 @@ type ClerkUserEvent = {
 /** Sincroniza usuarios de Clerk a la tabla users (webhook firmado con svix) */
 export const POST = handler(async (req: Request) => {
   const body = await req.text();
-  const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET ?? "");
+  // Mismo criterio que el webhook de Stripe: si falta el secreto es un error de
+  // configuración con su nombre, no un 500 genérico ni una "firma inválida"
+  // que manda a depurar el sitio equivocado.
+  const wh = new Webhook(requireEnv("CLERK_WEBHOOK_SECRET"));
   let event: ClerkUserEvent;
   try {
     event = wh.verify(body, {

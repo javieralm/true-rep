@@ -1,10 +1,18 @@
 import OpenAI from "openai";
+import { requireEnv } from "@/lib/env";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let client: OpenAI | null = null;
+
+/** Perezoso por el mismo motivo que Stripe: el SDK lanza si falta la apiKey, y
+ * construirlo al importar el módulo obligaba a tener la clave para compilar. */
+function openaiClient(): OpenAI {
+  client ??= new OpenAI({ apiKey: requireEnv("OPENAI_API_KEY") });
+  return client;
+}
 
 /** Analiza keyframes de un ejercicio y devuelve 3 correcciones de postura */
 export async function analyzeForm(exerciseName: string, frameUrls: string[]): Promise<string> {
-  const response = await openai.chat.completions.create({
+  const response = await openaiClient().chat.completions.create({
     model: "gpt-4o",
     max_tokens: 500,
     messages: [

@@ -159,6 +159,17 @@ export interface Routine {
   preview_video_url: string | null;
   is_published: boolean;
   created_at: string;
+  /** Solo presente cuando GET /routines/[id] se pide autenticado (auto-escalado) */
+  weight_suggestions?: WeightSuggestion[];
+}
+
+/** Auto-escalado: si la última vez que se registró peso en este ejercicio se
+ * sintió "easy", sugiere +1kg. El cliente decide si la usa. */
+export interface WeightSuggestion {
+  exercise_id: string;
+  last_weight_kg: number;
+  last_felt_like: "easy" | "medium" | "hard";
+  suggested_weight_kg: number;
 }
 
 export interface ExerciseCompleted {

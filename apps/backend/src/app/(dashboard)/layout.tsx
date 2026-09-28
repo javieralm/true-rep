@@ -21,7 +21,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <Link href="/routines/new">Crear rutina</Link>
           <Link href="/programs">Programas</Link>
           <Link href="/clients">Clientes</Link>
-          <Link href="/video-review">Revisión de vídeos</Link>
         </nav>
         <div className="mt-8">
           <UserButton />

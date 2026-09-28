@@ -2,16 +2,23 @@ import type Stripe from "stripe";
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
 import { stripe, priceToPlan } from "@/lib/stripe";
+import { requireEnv } from "@/lib/env";
 
 export const POST = handler(async (req: Request) => {
   const signature = req.headers.get("stripe-signature");
   if (!signature) return fail("Missing signature", 400);
 
+  // Fuera del try a propósito: si falta el secreto es un error de
+  // configuración (500 con el nombre de la variable), no una firma inválida.
+  // Dentro del try se tragaba como "Invalid signature" y mandaba a depurar
+  // el sitio equivocado.
+  const webhookSecret = requireEnv("STRIPE_WEBHOOK_SECRET");
+
   // Regla no negociable #6: firma verificada siempre
   let event: Stripe.Event;
   try {
     const body = await req.text();
-    event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET ?? "");
+    event = stripe().webhooks.constructEvent(body, signature, webhookSecret);
   } catch {
     return fail("Invalid signature", 400);
   }

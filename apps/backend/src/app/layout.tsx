@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      {/* lang="es": el dashboard está en español y los lectores de pantalla
+          necesitan el idioma correcto para pronunciarlo bien. */}
+      <html lang="es">
         <body className="bg-white text-[#1A1A1A] antialiased">{children}</body>
       </html>
     </ClerkProvider>
