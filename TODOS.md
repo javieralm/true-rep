@@ -125,11 +125,27 @@ las migraciones apuntasen a bases distintas.
   No he reescrito la migración a propósito — reescribir una migración ya aplicada
   en algún entorno es peor que el problema.
 - ~~`vercel.json` está en la raíz del repo~~ **Corregido el 2026-09-28: era
-  falso.** `vercel.json` está en `apps/backend/vercel.json`, que es exactamente
-  donde Vercel lo busca con Root Directory = `apps/backend`. El cron horario de
-  `/api/cron/reminders` está bien colocado. Aun así, confirma en el dashboard
-  que el cron aparece tras el primer deploy: es la única forma de saber que
-  Vercel lo registró.
+  falso.** Está en `apps/backend/vercel.json`, justo donde Vercel lo busca con
+  Root Directory = `apps/backend`.
+- **El cron de recordatorios está quitado de `vercel.json` (2026-09-28).** El
+  plan Hobby solo admite crons **diarios**, y `"0 * * * *"` hacía fallar el
+  deploy entero con `deploy_failed`, no solo el cron. Un cron diario tampoco
+  vale como sustituto: `/api/cron/reminders` compara la hora local de cada
+  usuario con su `reminder_hour` configurable, así que corriendo una vez al día
+  solo acertaría con quien tuviera esa hora exacta — el resto no recibiría nada
+  y parecería que la feature funciona. Encaja con que los recordatorios ya eran
+  alcance diferido (P3, ver más abajo). Para restaurarlo hace falta plan Pro y
+  volver a poner en `apps/backend/vercel.json`:
+  `{"crons":[{"path":"/api/cron/reminders","schedule":"0 * * * *"}]}`.
+  La ruta y su auth por `CRON_SECRET` siguen intactas.
+- **Las variables `NEXT_PUBLIC_*` en Vercel tienen que ser tipo Config, no
+  Sensitive.** Estaban las 19 como Secret y el build moría con
+  `Missing publishableKey`: Vercel no expone las Sensitive durante el build, y
+  una `NEXT_PUBLIC_*` necesita estar ahí para incrustarse en el bundle del
+  cliente. Ya corregida `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`; si algún día se
+  usan de verdad, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`,
+  `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` necesitan lo
+  mismo. Ninguna es secreta: todas viajan al navegador por definición.
 - **No hay icono ni splash de la app** (no existe `apps/mobile/assets/`, y
   `app.json` no referencia ninguno). Expo usará el placeholder por defecto y
   App Store lo rechaza. Hace falta un icono 1024×1024 sin transparencia.
