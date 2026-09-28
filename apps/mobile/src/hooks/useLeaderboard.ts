@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { supabase } from "@/services/supabase";
+import { getSupabase } from "@/services/supabase";
 import type { LeaderboardRow } from "@truerep/shared";
 
 interface ChallengeLeaderboard {
@@ -21,6 +21,11 @@ export function useLeaderboard(challengeId: string) {
 
   useEffect(() => {
     if (!challengeId) return;
+    // Sin Supabase configurado no hay tiempo real, pero el leaderboard sigue
+    // funcionando: los datos vienen de la API, esto solo refresca en vivo.
+    const supabase = getSupabase();
+    if (!supabase) return;
+
     const channel = supabase
       .channel(`challenge:${challengeId}:leaderboard`)
       .on(
