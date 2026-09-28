@@ -22,5 +22,15 @@ jobs:
       # El build se verifica en CI a propósito: type-check no lo cubre. Next
       # importa cada ruta para recolectar metadatos, así que un cliente de SDK
       # construido al cargar el módulo rompe aquí y no en type-check (nos pasó
-      # con Stripe y OpenAI). Sin secretos: si el build los necesita, está mal.
+      # con Stripe y OpenAI).
+      #
+      # Ningún SECRETO hace falta aquí: si el build pide uno, está mal montado.
+      # La publishable key de Clerk es otra cosa — no es secreta (viaja al
+      # navegador en cada carga) y ClerkProvider la exige al prerenderizar las
+      # páginas estáticas, así que sin ella el build no pasa de "Generating
+      # static pages". Se usa una de ejemplo a propósito: CI solo comprueba que
+      # compila, nunca habla con Clerk, y así el workflow no depende de que
+      # alguien configure un secreto en GitHub.
       - run: pnpm --filter @truerep/backend build
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsuZXhhbXBsZS5jb20k
