@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/clerk-expo";
+import type { ColorValue } from "react-native";
 import { registerForPushNotifications } from "@/lib/push";
 import { colors } from "@/constants/colors";
 
+// ColorValue y no string: desde SDK 57 el tabBarIcon recibe el color como
+// ColorValue, que admite también OpaqueColorValue (colores de plataforma).
 function icon(name: keyof typeof Ionicons.glyphMap) {
-  return ({ color, size }: { color: string; size: number }) => (
+  return ({ color, size }: { color: ColorValue; size: number }) => (
     <Ionicons name={name} color={color} size={size} />
   );
 }

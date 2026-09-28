@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "scheme": "truerep",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "com.truerep.app",
       "supportsTablet": false,
@@ -17,9 +16,18 @@
     },
     "android": {
       "package": "com.truerep.app",
-      "permissions": ["CAMERA", "READ_MEDIA_VIDEO"]
+      "permissions": [
+        "CAMERA",
+        "READ_MEDIA_VIDEO"
+      ]
     },
-    "plugins": ["expo-router", "expo-camera", "expo-secure-store"],
+    "plugins": [
+      "expo-router",
+      "expo-camera",
+      "expo-secure-store",
+      "expo-web-browser",
+      "expo-font"
+    ],
     "experiments": {
       "typedRoutes": true
     },
