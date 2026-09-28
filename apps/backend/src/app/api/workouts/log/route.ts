@@ -5,10 +5,6 @@ import { calcXp, nextStreak, checkAchievements } from "@/lib/gamification";
 import { logWorkoutSchema } from "@truerep/shared";
 import type { Exercise } from "@truerep/shared";
 
-// Ventana de deduplicación: reintentos de red / doble-tap en este rango se
-// tratan como el mismo log en vez de duplicar workout + XP.
-const RETRY_DEDUPE_WINDOW_MS = 60_000;
-
 // Anti XP-farming: cuánto por encima de la duración nominal de la rutina se
 // tolera antes de rechazar el log (margen para series extra, descansos, etc).
 const MAX_DURATION_MULTIPLIER = 1.5;
@@ -79,13 +75,12 @@ export const POST = handler(async (req: Request) => {
     // reciente que sí llegó a tiempo.
     const [{ now }] = await tx.$queryRaw<{ now: Date }[]>`SELECT now() as now`;
 
+    // Idempotencia real: un reintento con la misma key siempre encuentra el
+    // workout ya creado, sin depender de una ventana de tiempo (que
+    // fusionaría dos workouts legítimos del mismo usuario+rutina en <60s, o
+    // dejaría pasar un reintento a los 61s).
     const recentDuplicate = await tx.workout.findFirst({
-      where: {
-        user_id: user.id,
-        routine_id: input.routine_id,
-        completed_at: { gte: new Date(now.getTime() - RETRY_DEDUPE_WINDOW_MS) },
-      },
-      orderBy: { completed_at: "desc" },
+      where: { user_id: user.id, idempotency_key: input.idempotency_key },
     });
     if (recentDuplicate) {
       const currentUser = await tx.user.findUniqueOrThrow({ where: { id: user.id } });
@@ -121,6 +116,7 @@ export const POST = handler(async (req: Request) => {
         exercises_completed: input.exercises_completed,
         xp_earned: xpEarned,
         notes: input.notes,
+        idempotency_key: input.idempotency_key,
       },
     });
     const updatedUser = await tx.user.update({

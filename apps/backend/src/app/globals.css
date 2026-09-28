@@ -7,4 +7,53 @@
   --color-surface: #f8f8f8;
   --color-success: #2ecc71;
   --color-danger: #e74c3c;
+
+  /* Fuente del sistema a propósito: ya trae optical sizing, tablas de tracking
+     y ajustes de legibilidad por tamaño. Una webfont solo se justifica con una
+     razón de marca concreta, y cuesta una petición más en cada carga. */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Tracking y leading específicos del tamaño: el texto grande se lee
+     demasiado separado si mantiene el tracking del cuerpo, así que se aprieta
+     a medida que crece; el pequeño gana legibilidad con tracking positivo. */
+  --text-xs--line-height: 1.35;
+  --text-xs--letter-spacing: 0.01em;
+  --text-sm--line-height: 1.45;
+  --text-base--line-height: 1.5;
+  --text-lg--line-height: 1.3;
+  --text-lg--letter-spacing: -0.01em;
+  --text-xl--line-height: 1.25;
+  --text-xl--letter-spacing: -0.015em;
+  --text-2xl--line-height: 1.15;
+  --text-2xl--letter-spacing: -0.02em;
+  --text-3xl--line-height: 1.1;
+  --text-3xl--letter-spacing: -0.025em;
+}
+
+/* Respuesta al pulsar: el feedback ocurre al APOYAR el dedo/ratón, no al
+   soltar. Sin esto, un botón no da ninguna señal de haber recibido el clic. */
+button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  button:not(:disabled):hover,
+  a:hover {
+    opacity: 0.85;
+  }
+}
+
+/* Reduced motion: el feedback se queda en opacidad, sin transformaciones. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  button:not(:disabled):active {
+    transform: none;
+  }
 }

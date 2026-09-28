@@ -61,7 +61,7 @@ export default function ProgressScreen() {
       <View style={styles.statsRow}>
         <Card style={styles.stat}>
           <Text style={styles.statValue}>{stats?.totals.workouts ?? 0}</Text>
-          <Text style={styles.statLabel}>Workouts (12 sem)</Text>
+          <Text style={styles.statLabel}>Entrenos (12 sem)</Text>
         </Card>
         <Card style={styles.stat}>
           <Text style={styles.statValue}>{stats?.totals.reps ?? 0}</Text>
@@ -74,7 +74,7 @@ export default function ProgressScreen() {
       </View>
 
       <Card>
-        <Text style={styles.section}>Workouts por semana</Text>
+        <Text style={styles.section}>Entrenos por semana</Text>
         {stats ? (
           <>
             <WeeklyBars weekly={stats.weekly} />

@@ -61,7 +61,7 @@ Mobile → API (Clerk Bearer token) → middleware/`requireUser()` validates →
 
 ## Design Tokens
 
-Primary `#FF6B35` · Secondary `#004E89` · Accent `#F7B801` · Success `#2ECC71` · Danger `#E74C3C`. Inter font, 4px spacing scale, 8px radius. Mobile tokens in `apps/mobile/src/constants/colors.ts`, web in `apps/backend/src/app/globals.css`.
+Primary `#FF6B35` · Secondary `#004E89` · Accent `#F7B801` · Success `#2ECC71` · Danger `#E74C3C`. Fuente del sistema (no Inter: nunca se cargó, y la del sistema ya trae optical sizing y tracking por tamaño), 4px spacing scale, 8px radius. Mobile tokens in `apps/mobile/src/constants/colors.ts` + `typography.ts`, web in `apps/backend/src/app/globals.css`. Copy visible al usuario: **en español**. Ver `DESIGN.md` para la escala tipográfica y las reglas de feedback al pulsar.
 
 ## Environment Variables
 

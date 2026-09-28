@@ -1,9 +1,6 @@
-import { after } from "next/server";
 import { db } from "@/lib/db";
 import { ok, parseBody, handler } from "@/lib/api";
 import { requirePremium } from "@/lib/auth";
-import { keyframeUrls } from "@/lib/cloudinary";
-import { analyzeForm } from "@/lib/openai";
 import { analyzeVideoSchema } from "@truerep/shared";
 
 export const POST = handler(async (req: Request) => {
@@ -11,33 +8,19 @@ export const POST = handler(async (req: Request) => {
 
   const input = await parseBody(req, analyzeVideoSchema);
 
+  // Gate manual: el análisis de OpenAI Vision ya NO se dispara solo. Un
+  // trainer tiene que aprobarlo vía POST /api/video-feedback/[id]/review
+  // primero — es la pieza más cara y menos validada del producto (CEO
+  // review, 2026-07-31), no se automatiza hasta confirmar que el feedback
+  // manual ya genera valor real.
   const feedback = await db.videoFeedback.create({
     data: {
       user_id: user.id,
       exercise_name: input.exercise_name,
       video_url: input.video_url,
-      analysis_status: "PENDING",
+      analysis_status: "PENDING_TRAINER_REVIEW",
     },
   });
 
-  // ponytail: análisis en after() del mismo request; mover a cola (QStash/Inngest)
-  // si el volumen supera los límites de tiempo de Vercel
-  after(async () => {
-    try {
-      const frames = keyframeUrls(input.video_url);
-      const text = await analyzeForm(input.exercise_name, frames);
-      await db.videoFeedback.update({
-        where: { id: feedback.id },
-        data: { analysis_status: "COMPLETED", feedback_text: text, analyzed_at: new Date() },
-      });
-    } catch (e) {
-      console.error("Vision analysis failed:", e);
-      await db.videoFeedback.update({
-        where: { id: feedback.id },
-        data: { analysis_status: "FAILED" },
-      });
-    }
-  });
-
-  return ok({ feedback_id: feedback.id, status: "pending", created_at: feedback.created_at }, 202);
+  return ok({ feedback_id: feedback.id, status: "pending_trainer_review", created_at: feedback.created_at }, 202);
 });

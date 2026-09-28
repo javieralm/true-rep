@@ -1,26 +1,30 @@
 import { v2 as cloudinary } from "cloudinary";
+import { requireEnv } from "@/lib/env";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-/** URL firmada para subida directa de video desde el móvil */
+/** URL firmada para subida directa de video desde el móvil.
+ *
+ * La config va aquí y no al cargar el módulo: con las variables sin definir,
+ * `api_sign_request` firmaba con un secreto vacío y devolvía una firma
+ * inválida sin avisar — Cloudinary rechazaba la subida y el error aparecía en
+ * el móvil, lejos de la causa real. */
 export function signedUploadParams(userId: string) {
+  const cloudName = requireEnv("CLOUDINARY_CLOUD_NAME");
+  const apiKey = requireEnv("CLOUDINARY_API_KEY");
+  const apiSecret = requireEnv("CLOUDINARY_API_SECRET");
+  cloudinary.config({ cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret });
+
   const timestamp = Math.round(Date.now() / 1000);
   const publicId = `feedback/${userId}/${timestamp}`;
-  const paramsToSign = { timestamp, public_id: publicId };
   const signature = cloudinary.utils.api_sign_request(
-    paramsToSign,
-    process.env.CLOUDINARY_API_SECRET ?? ""
+    { timestamp, public_id: publicId },
+    apiSecret
   );
   return {
-    upload_url: `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/video/upload`,
+    upload_url: `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`,
     public_id: publicId,
     timestamp,
     signature,
-    api_key: process.env.CLOUDINARY_API_KEY ?? "",
+    api_key: apiKey,
   };
 }
 

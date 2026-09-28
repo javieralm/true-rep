@@ -86,26 +86,24 @@ export default function ProfileScreen() {
         )}
       </Card>
 
-      <Text style={styles.section}>Achievements ({unlocked.length}/{achievements?.length ?? 0})</Text>
+      <Text style={styles.section}>Logros ({unlocked.length}/{achievements?.length ?? 0})</Text>
       <View style={styles.badges}>
         {(achievements ?? []).map((a) => (
-          <Card key={a.id} style={[styles.badge, !a.unlocked_at && { opacity: 0.35 }]}>
-            <Text style={styles.badgeName}>{a.name}</Text>
+          <Card
+            key={a.id}
+            style={[styles.badge, !a.unlocked_at && { opacity: 0.35 }]}
+            accessibilityLabel={`${a.name}: ${a.unlocked_at ? "desbloqueado" : "bloqueado"}`}
+          >
+            <Text style={styles.badgeName}>
+              {a.name}
+              {!a.unlocked_at ? " (bloqueado)" : ""}
+            </Text>
             <Text style={styles.badgeDesc}>{a.description}</Text>
           </Card>
         ))}
       </View>
 
-      {isPremium ? (
-        <Button title="Get AI Form Feedback" onPress={() => router.push("/feedback-camera")} />
-      ) : (
-        <Button
-          title="Análisis de vídeo con IA (Premium)"
-          variant="outline"
-          onPress={() => router.push("/paywall")}
-        />
-      )}
-      <Button title="Sign Out" variant="outline" onPress={() => signOut()} />
+      <Button title="Cerrar sesión" variant="outline" onPress={() => signOut()} />
     </ScrollView>
   );
 }

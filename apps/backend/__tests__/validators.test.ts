@@ -49,23 +49,28 @@ describe("createRoutineSchema", () => {
 });
 
 describe("logWorkoutSchema", () => {
+  const validLog = {
+    routine_id: "r1",
+    duration_minutes: 42,
+    exercises_completed: [{ exercise_id: "e1", reps_done: 12, felt_like: "hard" }],
+    idempotency_key: "11111111-1111-1111-1111-111111111111",
+  };
+
   it("accepts a valid workout log", () => {
-    expect(() =>
-      logWorkoutSchema.parse({
-        routine_id: "r1",
-        duration_minutes: 42,
-        exercises_completed: [{ exercise_id: "e1", reps_done: 12, felt_like: "hard" }],
-      })
-    ).not.toThrow();
+    expect(() => logWorkoutSchema.parse(validLog)).not.toThrow();
   });
   it("rejects invalid felt_like", () => {
     expect(() =>
       logWorkoutSchema.parse({
-        routine_id: "r1",
-        duration_minutes: 42,
+        ...validLog,
         exercises_completed: [{ exercise_id: "e1", reps_done: 12, felt_like: "brutal" }],
       })
     ).toThrow();
+  });
+  it("requires idempotency_key to be a UUID", () => {
+    const { idempotency_key: _drop, ...withoutKey } = validLog;
+    expect(() => logWorkoutSchema.parse(withoutKey)).toThrow();
+    expect(() => logWorkoutSchema.parse({ ...validLog, idempotency_key: "not-a-uuid" })).toThrow();
   });
 });
 
@@ -75,6 +80,7 @@ describe("logWorkoutSchema weight_kg", () => {
       routine_id: "r1",
       duration_minutes: 30,
       exercises_completed: [{ exercise_id: "e1", reps_done: 8, weight_kg, felt_like: "medium" }],
+      idempotency_key: "11111111-1111-1111-1111-111111111111",
     });
     expect(() => logWorkoutSchema.parse(log(20))).not.toThrow();
     expect(() => logWorkoutSchema.parse(log(undefined))).not.toThrow();

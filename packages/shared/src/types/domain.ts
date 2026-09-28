@@ -35,7 +35,7 @@ export const PLAN_FEATURES = {
   },
 } as const;
 export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-export type AnalysisStatus = "PENDING" | "COMPLETED" | "FAILED";
+export type AnalysisStatus = "PENDING_TRAINER_REVIEW" | "PENDING" | "COMPLETED" | "FAILED";
 
 /** Ejercicio dentro de una rutina (Json en Routine.exercises) */
 export interface Exercise {
@@ -159,6 +159,17 @@ export interface Routine {
   preview_video_url: string | null;
   is_published: boolean;
   created_at: string;
+  /** Solo presente cuando GET /routines/[id] se pide autenticado (auto-escalado) */
+  weight_suggestions?: WeightSuggestion[];
+}
+
+/** Auto-escalado: si la última vez que se registró peso en este ejercicio se
+ * sintió "easy", sugiere +1kg. El cliente decide si la usa. */
+export interface WeightSuggestion {
+  exercise_id: string;
+  last_weight_kg: number;
+  last_felt_like: "easy" | "medium" | "hard";
+  suggested_weight_kg: number;
 }
 
 export interface ExerciseCompleted {
@@ -228,6 +239,11 @@ export interface VideoFeedback {
   analysis_status: AnalysisStatus;
   feedback_text: string | null;
   created_at: string;
+}
+
+/** GET /api/video-feedback/pending-review — cola de aprobación manual del trainer */
+export interface PendingReviewFeedback extends VideoFeedback {
+  user: { id: string; username: string; avatar_url: string | null };
 }
 
 /** Regla no negociable #2: forma de respuesta API consistente */

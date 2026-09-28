@@ -1,6 +1,12 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // En serverless cada instancia abre sus propias conexiones, así que
+  // DATABASE_URL apunta al pooler de Supabase (puerto 6543, pgbouncer) para no
+  // agotar el límite de conexiones. Pero las migraciones no pueden pasar por
+  // pgbouncer en modo transaction: DIRECT_URL es la conexión directa (5432) y
+  // es la que usa `prisma migrate`.
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -153,9 +159,14 @@ model Workout {
   trainer_feedback    String?  @db.Text // comentario del coach (Fase 5)
   feedback_at         DateTime?
   created_at          DateTime @default(now())
+  // Idempotencia real: el cliente envía un UUID por intento de guardado; un
+  // reintento con la MISMA key nunca duplica el workout, sin depender de una
+  // ventana de tiempo.
+  idempotency_key     String
 
   @@index([user_id, completed_at])
   @@index([routine_id])
+  @@unique([user_id, idempotency_key])
   @@map("workouts")
 }
 
@@ -289,6 +300,7 @@ enum AchievementCondition {
 }
 
 enum AnalysisStatus {
+  PENDING_TRAINER_REVIEW // el trainer no ha aprobado el análisis automático todavía
   PENDING
   COMPLETED
   FAILED

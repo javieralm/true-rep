@@ -1,55 +1,76 @@
-import { ScrollView, Text, View, StyleSheet, Pressable, Linking } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Linking } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import type { ScheduleTask } from "@truerep/shared";
 import { useUser } from "@/hooks/useUser";
 import { useRoutines } from "@/hooks/useRoutines";
 import { useSchedule } from "@/hooks/useSchedule";
 import { RoutineCard } from "@/components/workout/RoutineCard";
 import { Card } from "@/components/ui/Card";
+import { PressableCard } from "@/components/ui/PressableCard";
 import { colors, spacing } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
+import { DIFFICULTY_LABEL } from "@/constants/labels";
 
-const TASK_ICON: Record<ScheduleTask["type"], string> = {
-  ROUTINE: "🏋",
-  MESSAGE: "💬",
-  VIDEO: "🎬",
-  NOTE: "📝",
-  SESSION: "📅",
+const TASK_ICON: Record<ScheduleTask["type"], keyof typeof Ionicons.glyphMap> = {
+  ROUTINE: "barbell",
+  MESSAGE: "chatbubble",
+  VIDEO: "videocam",
+  NOTE: "document-text",
+  SESSION: "calendar",
 };
 
-function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<typeof useRouter> }) {
-  const icon = TASK_ICON[task.type];
+const TASK_LABEL: Record<ScheduleTask["type"], string> = {
+  ROUTINE: "Rutina",
+  MESSAGE: "Mensaje",
+  VIDEO: "Vídeo",
+  NOTE: "Nota",
+  SESSION: "Sesión",
+};
 
+function TaskTitle({ type, done, children }: { type: ScheduleTask["type"]; done?: boolean; children: string }) {
+  return (
+    <View style={styles.taskTitleRow} accessibilityLabel={`${TASK_LABEL[type]}: ${children}`}>
+      {done ? (
+        <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+      ) : (
+        <Ionicons name={TASK_ICON[type]} size={16} color={colors.primary} />
+      )}
+      <Text style={styles.todayTitle}>{children}</Text>
+    </View>
+  );
+}
+
+function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<typeof useRouter> }) {
   // Rutina: navegable al detalle, con estado de completada
   if (task.type === "ROUTINE" && task.routine) {
     const r = task.routine;
     return (
-      <Pressable onPress={() => router.push({ pathname: "/routine-detail", params: { id: r.id } })}>
-        <Card style={r.completed ? styles.todayDone : styles.today}>
-          <Text style={styles.todayTitle}>
-            {r.completed ? "✓ " : `${icon} `}
-            {r.title}
-          </Text>
-          <Text style={styles.todayMeta}>
-            {r.difficulty.toLowerCase()} · {r.duration_minutes} min
-            {r.completed ? " · completada" : ""}
-          </Text>
-        </Card>
-      </Pressable>
+      <PressableCard
+        onPress={() => router.push({ pathname: "/routine-detail", params: { id: r.id } })}
+        cardStyle={r.completed ? styles.todayDone : styles.today}
+      >
+        <TaskTitle type="ROUTINE" done={r.completed}>
+          {r.title}
+        </TaskTitle>
+        <Text style={styles.todayMeta}>
+          {DIFFICULTY_LABEL[r.difficulty]} · {r.duration_minutes} min
+          {r.completed ? " · completada" : ""}
+        </Text>
+      </PressableCard>
     );
   }
 
   const d = task.data ?? {};
-  const title = d.title || TASK_ICON[task.type];
+  const title = d.title || TASK_LABEL[task.type];
 
   // Vídeo: abre la URL externa
   if (task.type === "VIDEO" && d.url) {
     return (
-      <Pressable onPress={() => Linking.openURL(d.url!)}>
-        <Card style={styles.today}>
-          <Text style={styles.todayTitle}>{icon} {d.title || "Vídeo"}</Text>
-          <Text style={styles.todayMeta}>Ver vídeo</Text>
-        </Card>
-      </Pressable>
+      <PressableCard onPress={() => Linking.openURL(d.url!)} cardStyle={styles.today}>
+        <TaskTitle type="VIDEO">{d.title || "Vídeo"}</TaskTitle>
+        <Text style={styles.todayMeta}>Ver vídeo</Text>
+      </PressableCard>
     );
   }
 
@@ -58,7 +79,7 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
     const meta = [d.mode, d.location, d.time].filter(Boolean).join(" · ");
     return (
       <Card style={styles.today}>
-        <Text style={styles.todayTitle}>{icon} {d.title || "Sesión"}</Text>
+        <TaskTitle type="SESSION">{d.title || "Sesión"}</TaskTitle>
         {meta ? <Text style={styles.todayMeta}>{meta}</Text> : null}
       </Card>
     );
@@ -67,7 +88,7 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
   // Mensaje / Nota: título + cuerpo
   return (
     <Card style={styles.today}>
-      <Text style={styles.todayTitle}>{icon} {title}</Text>
+      <TaskTitle type={task.type}>{title}</TaskTitle>
       {d.body ? <Text style={styles.todayMeta}>{d.body}</Text> : null}
     </Card>
   );
@@ -86,20 +107,20 @@ export default function Dashboard() {
   if (isUserLoading) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.empty}>Loading…</Text>
+        <Text style={styles.empty}>Cargando…</Text>
       </View>
     );
   }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg }}>
-      <Text style={styles.greeting}>Hey {user?.username ?? "athlete"} 👋</Text>
+      <Text style={styles.greeting}>Hola, {user?.username ?? "atleta"} 👋</Text>
 
       {/* Acción dominante primero: la rutina/tarea de hoy es lo que el
           usuario vino a hacer. Las stats son contexto de apoyo, no lo primero
           que se ve (jerarquía invertida señalada en el Design Review). */}
       {isScheduleLoading ? (
-        <Text style={styles.empty}>Loading today&apos;s plan…</Text>
+        <Text style={styles.empty}>Cargando el plan de hoy…</Text>
       ) : schedule && schedule.tasks.length > 0 ? (
         <>
           <Text style={styles.section}>
@@ -113,16 +134,16 @@ export default function Dashboard() {
         </>
       ) : (
         <>
-          <Text style={styles.section}>Today&apos;s Recommendation</Text>
+          <Text style={styles.section}>Recomendado para hoy</Text>
           {isRoutinesLoading ? (
-            <Text style={styles.empty}>Loading routines…</Text>
+            <Text style={styles.empty}>Cargando rutinas…</Text>
           ) : recommended ? (
             <RoutineCard
               routine={recommended}
               onPress={() => router.push({ pathname: "/routine-detail", params: { id: recommended.id } })}
             />
           ) : (
-            <Text style={styles.empty}>No routines available yet.</Text>
+            <Text style={styles.empty}>Todavía no hay rutinas disponibles.</Text>
           )}
         </>
       )}
@@ -134,11 +155,11 @@ export default function Dashboard() {
         </Card>
         <Card style={styles.stat}>
           <Text style={styles.statValue}>🔥 {user?.streak ?? 0}</Text>
-          <Text style={styles.statLabel}>Streak</Text>
+          <Text style={styles.statLabel}>Racha</Text>
         </Card>
         <Card style={styles.stat}>
           <Text style={styles.statValue}>{Math.floor((user?.xp ?? 0) / 100) + 1}</Text>
-          <Text style={styles.statLabel}>Level</Text>
+          <Text style={styles.statLabel}>Nivel</Text>
         </Card>
       </View>
     </ScrollView>
@@ -148,15 +169,16 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
   centerContainer: { flex: 1, backgroundColor: colors.surface, justifyContent: "center", alignItems: "center" },
-  greeting: { fontSize: 24, fontWeight: "700", color: colors.textPrimary, marginBottom: spacing.lg },
+  greeting: { ...typo.display, color: colors.textPrimary, marginBottom: spacing.lg },
   statsRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.lg },
   stat: { flex: 1, alignItems: "center" },
-  statValue: { fontSize: 20, fontWeight: "700", color: colors.primary },
-  statLabel: { fontSize: 12, color: colors.textSecondary, marginTop: spacing.xs },
-  section: { fontSize: 18, fontWeight: "600", marginBottom: spacing.md, color: colors.textPrimary },
-  empty: { color: colors.textMuted },
+  statValue: { ...typo.stat, color: colors.primary },
+  statLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary, marginTop: spacing.xs },
+  section: { ...typo.section, color: colors.textPrimary, marginBottom: spacing.md },
+  empty: { ...typo.body, color: colors.textMuted },
   today: { borderColor: colors.primary, borderWidth: 1.5 },
   todayDone: { borderColor: colors.success, borderWidth: 1.5, opacity: 0.7 },
-  todayTitle: { fontSize: 16, fontWeight: "600", color: colors.textPrimary },
-  todayMeta: { fontSize: 13, color: colors.textSecondary, marginTop: 2 },
+  taskTitleRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs },
+  todayTitle: { ...typo.cardTitle, color: colors.textPrimary, flex: 1 },
+  todayMeta: { ...typo.meta, color: colors.textSecondary, marginTop: 2 },
 });

@@ -130,6 +130,10 @@ export const logWorkoutSchema = z.object({
     )
     .min(1),
   notes: z.string().max(2000).optional(),
+  // Idempotencia real: un UUID por intento de guardado, generado por el
+  // cliente. Requerido — el único cliente (la app mobile de este mismo
+  // monorepo) siempre lo manda; no hay clientes "viejos" que soportar todavía.
+  idempotency_key: z.string().uuid(),
 });
 
 export const updateProfileSchema = z.object({

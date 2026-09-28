@@ -5,6 +5,9 @@
   "engines": {
     "node": ">=22.13"
   },
+  "devDependencies": {
+    "@types/react": "~18.3.0"
+  },
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",

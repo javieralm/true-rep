@@ -26,10 +26,10 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="(auth)" />
-          <Stack.Screen name="routine-detail" options={{ presentation: "modal", headerShown: true, title: "Routine" }} />
-          <Stack.Screen name="workout-session" options={{ presentation: "modal", headerShown: true, title: "Workout" }} />
-          <Stack.Screen name="challenge-detail" options={{ presentation: "modal", headerShown: true, title: "Challenge" }} />
-          <Stack.Screen name="feedback-camera" options={{ presentation: "modal", headerShown: true, title: "Form Feedback" }} />
+          <Stack.Screen name="routine-detail" options={{ presentation: "modal", headerShown: true, title: "Rutina" }} />
+          <Stack.Screen name="workout-session" options={{ presentation: "modal", headerShown: true, title: "Entrenamiento" }} />
+          <Stack.Screen name="challenge-detail" options={{ presentation: "modal", headerShown: true, title: "Reto" }} />
+          <Stack.Screen name="feedback-camera" options={{ presentation: "modal", headerShown: true, title: "Análisis de técnica" }} />
           <Stack.Screen name="paywall" options={{ presentation: "modal", headerShown: true, title: "Suscripción" }} />
         </Stack>
       </QueryClientProvider>

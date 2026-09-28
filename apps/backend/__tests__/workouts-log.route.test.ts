@@ -75,6 +75,7 @@ const validBody = {
   routine_id: "r1",
   duration_minutes: 20,
   exercises_completed: [{ exercise_id: "ex1", reps_done: 10, felt_like: "medium" }],
+  idempotency_key: "00000000-0000-0000-0000-000000000000",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -146,18 +147,31 @@ describe("POST /api/workouts/log", () => {
     expect(res.status).toBe(201);
   });
 
-  it("dedupes a retried request within the idempotency window instead of creating a second workout", async () => {
+  it("dedupes by idempotency_key regardless of how much time has passed", async () => {
     tx.workout.findFirst.mockResolvedValue({
       id: "w-existing",
       user_id: "u1",
       routine_id: "r1",
-      completed_at: new Date(),
+      idempotency_key: "11111111-1111-1111-1111-111111111111",
+      completed_at: new Date("2020-01-01T00:00:00Z"), // long before "now" — no time window applies
     });
-    const res = await POST(req(validBody));
+    const res = await POST(req({ ...validBody, idempotency_key: "11111111-1111-1111-1111-111111111111" }));
     const body = await res.json();
     expect(res.status).toBe(201);
     expect(body.data.deduped).toBe(true);
+    expect(tx.workout.findFirst).toHaveBeenCalledWith({
+      where: { user_id: "u1", idempotency_key: "11111111-1111-1111-1111-111111111111" },
+    });
     expect(tx.workout.create).not.toHaveBeenCalled();
+  });
+
+  it("persists the idempotency_key on a new workout when the client sends one", async () => {
+    await POST(req({ ...validBody, idempotency_key: "22222222-2222-2222-2222-222222222222" }));
+    expect(tx.workout.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ idempotency_key: "22222222-2222-2222-2222-222222222222" }),
+      })
+    );
   });
 
   it("acquires a per-user advisory lock (with a lock timeout) before the dedupe check", async () => {

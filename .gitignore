@@ -7,6 +7,11 @@ build/
 .env
 .env.local
 .env*.local
+# Cualquier variante de .env (backups, .env.bak.123, .env.production…): los
+# patrones de arriba solo cubren nombres exactos y *.local, así que una copia
+# como .env.bak.1790587952 se colaba al commit con las claves dentro.
+.env.*
+!.env.example
 .DS_Store
 .vercel
 coverage/
