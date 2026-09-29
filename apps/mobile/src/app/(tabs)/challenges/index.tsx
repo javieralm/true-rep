@@ -1,6 +1,7 @@
-import { FlatList, Text, View, StyleSheet } from "react-native";
+import { FlatList, Text, View, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { useChallenges } from "@/hooks/useChallenges";
+import { useRefresh } from "@/hooks/useRefresh";
 import { PressableCard } from "@/components/ui/PressableCard";
 import { DifficultyBadge } from "@/components/ui/Badge";
 import { colors, spacing } from "@/constants/colors";
@@ -9,6 +10,7 @@ import { type as typo } from "@/constants/typography";
 export default function ChallengesScreen() {
   const router = useRouter();
   const { data: challenges, isLoading } = useChallenges();
+  const { refreshing, onRefresh } = useRefresh();
 
   return (
     <View style={styles.container}>
@@ -16,9 +18,12 @@ export default function ChallengesScreen() {
         data={challenges ?? []}
         keyExtractor={(c) => c.id}
         contentContainerStyle={{ padding: spacing.lg }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
+        }
         renderItem={({ item }) => (
           <PressableCard
-            onPress={() => router.push({ pathname: "/challenge-detail", params: { id: item.id } })}
+            onPress={() => router.push({ pathname: "/challenges/[id]", params: { id: item.id } })}
             cardStyle={styles.card}
           >
             <View style={styles.row}>

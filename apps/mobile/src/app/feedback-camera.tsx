@@ -99,7 +99,7 @@ export default function FeedbackCameraScreen() {
       <Text style={styles.title}>AI Form Feedback</Text>
       <Text style={styles.hint}>
         Upload a short video (≤30s) of your exercise. Your trainer reviews it before the AI
-        analysis runs, so this can take a bit — check back later if it's not ready right away.
+        analysis runs, so this can take a bit — check back later if it&apos;s not ready right away.
       </Text>
       <TextInput
         style={styles.input}

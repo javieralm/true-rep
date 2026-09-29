@@ -2,10 +2,13 @@ import { z } from "zod";
 
 export const difficultySchema = z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]);
 
+export const exerciseMeasureSchema = z.enum(["reps", "seconds"]);
+
 export const exerciseSchema = z.object({
   id: z.string().min(1),
   exercise_id: z.string().optional(), // referencia a la librería si viene de ella
   name: z.string().min(1).max(100),
+  measure: exerciseMeasureSchema.optional(),
   reps: z.string().optional(),
   sets: z.number().int().min(1).max(20).optional(),
   rest_seconds: z.number().int().min(0).max(600).optional(),
@@ -18,6 +21,7 @@ export const exerciseSchema = z.object({
 // ─── Librería de ejercicios ───
 export const createExerciseSchema = z.object({
   name: z.string().min(2).max(100),
+  measure: exerciseMeasureSchema.optional(),
   muscle_group: z.string().max(50).optional(),
   equipment: z.string().max(100).optional(),
   video_url: z.string().url().optional(),
@@ -126,6 +130,21 @@ export const logWorkoutSchema = z.object({
         reps_done: z.number().int().min(0),
         weight_kg: z.number().min(0).max(500).optional(),
         felt_like: z.enum(["easy", "medium", "hard"]),
+        // Desglose por serie. Opcional: los clientes que no lo mandan siguen
+        // siendo válidos, y reps_done/weight_kg se mantienen como agregados.
+        // El tope de 30 es para que una app rota no meta un array enorme en
+        // la columna JSON.
+        sets: z
+          .array(
+            z.object({
+              reps: z.number().int().min(0).max(1000),
+              // Ejercicios por segundos (L-sit, plancha). Tope: una hora.
+              seconds: z.number().int().min(0).max(3600).optional(),
+              weight_kg: z.number().min(0).max(500).optional(),
+            })
+          )
+          .max(30)
+          .optional(),
       })
     )
     .min(1),

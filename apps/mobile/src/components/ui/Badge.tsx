@@ -19,5 +19,5 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     alignSelf: "flex-start",
   },
-  text: { ...typo.label, color: "#fff" },
+  text: { ...typo.label, color: colors.onFill },
 });

@@ -1,9 +1,10 @@
-import { ScrollView, Text, View, StyleSheet, Switch, Pressable } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Switch, Pressable, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
 import { useAchievements } from "@/hooks/useAchievements";
+import { useRefresh } from "@/hooks/useRefresh";
 import { api } from "@/lib/api";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -11,6 +12,7 @@ import { colors, spacing } from "@/constants/colors";
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { refreshing, onRefresh } = useRefresh();
   const { signOut } = useAuth();
   const { data: user } = useUser();
   const { data: achievements } = useAchievements(user?.id);
@@ -29,7 +31,13 @@ export default function ProfileScreen() {
   const reminderHour = user?.reminder_hour ?? 8;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
+      }
+    >
       <Card style={styles.header}>
         <Text style={styles.username}>{user?.username ?? "…"}</Text>
         <Text style={styles.meta}>
@@ -40,16 +48,16 @@ export default function ProfileScreen() {
       <Card style={styles.planCard}>
         <Text style={styles.section}>Tu plan: {planLabel}</Text>
         {!isActive ? (
-          <Button title="Suscríbete" onPress={() => router.push("/paywall")} />
+          <Button title="Suscríbete" onPress={() => router.navigate("/paywall")} />
         ) : (
           <>
             {!isPremium && (
-              <Button title="Mejorar a Premium" onPress={() => router.push("/paywall")} />
+              <Button title="Mejorar a Premium" onPress={() => router.navigate("/paywall")} />
             )}
             <Button
               title="Gestionar suscripción"
               variant="outline"
-              onPress={() => router.push("/paywall")}
+              onPress={() => router.navigate("/paywall")}
             />
           </>
         )}

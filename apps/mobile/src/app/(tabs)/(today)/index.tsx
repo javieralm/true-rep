@@ -1,10 +1,11 @@
-import { ScrollView, Text, View, StyleSheet, Linking } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Linking, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import type { ScheduleTask } from "@truerep/shared";
 import { useUser } from "@/hooks/useUser";
 import { useRoutines } from "@/hooks/useRoutines";
 import { useSchedule } from "@/hooks/useSchedule";
+import { useRefresh } from "@/hooks/useRefresh";
 import { RoutineCard } from "@/components/workout/RoutineCard";
 import { Card } from "@/components/ui/Card";
 import { PressableCard } from "@/components/ui/PressableCard";
@@ -47,7 +48,7 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
     const r = task.routine;
     return (
       <PressableCard
-        onPress={() => router.push({ pathname: "/routine-detail", params: { id: r.id } })}
+        onPress={() => router.push({ pathname: "/routine/[id]", params: { id: r.id } })}
         cardStyle={r.completed ? styles.todayDone : styles.today}
       >
         <TaskTitle type="ROUTINE" done={r.completed}>
@@ -96,10 +97,11 @@ function TodayTask({ task, router }: { task: ScheduleTask; router: ReturnType<ty
 
 export default function Dashboard() {
   const router = useRouter();
+  const { refreshing, onRefresh } = useRefresh();
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: routines, isLoading: isRoutinesLoading } = useRoutines();
   const isPremium = user?.subscription_status === "ACTIVE" && user?.subscription_plan === "PREMIUM";
-  const { data: schedule, isLoading: isScheduleLoading } = useSchedule(isPremium);
+  const { data: schedule, isLoading: isScheduleLoading, error: scheduleError } = useSchedule(isPremium);
   const recommended = routines?.[0];
 
   // Un usuario con progreso real no debe ver "0 XP" mientras carga: loading
@@ -113,8 +115,23 @@ export default function Dashboard() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg }}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ padding: spacing.lg }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
+      }
+    >
       <Text style={styles.greeting}>Hola, {user?.username ?? "atleta"} 👋</Text>
+
+      {/* Si el plan no ha podido cargarse se dice, y se sigue mostrando el
+          recomendado debajo. Antes el hook convertía cualquier fallo en null y
+          el usuario con programa asignado creía que no tenía nada para hoy. */}
+      {scheduleError && (
+        <Text style={styles.scheduleError}>
+          No hemos podido cargar tu plan de hoy. Desliza hacia abajo para reintentar.
+        </Text>
+      )}
 
       {/* Acción dominante primero: la rutina/tarea de hoy es lo que el
           usuario vino a hacer. Las stats son contexto de apoyo, no lo primero
@@ -140,7 +157,7 @@ export default function Dashboard() {
           ) : recommended ? (
             <RoutineCard
               routine={recommended}
-              onPress={() => router.push({ pathname: "/routine-detail", params: { id: recommended.id } })}
+              onPress={() => router.push({ pathname: "/routine/[id]", params: { id: recommended.id } })}
             />
           ) : (
             <Text style={styles.empty}>Todavía no hay rutinas disponibles.</Text>
@@ -172,10 +189,11 @@ const styles = StyleSheet.create({
   greeting: { ...typo.display, color: colors.textPrimary, marginBottom: spacing.lg },
   statsRow: { flexDirection: "row", gap: spacing.md, marginTop: spacing.lg },
   stat: { flex: 1, alignItems: "center" },
-  statValue: { ...typo.stat, color: colors.primary },
+  statValue: { ...typo.stat, color: colors.primaryText },
   statLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary, marginTop: spacing.xs },
   section: { ...typo.section, color: colors.textPrimary, marginBottom: spacing.md },
   empty: { ...typo.body, color: colors.textMuted },
+  scheduleError: { ...typo.meta, color: colors.dangerText, marginBottom: spacing.md },
   today: { borderColor: colors.primary, borderWidth: 1.5 },
   todayDone: { borderColor: colors.success, borderWidth: 1.5, opacity: 0.7 },
   taskTitleRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs },

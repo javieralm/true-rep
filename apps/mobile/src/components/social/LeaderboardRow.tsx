@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
     gap: spacing.md,
   },
-  rank: { width: 32, fontSize: 16, fontWeight: "700", color: colors.primary },
+  rank: { width: 32, fontSize: 16, fontWeight: "700", color: colors.primaryText },
   name: { flex: 1, fontSize: 15, color: colors.textPrimary },
   status: { fontSize: 13, color: colors.textSecondary },
 });

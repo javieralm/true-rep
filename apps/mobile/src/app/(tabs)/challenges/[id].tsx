@@ -4,17 +4,19 @@ import { useChallenge, useJoinChallenge } from "@/hooks/useChallenges";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { LeaderboardRow } from "@/components/social/LeaderboardRow";
 import { Button } from "@/components/ui/Button";
+import { ErrorState } from "@/components/ui/ErrorState";
 import { DifficultyBadge } from "@/components/ui/Badge";
 import { colors, spacing } from "@/constants/colors";
 import { type as typo } from "@/constants/typography";
 
 export default function ChallengeDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { data: challenge, isLoading } = useChallenge(id);
+  const { data: challenge, isLoading, error, refetch } = useChallenge(id);
   const { data: leaderboard } = useLeaderboard(id);
   const join = useJoinChallenge(id);
 
-  if (isLoading || !challenge) return <Text style={styles.loading}>Cargando…</Text>;
+  if (isLoading) return <Text style={styles.loading}>Cargando…</Text>;
+  if (error || !challenge) return <ErrorState error={error} onRetry={() => void refetch()} />;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}>

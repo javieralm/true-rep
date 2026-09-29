@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   // En serverless cada instancia abre sus propias conexiones, así que
   // DATABASE_URL apunta al pooler de Supabase (puerto 6543, pgbouncer) para no
   // agotar el límite de conexiones. Pero las migraciones no pueden pasar por
@@ -14,27 +14,27 @@ generator client {
 }
 
 model User {
-  id                       String              @id @default(cuid())
-  email                    String              @unique
-  clerk_id                 String              @unique
+  id                       String             @id @default(cuid())
+  email                    String             @unique
+  clerk_id                 String             @unique
   username                 String
   avatar_url               String?
-  role                     Role                @default(USER)
-  is_superadmin            Boolean             @default(false) // promueve trainers desde /admin
-  subscription_status      SubscriptionStatus  @default(FREE)
+  role                     Role               @default(USER)
+  is_superadmin            Boolean            @default(false) // promueve trainers desde /admin
+  subscription_status      SubscriptionStatus @default(FREE)
   subscription_id          String?
   stripe_customer_id       String? // reusado entre checkouts para no fragmentar el historial de pago
   subscription_plan        SubscriptionPlan?
   subscription_expires_at  DateTime?
-  xp                       Int                 @default(0)
-  streak                   Int                 @default(0)
+  xp                       Int                @default(0)
+  streak                   Int                @default(0)
   streak_last_workout_date DateTime?
-  reminder_enabled         Boolean             @default(true)
-  reminder_hour            Int                 @default(8) // hora local 0-23
-  timezone                 String              @default("Europe/Madrid")
+  reminder_enabled         Boolean            @default(true)
+  reminder_hour            Int                @default(8) // hora local 0-23
+  timezone                 String             @default("Europe/Madrid")
   last_reminder_sent_at    DateTime?
-  created_at               DateTime            @default(now())
-  updated_at               DateTime            @updatedAt
+  created_at               DateTime           @default(now())
+  updated_at               DateTime           @updatedAt
 
   routines               Routine[]
   workouts               Workout[]
@@ -79,19 +79,25 @@ model Routine {
   @@map("routines")
 }
 
+enum ExerciseMeasure {
+  reps
+  seconds
+}
+
 model Exercise {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   trainer_id    String
-  trainer       User      @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  trainer       User            @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
   name          String
+  measure       ExerciseMeasure @default(reps) // posturales (L-sit, plancha) van por segundos
   muscle_group  String? // "Tracción", "Empuje", "Pierna", "Core"...
   equipment     String? // "Barra de dominadas", "Anillas", "Goma elástica"...
   video_url     String?
   thumbnail_url String?
-  description   String?   @db.Text
+  description   String?         @db.Text
   deleted_at    DateTime? // soft delete
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @updatedAt
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
 
   @@index([trainer_id, name])
   @@map("exercises")
@@ -146,27 +152,27 @@ model ProgramAssignment {
 }
 
 model Workout {
-  id                  String   @id @default(cuid())
+  id                  String    @id @default(cuid())
   user_id             String
-  user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user                User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   routine_id          String
-  routine             Routine  @relation(fields: [routine_id], references: [id], onDelete: Cascade)
+  routine             Routine   @relation(fields: [routine_id], references: [id], onDelete: Cascade)
   completed_at        DateTime
   duration_minutes    Int
   exercises_completed Json // Array: [{exercise_id, reps_done, weight_kg?, felt_like}]
   xp_earned           Int
-  notes               String?  @db.Text
-  trainer_feedback    String?  @db.Text // comentario del coach (Fase 5)
+  notes               String?   @db.Text
+  trainer_feedback    String?   @db.Text // comentario del coach (Fase 5)
   feedback_at         DateTime?
-  created_at          DateTime @default(now())
+  created_at          DateTime  @default(now())
   // Idempotencia real: el cliente envía un UUID por intento de guardado; un
   // reintento con la MISMA key nunca duplica el workout, sin depender de una
   // ventana de tiempo.
   idempotency_key     String
 
+  @@unique([user_id, idempotency_key])
   @@index([user_id, completed_at])
   @@index([routine_id])
-  @@unique([user_id, idempotency_key])
   @@map("workouts")
 }
 

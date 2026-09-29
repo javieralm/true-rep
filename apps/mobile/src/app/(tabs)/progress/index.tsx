@@ -1,8 +1,9 @@
-import { ScrollView, Text, View, StyleSheet } from "react-native";
+import { ScrollView, Text, View, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "@/hooks/useUser";
 import { useStats } from "@/hooks/useStats";
 import { useWorkoutHistory } from "@/hooks/useWorkoutHistory";
+import { useRefresh } from "@/hooks/useRefresh";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { colors, spacing } from "@/constants/colors";
@@ -29,6 +30,7 @@ function WeeklyBars({ weekly }: { weekly: Array<{ workouts: number }> }) {
 
 export default function ProgressScreen() {
   const router = useRouter();
+  const { refreshing, onRefresh } = useRefresh();
   const { data: user } = useUser();
   const isActive = user?.subscription_status === "ACTIVE";
   const isPremium = isActive && user?.subscription_plan === "PREMIUM";
@@ -42,7 +44,7 @@ export default function ProgressScreen() {
         <Text style={styles.lockedText}>
           Con el plan Base llevas el seguimiento de tus entrenamientos, reps y racha semana a semana.
         </Text>
-        <Button title="Ver planes" onPress={() => router.push("/paywall")} />
+        <Button title="Ver planes" onPress={() => router.navigate("/paywall")} />
       </View>
     );
   }
@@ -55,7 +57,13 @@ export default function ProgressScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ padding: spacing.lg, gap: spacing.lg }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
+      }
+    >
       <Text style={styles.title}>Tu progreso</Text>
 
       <View style={styles.statsRow}>
@@ -95,7 +103,7 @@ export default function ProgressScreen() {
             <Text style={styles.empty}>
               Estadísticas avanzadas: progresión de cargas por ejercicio, disponible en Premium.
             </Text>
-            <Button title="Mejorar a Premium" variant="outline" onPress={() => router.push("/paywall")} />
+            <Button title="Mejorar a Premium" variant="outline" onPress={() => router.navigate("/paywall")} />
           </View>
         ) : !stats?.weights || stats.weights.length === 0 ? (
           <Text style={styles.empty}>
@@ -110,7 +118,7 @@ export default function ProgressScreen() {
                 <Text style={styles.weightValue}>
                   {latestWeight(w.entries)} kg
                   {delta !== null && delta !== 0 && (
-                    <Text style={{ color: delta > 0 ? colors.success : colors.danger }}>
+                    <Text style={{ color: delta > 0 ? colors.successText : colors.dangerText }}>
                       {"  "}
                       {delta > 0 ? "▲" : "▼"} {Math.abs(delta)} kg
                     </Text>
@@ -154,7 +162,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: "700", color: colors.textPrimary },
   statsRow: { flexDirection: "row", gap: spacing.md },
   stat: { flex: 1, alignItems: "center" },
-  statValue: { fontSize: 20, fontWeight: "700", color: colors.primary },
+  statValue: { fontSize: 20, fontWeight: "700", color: colors.primaryText },
   statLabel: { fontSize: 11, color: colors.textSecondary, marginTop: spacing.xs, textAlign: "center" },
   section: { fontSize: 16, fontWeight: "600", color: colors.textPrimary, marginBottom: spacing.md },
   chart: { flexDirection: "row", alignItems: "flex-end", height: 120, gap: 4 },
@@ -189,7 +197,7 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     gap: 2,
   },
-  feedbackLabel: { fontSize: 11, fontWeight: "700", color: colors.primary },
+  feedbackLabel: { fontSize: 11, fontWeight: "700", color: colors.primaryText },
   feedbackText: { fontSize: 13, color: colors.textPrimary },
   locked: { flex: 1, justifyContent: "center", padding: spacing.xl, gap: spacing.md, backgroundColor: colors.surface },
   lockedTitle: { fontSize: 22, fontWeight: "700", color: colors.textPrimary, textAlign: "center" },

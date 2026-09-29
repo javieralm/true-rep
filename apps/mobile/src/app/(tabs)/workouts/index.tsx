@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { FlatList, Text, View, Pressable, StyleSheet } from "react-native";
+import { FlatList, Text, View, Pressable, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { useRoutines } from "@/hooks/useRoutines";
+import { useRefresh } from "@/hooks/useRefresh";
 import { RoutineCard } from "@/components/workout/RoutineCard";
 import { colors, spacing, radius } from "@/constants/colors";
 import { type as typo } from "@/constants/typography";
@@ -13,6 +14,7 @@ const filters: (Difficulty | null)[] = [null, "BEGINNER", "INTERMEDIATE", "ADVAN
 export default function WorkoutsScreen() {
   const router = useRouter();
   const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
+  const { refreshing, onRefresh } = useRefresh();
   const { data: routines, isLoading, error } = useRoutines(difficulty ?? undefined);
 
   return (
@@ -41,10 +43,13 @@ export default function WorkoutsScreen() {
         data={routines ?? []}
         keyExtractor={(r) => r.id}
         contentContainerStyle={{ padding: spacing.lg }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
+        }
         renderItem={({ item }) => (
           <RoutineCard
             routine={item}
-            onPress={() => router.push({ pathname: "/routine-detail", params: { id: item.id } })}
+            onPress={() => router.push({ pathname: "/workouts/[id]", params: { id: item.id } })}
           />
         )}
         ListEmptyComponent={
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipPressed: { transform: [{ scale: 0.97 }], opacity: 0.9 },
   chipText: { ...typo.meta, color: colors.textSecondary },
-  chipTextActive: { color: "#fff", fontWeight: "600" },
+  chipTextActive: { color: colors.onFill, fontWeight: "600" },
   empty: { ...typo.body, textAlign: "center", color: colors.textMuted, marginTop: spacing.xxl },
-  error: { ...typo.body, color: colors.danger, padding: spacing.lg },
+  error: { ...typo.body, color: colors.dangerText, padding: spacing.lg },
 });

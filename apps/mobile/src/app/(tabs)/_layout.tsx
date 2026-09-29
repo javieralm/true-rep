@@ -9,30 +9,40 @@ import { colors } from "@/constants/colors";
 // ColorValue y no string: desde SDK 57 el tabBarIcon recibe el color como
 // ColorValue, que admite también OpaqueColorValue (colores de plataforma).
 function icon(name: keyof typeof Ionicons.glyphMap) {
-  return ({ color, size }: { color: ColorValue; size: number }) => (
+  const TabIcon = ({ color, size }: { color: ColorValue; size: number }) => (
     <Ionicons name={name} color={color} size={size} />
   );
+  TabIcon.displayName = `TabIcon(${name})`;
+  return TabIcon;
 }
 
 export default function TabsLayout() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn } = useAuth();
 
   useEffect(() => {
     if (isSignedIn) void registerForPushNotifications();
   }, [isSignedIn]);
 
-  if (isLoaded && !isSignedIn) return <Redirect href="/(auth)/login" />;
+  // Sin comprobar isLoaded: el layout raíz no monta nada hasta que Clerk ha
+  // cargado, así que aquí isSignedIn ya es una respuesta, no un "todavía no sé".
+  if (!isSignedIn) return <Redirect href="/(auth)/login" />;
 
   return (
     // Etiquetas por su contenido ("Hoy", "Rutinas"), no paraguas genéricos
     // ("Home"): el usuario predice mejor lo que hay detrás de cada pestaña.
+    //
+    // headerShown: false porque cada pestaña es ahora un Stack y es él quien
+    // pone la cabecera. Con las dos activas salían dos cabeceras apiladas, y
+    // es el Stack el que sabe el título de la pantalla en la que estás y de
+    // dónde vienes.
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
+        headerShown: false,
+        tabBarActiveTintColor: colors.primaryText,
         tabBarInactiveTintColor: colors.textSecondary,
       }}
     >
-      <Tabs.Screen name="index" options={{ title: "Hoy", tabBarIcon: icon("today") }} />
+      <Tabs.Screen name="(today)" options={{ title: "Hoy", tabBarIcon: icon("today") }} />
       <Tabs.Screen name="workouts" options={{ title: "Rutinas", tabBarIcon: icon("barbell") }} />
       <Tabs.Screen name="progress" options={{ title: "Progreso", tabBarIcon: icon("trending-up") }} />
       <Tabs.Screen name="challenges" options={{ title: "Retos", tabBarIcon: icon("trophy") }} />

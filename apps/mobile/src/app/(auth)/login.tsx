@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { useSignIn, useSignUp, useSSO } from "@clerk/clerk-expo";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
@@ -16,10 +24,13 @@ import { type as typo } from "@/constants/typography";
  * dos casos está, ni inventarse una contraseña (la instancia exige 15
  * caracteres, que en una prueba nadie va a teclear). */
 export default function LoginScreen() {
-  const router = useRouter();
   const { signIn, setActive: setSignInActive, isLoaded: signInLoaded } = useSignIn();
   const { signUp, setActive: setSignUpActive, isLoaded: signUpLoaded } = useSignUp();
   const { startSSOFlow } = useSSO();
+
+  // Esta pantalla no navega: en cuanto setActive resuelve, isSignedIn pasa a
+  // true y el layout de (auth) redirige a las pestañas. Antes había además tres
+  // router.replace("/(tabs)") haciendo el mismo trabajo en paralelo.
 
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -77,7 +88,6 @@ export default function LoginScreen() {
         const res = await signIn.attemptFirstFactor({ strategy: "email_code", code: code.trim() });
         if (res.status === "complete") {
           await setSignInActive({ session: res.createdSessionId });
-          router.replace("/(tabs)");
         } else {
           setError("El código no es válido");
         }
@@ -85,7 +95,6 @@ export default function LoginScreen() {
         const res = await signUp.attemptEmailAddressVerification({ code: code.trim() });
         if (res.status === "complete") {
           await setSignUpActive({ session: res.createdSessionId });
-          router.replace("/(tabs)");
         } else {
           setError("El código no es válido");
         }
@@ -108,7 +117,6 @@ export default function LoginScreen() {
       });
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
-        router.replace("/(tabs)");
       }
       // Sin createdSessionId el usuario canceló: no es un error que mostrar.
     } catch (e) {
@@ -119,9 +127,14 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    // El contenido está centrado vertical: con el teclado abierto en una
+    // pantalla pequeña, el campo del código quedaba justo debajo de él.
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
       <Text style={styles.title}>
-        True<Text style={{ color: colors.primary }}>Rep</Text>
+        True<Text style={{ color: colors.primaryText }}>Rep</Text>
       </Text>
 
       {sent === null ? (
@@ -190,7 +203,7 @@ export default function LoginScreen() {
       )}
 
       {busy && <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.md }} />}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -236,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.textPrimary,
   },
-  error: { ...typo.meta, color: colors.danger },
+  error: { ...typo.meta, color: colors.dangerText },
   hint: { ...typo.meta, color: colors.textMuted, textAlign: "center" },
   sentTo: { ...typo.body, color: colors.textSecondary, textAlign: "center" },
   backRow: { minHeight: 44, justifyContent: "center" },

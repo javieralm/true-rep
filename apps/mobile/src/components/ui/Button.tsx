@@ -24,7 +24,7 @@ export function Button({ title, variant = "primary", disabled, ...rest }: Props)
       accessibilityState={{ disabled: !!disabled }}
       {...rest}
     >
-      <Text style={[styles.text, variant === "outline" && { color: colors.primary }]}>{title}</Text>
+      <Text style={[styles.text, variant === "outline" && { color: colors.primaryText }]}>{title}</Text>
     </Pressable>
   );
 }
@@ -42,5 +42,5 @@ const styles = StyleSheet.create({
   // Respuesta al apoyar el dedo: se hunde un poco, como algo físico.
   pressed: { transform: [{ scale: 0.97 }], opacity: 0.9 },
   disabled: { opacity: 0.4 },
-  text: { ...typo.cardTitle, color: "#fff" },
+  text: { ...typo.cardTitle, color: colors.onFill },
 });

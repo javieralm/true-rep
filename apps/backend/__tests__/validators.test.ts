@@ -67,6 +67,58 @@ describe("logWorkoutSchema", () => {
       })
     ).toThrow();
   });
+
+  // El desglose por serie se añadió después. Es opcional a propósito: los
+  // workouts ya guardados no lo tienen y reps_done/weight_kg siguen siendo los
+  // agregados que leen stats, el export y el auto-escalado.
+  it("accepts a per-set breakdown", () => {
+    expect(() =>
+      logWorkoutSchema.parse({
+        ...validLog,
+        exercises_completed: [
+          {
+            exercise_id: "e1",
+            reps_done: 30,
+            weight_kg: 30,
+            felt_like: "medium",
+            sets: [
+              { reps: 12, weight_kg: 20 },
+              { reps: 10, weight_kg: 30 },
+              { reps: 8 },
+            ],
+          },
+        ],
+      })
+    ).not.toThrow();
+  });
+  it("still accepts an entry without sets", () => {
+    expect(() => logWorkoutSchema.parse(validLog)).not.toThrow();
+  });
+  it("rejects a set with negative reps", () => {
+    expect(() =>
+      logWorkoutSchema.parse({
+        ...validLog,
+        exercises_completed: [
+          { exercise_id: "e1", reps_done: 0, felt_like: "easy", sets: [{ reps: -1 }] },
+        ],
+      })
+    ).toThrow();
+  });
+  it("rejects an absurd number of sets", () => {
+    expect(() =>
+      logWorkoutSchema.parse({
+        ...validLog,
+        exercises_completed: [
+          {
+            exercise_id: "e1",
+            reps_done: 0,
+            felt_like: "easy",
+            sets: Array.from({ length: 31 }, () => ({ reps: 1 })),
+          },
+        ],
+      })
+    ).toThrow();
+  });
   it("requires idempotency_key to be a UUID", () => {
     const { idempotency_key: _drop, ...withoutKey } = validLog;
     expect(() => logWorkoutSchema.parse(withoutKey)).toThrow();

@@ -2,9 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-api";
-import type { LibraryExercise } from "@truerep/shared";
+import type { ExerciseMeasure, LibraryExercise } from "@truerep/shared";
 
-const empty = { name: "", muscle_group: "", equipment: "", video_url: "", description: "" };
+const empty = {
+  name: "",
+  measure: "reps" as ExerciseMeasure,
+  muscle_group: "",
+  equipment: "",
+  video_url: "",
+  description: "",
+};
 
 export default function ExercisesPage() {
   const [exercises, setExercises] = useState<LibraryExercise[]>([]);
@@ -36,6 +43,7 @@ export default function ExercisesPage() {
     setEditing(ex);
     setForm({
       name: ex.name,
+      measure: ex.measure,
       muscle_group: ex.muscle_group ?? "",
       equipment: ex.equipment ?? "",
       video_url: ex.video_url ?? "",
@@ -104,6 +112,7 @@ export default function ExercisesPage() {
               )}
             </div>
             <div className="mt-2 flex flex-wrap gap-1 text-[11px] uppercase text-[#666]">
+              {ex.measure === "seconds" && <span className="rounded bg-[#eee] px-2 py-0.5">Por segundos</span>}
               {ex.muscle_group && <span className="rounded bg-[#eee] px-2 py-0.5">{ex.muscle_group}</span>}
               {ex.equipment && <span className="rounded bg-[#eee] px-2 py-0.5">{ex.equipment}</span>}
             </div>
@@ -138,6 +147,28 @@ export default function ExercisesPage() {
               minLength={2}
               className="w-full rounded-lg border border-[#ddd] p-2.5"
             />
+            <fieldset className="flex items-center gap-4 text-sm">
+              <legend className="sr-only">Cómo se cuenta</legend>
+              <span className="text-[#666]">Se cuenta en</span>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name="measure"
+                  checked={form.measure === "reps"}
+                  onChange={() => setForm({ ...form, measure: "reps" })}
+                />
+                Repeticiones
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  name="measure"
+                  checked={form.measure === "seconds"}
+                  onChange={() => setForm({ ...form, measure: "seconds" })}
+                />
+                Segundos (L-sit, plancha…)
+              </label>
+            </fieldset>
             <input
               value={form.muscle_group}
               onChange={(e) => setForm({ ...form, muscle_group: e.target.value })}

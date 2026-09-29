@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   planName: { fontSize: 20, fontWeight: "700", color: colors.textPrimary },
   badge: {
     backgroundColor: colors.primary,
-    color: "#fff",
+    color: colors.onFill,
     fontSize: 11,
     fontWeight: "700",
     paddingHorizontal: spacing.sm,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: "hidden",
   },
-  price: { fontSize: 28, fontWeight: "800", color: colors.primary },
+  price: { fontSize: 28, fontWeight: "800", color: colors.primaryText },
   feature: { fontSize: 14, color: colors.textSecondary },
   footnote: { fontSize: 12, color: colors.textSecondary, textAlign: "center" },
 });

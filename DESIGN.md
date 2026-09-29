@@ -13,7 +13,8 @@ judgment — see CLAUDE.md's "Design Tokens" section for the same values.
 | `secondary` | `#004E89` | Secondary emphasis |
 | `accent` | `#F7B801` | Highlights, badges |
 | `success` | `#2ECC71` | Success states, completed items |
-| `warning` | `#F39C12` | Warnings, INTERMEDIATE difficulty |
+| `warning` | `#F39C12` | Warnings, INTERMEDIATE difficulty (borde/relleno) |
+| `warningText` | `#B45309` | Texto de un aviso (el `warning` de marca no llega a AA como texto) |
 | `danger` | `#E74C3C` | Errors, destructive actions, ADVANCED difficulty |
 | `background` | `#FFFFFF` | Screen background |
 | `surface` | `#F8F8F8` | Cards, elevated surfaces |

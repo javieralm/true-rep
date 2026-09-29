@@ -45,7 +45,8 @@ function toRoutineExercise(lib: LibraryExercise): Exercise {
     exercise_id: lib.id,
     name: lib.name,
     sets: 3,
-    reps: "10",
+    // Hereda cómo se cuenta de la librería; el objetivo por defecto cambia con ello.
+    ...(lib.measure === "seconds" ? { measure: "seconds" as const, reps: "20" } : { reps: "10" }),
     rest_seconds: 60,
     ...(lib.video_url ? { technique_video_url: lib.video_url } : {}),
   };
@@ -118,10 +119,25 @@ function ExerciseRow({
           />
         </label>
         <label className="flex items-center gap-1 text-xs text-[#666]">
-          Reps
+          <select
+            value={ex.measure ?? "reps"}
+            onChange={(e) =>
+              onChange(
+                e.target.value === "seconds"
+                  ? { ...ex, measure: "seconds" }
+                  : { ...ex, measure: undefined }
+              )
+            }
+            aria-label="Cómo se cuenta"
+            className="rounded border border-[#ddd] p-1.5"
+          >
+            <option value="reps">Reps</option>
+            <option value="seconds">Segundos</option>
+          </select>
           <input
             value={ex.reps ?? ""}
             onChange={(e) => onChange({ ...ex, reps: e.target.value })}
+            aria-label={ex.measure === "seconds" ? "Segundos objetivo" : "Repeticiones objetivo"}
             className="w-16 rounded border border-[#ddd] p-1.5"
           />
         </label>

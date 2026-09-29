@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "scheme": "truerep",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "ios": {
       "bundleIdentifier": "com.truerep.app",
       "supportsTablet": false,
@@ -16,6 +17,10 @@
     },
     "android": {
       "package": "com.truerep.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FF6B35"
+      },
       "permissions": [
         "CAMERA",
         "READ_MEDIA_VIDEO"

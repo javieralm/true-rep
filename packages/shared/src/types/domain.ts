@@ -38,10 +38,16 @@ export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
 export type AnalysisStatus = "PENDING_TRAINER_REVIEW" | "PENDING" | "COMPLETED" | "FAILED";
 
 /** Ejercicio dentro de una rutina (Json en Routine.exercises) */
+/** Cómo se cuenta un ejercicio: por repeticiones o, en los posturales e
+ * isométricos (L-sit, plancha, dead hang), por segundos aguantados. */
+export type ExerciseMeasure = "reps" | "seconds";
+
 export interface Exercise {
   id: string;
   exercise_id?: string; // referencia a la librería si viene de ella
   name: string;
+  /** Sin definir = "reps". Con "seconds", `reps` es el objetivo en segundos. */
+  measure?: ExerciseMeasure;
   reps?: string;
   sets?: number;
   rest_seconds?: number;
@@ -56,6 +62,7 @@ export interface LibraryExercise {
   id: string;
   trainer_id: string;
   name: string;
+  measure: ExerciseMeasure;
   muscle_group: string | null;
   equipment: string | null;
   video_url: string | null;
@@ -172,11 +179,27 @@ export interface WeightSuggestion {
   suggested_weight_kg: number;
 }
 
+/** Una serie suelta dentro de un ejercicio. */
+export interface CompletedSet {
+  /** En ejercicios por segundos va a 0 y lo hecho está en `seconds`. */
+  reps: number;
+  seconds?: number;
+  weight_kg?: number;
+}
+
 export interface ExerciseCompleted {
   exercise_id: string;
+  /** Suma de las reps de todas las series. */
   reps_done: number;
+  /** La carga de la serie más pesada. Es la que alimenta el auto-escalado y la
+   *  progresión de pesos: lo que interesa es la serie tope, no el promedio. */
   weight_kg?: number;
   felt_like: "easy" | "medium" | "hard";
+  /** Detalle por serie. Opcional a propósito: los workouts registrados antes de
+   *  que existiera no lo tienen, y `reps_done`/`weight_kg` siguen siendo la
+   *  fuente de verdad para stats, export y progresión. Quien quiera el desglose
+   *  lo lee de aquí cuando está. */
+  sets?: CompletedSet[];
 }
 
 export interface Workout {
