@@ -1,15 +1,18 @@
 import { ScrollView, Text, View, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { useUser } from "@/hooks/useUser";
 import { useStats } from "@/hooks/useStats";
 import { useWorkoutHistory } from "@/hooks/useWorkoutHistory";
 import { useRefresh } from "@/hooks/useRefresh";
 import { Card } from "@/components/ui/Card";
+import { PressableCard } from "@/components/ui/PressableCard";
 import { Button } from "@/components/ui/Button";
 import { colors, spacing } from "@/constants/colors";
+import { type as typo } from "@/constants/typography";
 
 /* ponytail: gráfico de barras con Views puras — librería de charts cuando haga falta interactividad */
-function WeeklyBars({ weekly }: { weekly: Array<{ workouts: number }> }) {
+function WeeklyBars({ weekly }: { weekly: { workouts: number }[] }) {
   const max = Math.max(1, ...weekly.map((w) => w.workouts));
   return (
     <View style={styles.chart}>
@@ -40,7 +43,7 @@ export default function ProgressScreen() {
   if (user && !isActive) {
     return (
       <View style={styles.locked}>
-        <Text style={styles.lockedTitle}>Tu progreso te espera 📈</Text>
+        <Text style={styles.lockedTitle}>Tu progreso te espera</Text>
         <Text style={styles.lockedText}>
           Con el plan Base llevas el seguimiento de tus entrenamientos, reps y racha semana a semana.
         </Text>
@@ -49,9 +52,9 @@ export default function ProgressScreen() {
     );
   }
 
-  const latestWeight = (entries: Array<{ weight_kg: number }>) =>
+  const latestWeight = (entries: { weight_kg: number }[]) =>
     entries[entries.length - 1]?.weight_kg;
-  const weightDelta = (entries: Array<{ weight_kg: number }>) => {
+  const weightDelta = (entries: { weight_kg: number }[]) => {
     if (entries.length < 2) return null;
     return entries[entries.length - 1].weight_kg - entries[0].weight_kg;
   };
@@ -64,7 +67,6 @@ export default function ProgressScreen() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primaryText} />
       }
     >
-      <Text style={styles.title}>Tu progreso</Text>
 
       <View style={styles.statsRow}>
         <Card style={styles.stat}>
@@ -76,10 +78,21 @@ export default function ProgressScreen() {
           <Text style={styles.statLabel}>Reps totales</Text>
         </Card>
         <Card style={styles.stat}>
-          <Text style={styles.statValue}>🔥 {stats?.totals.streak ?? 0}</Text>
-          <Text style={styles.statLabel}>Racha</Text>
+          <Text style={styles.statValue}>{stats?.totals.streak ?? 0}</Text>
+          <Text style={styles.statLabel}>Días de racha</Text>
         </Card>
       </View>
+
+      <PressableCard onPress={() => router.push("/progress/challenges")} accessibilityLabel="Retos">
+        <View style={styles.linkRow}>
+          <Ionicons name="trophy" size={20} color={colors.primaryText} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.linkTitle}>Retos</Text>
+            <Text style={styles.linkMeta}>Compite con otros y gana XP extra</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+        </View>
+      </PressableCard>
 
       <Card>
         <Text style={styles.section}>Entrenos por semana</Text>
@@ -140,12 +153,12 @@ export default function ProgressScreen() {
               <View style={styles.historyHeader}>
                 <Text style={styles.weightName}>{w.routine?.title ?? "Workout"}</Text>
                 <Text style={styles.historyDate}>
-                  {new Date(w.completed_at).toLocaleDateString()} · +{w.xp_earned} XP
+                  {new Date(w.completed_at).toLocaleDateString("es-ES")} · +{w.xp_earned} XP
                 </Text>
               </View>
               {w.trainer_feedback && (
                 <View style={styles.feedbackBox}>
-                  <Text style={styles.feedbackLabel}>💬 Tu coach</Text>
+                  <Text style={styles.feedbackLabel}>Tu entrenador</Text>
                   <Text style={styles.feedbackText}>{w.trainer_feedback}</Text>
                 </View>
               )}
@@ -159,19 +172,21 @@ export default function ProgressScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.surface },
-  title: { fontSize: 24, fontWeight: "700", color: colors.textPrimary },
   statsRow: { flexDirection: "row", gap: spacing.md },
   stat: { flex: 1, alignItems: "center" },
-  statValue: { fontSize: 20, fontWeight: "700", color: colors.primaryText },
-  statLabel: { fontSize: 11, color: colors.textSecondary, marginTop: spacing.xs, textAlign: "center" },
-  section: { fontSize: 16, fontWeight: "600", color: colors.textPrimary, marginBottom: spacing.md },
+  statValue: { ...typo.stat, color: colors.primaryText },
+  statLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary, marginTop: spacing.xs, textAlign: "center" },
+  section: { ...typo.cardTitle, color: colors.textPrimary, marginBottom: spacing.md },
+  linkRow: { flexDirection: "row", alignItems: "center", gap: spacing.md },
+  linkTitle: { ...typo.cardTitle, color: colors.textPrimary },
+  linkMeta: { ...typo.meta, color: colors.textSecondary },
   chart: { flexDirection: "row", alignItems: "flex-end", height: 120, gap: 4 },
   barSlot: { flex: 1, height: "100%", justifyContent: "flex-end" },
   bar: { backgroundColor: colors.primary, borderRadius: 4, minHeight: 4 },
   barEmpty: { backgroundColor: "#e5e5e5" },
   chartLabels: { flexDirection: "row", justifyContent: "space-between", marginTop: spacing.xs },
-  chartLabel: { fontSize: 10, color: colors.textMuted },
-  empty: { fontSize: 13, color: colors.textMuted },
+  chartLabel: { ...typo.label, fontWeight: "400", color: colors.textMuted },
+  empty: { ...typo.meta, color: colors.textMuted },
   weightRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -179,8 +194,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#e5e5e5",
   },
-  weightName: { fontSize: 14, fontWeight: "500", color: colors.textPrimary },
-  weightValue: { fontSize: 14, fontWeight: "600", color: colors.textPrimary },
+  weightName: { ...typo.body, fontWeight: "500", color: colors.textPrimary },
+  weightValue: { ...typo.body, fontWeight: "600", color: colors.textPrimary, fontVariant: ["tabular-nums"] },
   historyRow: {
     paddingVertical: spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -188,7 +203,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   historyHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  historyDate: { fontSize: 12, color: colors.textMuted },
+  historyDate: { ...typo.label, fontWeight: "400", color: colors.textMuted },
   feedbackBox: {
     backgroundColor: "#fff7f2",
     borderLeftWidth: 3,
@@ -197,9 +212,9 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     gap: 2,
   },
-  feedbackLabel: { fontSize: 11, fontWeight: "700", color: colors.primaryText },
-  feedbackText: { fontSize: 13, color: colors.textPrimary },
+  feedbackLabel: { ...typo.label, color: colors.primaryText },
+  feedbackText: { ...typo.meta, color: colors.textPrimary },
   locked: { flex: 1, justifyContent: "center", padding: spacing.xl, gap: spacing.md, backgroundColor: colors.surface },
-  lockedTitle: { fontSize: 22, fontWeight: "700", color: colors.textPrimary, textAlign: "center" },
-  lockedText: { fontSize: 14, color: colors.textSecondary, textAlign: "center" },
+  lockedTitle: { ...typo.title, color: colors.textPrimary, textAlign: "center" },
+  lockedText: { ...typo.body, color: colors.textSecondary, textAlign: "center" },
 });

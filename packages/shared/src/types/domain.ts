@@ -139,6 +139,22 @@ export interface DaySchedule {
   tasks: ScheduleTask[];
 }
 
+/** Respuesta de /api/me/plan: la semana actual del programa que el entrenador
+ * ha asignado al cliente, quién es su entrenador y lo que le ha enviado. */
+export interface ClientPlan {
+  program_id: string;
+  program_name: string;
+  /** false si el programa empieza más adelante: `days` es entonces la semana 1. */
+  started: boolean;
+  week: number;
+  /** Día actual 1-7; 0 si aún no ha empezado. */
+  day: number;
+  trainer: { id: string; username: string; avatar_url: string | null };
+  days: { day: number; tasks: ScheduleTask[] }[];
+  /** Mensajes, vídeos y notas ya publicados (hasta hoy), el más reciente primero. */
+  messages: { week: number; day: number; type: ProgramItemType; data: ProgramTaskData | null }[];
+}
+
 export interface User {
   id: string;
   email: string;

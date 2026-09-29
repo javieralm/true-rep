@@ -23,7 +23,7 @@ export default function ChallengesScreen() {
         }
         renderItem={({ item }) => (
           <PressableCard
-            onPress={() => router.push({ pathname: "/challenges/[id]", params: { id: item.id } })}
+            onPress={() => router.push({ pathname: "/progress/challenges/[id]", params: { id: item.id } })}
             cardStyle={styles.card}
           >
             <View style={styles.row}>

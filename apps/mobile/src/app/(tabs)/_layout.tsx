@@ -42,10 +42,14 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: colors.textSecondary,
       }}
     >
+      {/* Orden del modelo entrenador–cliente: lo de hoy, la semana que ha
+          preparado el entrenador, cómo vas, el propio entrenador y tu cuenta.
+          Retos vive dentro de Progreso: con una sexta pestaña la barra se
+          quedaba sin sitio. */}
       <Tabs.Screen name="(today)" options={{ title: "Hoy", tabBarIcon: icon("today") }} />
-      <Tabs.Screen name="workouts" options={{ title: "Rutinas", tabBarIcon: icon("barbell") }} />
+      <Tabs.Screen name="workouts" options={{ title: "Mi plan", tabBarIcon: icon("calendar") }} />
       <Tabs.Screen name="progress" options={{ title: "Progreso", tabBarIcon: icon("trending-up") }} />
-      <Tabs.Screen name="challenges" options={{ title: "Retos", tabBarIcon: icon("trophy") }} />
+      <Tabs.Screen name="coach" options={{ title: "Entrenador", tabBarIcon: icon("chatbubbles") }} />
       <Tabs.Screen name="profile" options={{ title: "Perfil", tabBarIcon: icon("person") }} />
     </Tabs>
   );

@@ -1,11 +1,13 @@
 import { Stack } from "expo-router";
 
-/** Sin pantallas de detalle todavía, pero con Stack igual: es quien pone la
- * cabecera ahora que las Tabs no la ponen. */
+/** Retos cuelga de aquí y no de su propia pestaña: son una forma más de ver
+ * cómo vas, y la barra se queda en cinco pestañas. */
 export default function ProgressLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ title: "Progreso" }} />
+      <Stack.Screen name="challenges/index" options={{ title: "Retos" }} />
+      <Stack.Screen name="challenges/[id]" options={{ title: "Reto" }} />
     </Stack>
   );
 }

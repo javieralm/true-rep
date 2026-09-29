@@ -1,15 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import type { Routine, Difficulty } from "@truerep/shared";
+import type { Routine } from "@truerep/shared";
 
-export function useRoutines(difficulty?: Difficulty) {
-  const qs = difficulty ? `?difficulty=${difficulty}` : "";
-  return useQuery({
-    queryKey: ["routines", difficulty ?? "all"],
-    queryFn: () => api<Routine[]>(`/routines${qs}`),
-  });
-}
-
+/** Una rutina concreta. Ya no hay listado de catálogo en la app: el cliente
+ * llega a cada rutina desde el plan que le asigna su entrenador. */
 export function useRoutine(id: string) {
   return useQuery({
     queryKey: ["routine", id],
