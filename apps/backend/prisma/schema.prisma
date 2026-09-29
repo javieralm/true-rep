@@ -45,6 +45,8 @@ model User {
   programs               Program[]
   program_assignments    ProgramAssignment[]
   push_tokens            PushToken[]
+  trainer_clients        TrainerClient[]        @relation("TrainerClients")
+  client_of              TrainerClient[]        @relation("ClientTrainer")
 
   @@index([xp])
   @@index([subscription_id])
@@ -134,6 +136,32 @@ model ProgramItem {
 
   @@index([program_id, week, day])
   @@map("program_items")
+}
+
+/// Quién es cliente de quién. La crea el entrenador al invitar por email; el
+/// cliente queda vinculado al entrar en la app con ese email. Es lo que da
+/// acceso a la app: sin una relación ACTIVE (y pagada) no se entrena.
+/// Un cliente, un entrenador: se garantiza al invitar (ver POST /api/clients).
+model TrainerClient {
+  id                  String       @id @default(cuid())
+  trainer_id          String
+  trainer             User         @relation("TrainerClients", fields: [trainer_id], references: [id], onDelete: Cascade)
+  client_id           String?
+  client              User?        @relation("ClientTrainer", fields: [client_id], references: [id], onDelete: SetNull)
+  email               String // siempre en minúsculas
+  status              ClientStatus @default(INVITED)
+  billing             BillingMode  @default(CASH)
+  /// Efectivo: hasta cuándo ha pagado. Pasada la fecha, el acceso se corta solo.
+  paid_until          DateTime?
+  clerk_invitation_id String?
+  invited_at          DateTime     @default(now())
+  accepted_at         DateTime?
+  updated_at          DateTime     @updatedAt
+
+  @@unique([trainer_id, email])
+  @@index([email])
+  @@index([client_id])
+  @@map("trainer_clients")
 }
 
 model ProgramAssignment {
@@ -271,6 +299,18 @@ enum ProgramItemType {
   VIDEO // contenido de vídeo
   NOTE // nota/actividad libre (cardio, movilidad…)
   SESSION // sesión presencial u online
+}
+
+enum ClientStatus {
+  INVITED
+  ACTIVE
+  PAUSED
+  ENDED
+}
+
+enum BillingMode {
+  STRIPE
+  CASH
 }
 
 enum Role {

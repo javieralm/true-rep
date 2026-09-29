@@ -1,11 +1,9 @@
 import { ScrollView, Text, View, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
-import { useUser } from "@/hooks/useUser";
 import { usePlan } from "@/hooks/usePlan";
 import { useRefresh } from "@/hooks/useRefresh";
 import { PlanTask } from "@/components/workout/PlanTask";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { colors, radius, spacing } from "@/constants/colors";
 import { type as typo } from "@/constants/typography";
 
@@ -16,21 +14,9 @@ const DAY_NAME = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado
 export default function PlanScreen() {
   const router = useRouter();
   const { refreshing, onRefresh } = useRefresh();
-  const { data: user } = useUser();
-  const isPremium = user?.subscription_status === "ACTIVE" && user?.subscription_plan === "PREMIUM";
-  const { data: plan, isLoading, error } = usePlan(isPremium);
+  const { data: plan, isLoading, error } = usePlan(true);
 
-  const body = !user ? (
-    <Text style={styles.empty}>Cargando…</Text>
-  ) : !isPremium ? (
-    <Card style={styles.emptyCard}>
-      <Text style={styles.emptyTitle}>Tu semana, preparada por tu entrenador</Text>
-      <Text style={styles.emptyText}>
-        Con Premium tu entrenador te asigna un programa: qué rutina toca cada día, mensajes, vídeos y sesiones.
-      </Text>
-      <Button title="Ver planes" onPress={() => router.navigate("/paywall")} />
-    </Card>
-  ) : error ? (
+  const body = error ? (
     <Text style={styles.error}>No hemos podido cargar tu plan. Desliza hacia abajo para reintentar.</Text>
   ) : isLoading ? (
     <Text style={styles.empty}>Cargando tu plan…</Text>

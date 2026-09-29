@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
 import { ok, handler } from "@/lib/api";
-import { requireActiveSubscription } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
 import type { ExerciseCompleted, Exercise } from "@truerep/shared";
 
 const WEEKS = 12;
 
-/** Estadísticas de progreso. Base: semanas + totales. Premium: además pesos por ejercicio. */
+/** Estadísticas de progreso: semanas, totales y pesos por ejercicio. */
 export const GET = handler(async () => {
-  const user = await requireActiveSubscription();
+  const user = await requireClientAccess();
 
   const since = new Date(Date.now() - WEEKS * 7 * 86_400_000);
   const workouts = await db.workout.findMany({
@@ -38,7 +38,7 @@ export const GET = handler(async () => {
     totalReps += reps;
   }
 
-  // Estadísticas avanzadas (Premium): progresión de pesos por ejercicio
+  // Progresión de pesos por ejercicio (antes solo Premium; ya no hay niveles)
   type WeightSeries = {
     exercise_id: string;
     exercise_name: string;
@@ -46,7 +46,7 @@ export const GET = handler(async () => {
   };
   let weights: WeightSeries[] | null = null;
 
-  if (user.subscription_plan === "PREMIUM") {
+  {
     const routineIds = [...new Set(workouts.map((w) => w.routine_id))];
     const routines = await db.routine.findMany({
       where: { id: { in: routineIds } },
@@ -89,6 +89,6 @@ export const GET = handler(async () => {
       streak: user.streak,
     },
     weekly,
-    weights, // null si no es Premium
+    weights,
   });
 });

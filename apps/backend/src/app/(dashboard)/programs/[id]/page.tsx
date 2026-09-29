@@ -9,6 +9,7 @@ import type {
   ProgramItemType,
   ProgramTaskData,
   Routine,
+  TrainerClientRow,
 } from "@truerep/shared";
 
 type RoutineLite = Pick<Routine, "id" | "title" | "difficulty" | "duration_minutes">;
@@ -26,7 +27,6 @@ type ProgramFull = Program & {
   items: (Omit<ProgramItem, "routine"> & { routine: RoutineLite | null })[];
   assignments: Array<{ id: string; user: { id: string; username: string; email: string } }>;
 };
-type PremiumUser = { id: string; username: string; email: string };
 
 // Estilo de cada tipo de tarea en el calendario (estilo Harbiz)
 const TASK_META: Record<ProgramItemType, { label: string; icon: string; color: string }> = {
@@ -54,7 +54,7 @@ export default function ProgramEditorPage({ params }: { params: Promise<{ id: st
 
   // Modal de asignación
   const [assigning, setAssigning] = useState(false);
-  const [premiumUsers, setPremiumUsers] = useState<PremiumUser[]>([]);
+  const [clients, setClients] = useState<NonNullable<TrainerClientRow["user"]>[]>([]);
   const [assignUserId, setAssignUserId] = useState("");
   const [assignDate, setAssignDate] = useState(() => new Date().toISOString().slice(0, 10));
 
@@ -170,7 +170,9 @@ export default function ProgramEditorPage({ params }: { params: Promise<{ id: st
 
   async function openAssign() {
     setAssigning(true);
-    setPremiumUsers(await apiFetch<PremiumUser[]>("/users/premium"));
+    // Solo clientes que ya han entrado en la app: un invitado aún no tiene cuenta.
+    const rows = await apiFetch<TrainerClientRow[]>("/clients");
+    setClients(rows.flatMap((r) => (r.user && r.status !== "INVITED" ? [r.user] : [])));
   }
 
   async function assign(e: React.FormEvent) {
@@ -423,7 +425,7 @@ export default function ProgramEditorPage({ params }: { params: Promise<{ id: st
             className="w-full max-w-md space-y-3 rounded-xl bg-white p-6 shadow-xl"
           >
             <h2 className="text-lg font-bold">Asignar programa a cliente</h2>
-            <p className="text-sm text-[#666]">Solo miembros Premium activos.</p>
+            <p className="text-sm text-[#666]">Tus clientes que ya han entrado en la app.</p>
             <select
               value={assignUserId}
               onChange={(e) => setAssignUserId(e.target.value)}
@@ -431,14 +433,17 @@ export default function ProgramEditorPage({ params }: { params: Promise<{ id: st
               className="w-full rounded-lg border border-[#ddd] p-2.5"
             >
               <option value="">Selecciona un cliente…</option>
-              {premiumUsers.map((u) => (
+              {clients.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.username} ({u.email})
                 </option>
               ))}
             </select>
-            {premiumUsers.length === 0 && (
-              <p className="text-xs text-[#999]">No hay miembros Premium activos todavía.</p>
+            {clients.length === 0 && (
+              <p className="text-xs text-[#999]">
+                Aún no tienes clientes activos. Invítalos desde{" "}
+                <Link href="/clients" className="underline">Clientes</Link>.
+              </p>
             )}
             <label className="block text-sm text-[#666]">
               Fecha de inicio (día 1 del programa)

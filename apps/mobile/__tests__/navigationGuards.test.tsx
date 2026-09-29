@@ -4,6 +4,7 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 import { useAuth } from "@clerk/clerk-expo";
+import { useAccess } from "@/hooks/useAccess";
 
 import TabsLayout from "@/app/(tabs)/_layout";
 import AuthLayout from "@/app/(auth)/_layout";
@@ -28,11 +29,21 @@ jest.mock("expo-router", () => {
 jest.mock("@clerk/clerk-expo", () => ({ useAuth: jest.fn() }));
 jest.mock("@/lib/push", () => ({ registerForPushNotifications: jest.fn() }));
 jest.mock("@expo/vector-icons", () => ({ Ionicons: () => null }));
+jest.mock("@/hooks/useAccess", () => ({ useAccess: jest.fn() }));
 
 const mockUseAuth = useAuth as unknown as jest.Mock;
+const mockUseAccess = useAccess as unknown as jest.Mock;
+const access = (state: string) => ({
+  isLoading: false,
+  isFetching: false,
+  error: null,
+  data: { state, is_trainer: false, trainer: { username: "Marta", avatar_url: null }, billing: "CASH", paid_until: null },
+  refetch: jest.fn(),
+});
 
 beforeEach(() => {
   mockUseAuth.mockReset();
+  mockUseAccess.mockReset().mockReturnValue(access("active"));
 });
 
 describe("guarda de (tabs)", () => {
@@ -42,6 +53,25 @@ describe("guarda de (tabs)", () => {
     const { getByText } = await render(<TabsLayout />);
 
     expect(getByText("TABS")).toBeTruthy();
+  });
+
+  it("sin invitación no monta las pestañas y explica qué falta", async () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: true, isLoaded: true, signOut: jest.fn() });
+    mockUseAccess.mockReturnValue(access("no_invitation"));
+
+    const { getByText, queryByText } = await render(<TabsLayout />);
+
+    expect(getByText("Necesitas una invitación")).toBeTruthy();
+    expect(queryByText("TABS")).toBeNull();
+  });
+
+  it("con el acceso pausado por el entrenador lo dice con su nombre", async () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: true, isLoaded: true, signOut: jest.fn() });
+    mockUseAccess.mockReturnValue(access("paused"));
+
+    const { getByText } = await render(<TabsLayout />);
+
+    expect(getByText(/Marta ha pausado tu acceso/)).toBeTruthy();
   });
 
   it("sin sesión redirige al login y no monta las pestañas", async () => {

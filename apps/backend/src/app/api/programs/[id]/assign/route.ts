@@ -5,7 +5,8 @@ import { assignProgramSchema } from "@truerep/shared";
 
 type Params = { params: Promise<{ id: string }> };
 
-/** Solo se pueden asignar programas a suscriptores PREMIUM activos */
+/** Solo se asignan programas a clientes propios (activos o pausados). Antes
+ * valía cualquier suscriptor Premium de la plataforma, fuera de quien fuera. */
 export const POST = handler(async (req: Request, { params }: Params) => {
   const { id } = await params;
   const trainer = await requireTrainer();
@@ -16,10 +17,10 @@ export const POST = handler(async (req: Request, { params }: Params) => {
 
   const { user_id, start_date } = await parseBody(req, assignProgramSchema);
 
-  const user = await db.user.findUnique({ where: { id: user_id } });
-  if (!user) return fail("User not found", 404);
-  if (user.subscription_status !== "ACTIVE" || user.subscription_plan !== "PREMIUM")
-    return fail("Programs can only be assigned to active Premium members", 402);
+  const isClient = await db.trainerClient.findFirst({
+    where: { trainer_id: trainer.id, client_id: user_id, status: { in: ["ACTIVE", "PAUSED"] } },
+  });
+  if (!isClient) return fail("Solo puedes asignar programas a tus clientes", 403);
 
   // Un solo programa activo por usuario: desactivar los demás antes de asignar
   const [, assignment] = await db.$transaction([

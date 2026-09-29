@@ -1,12 +1,9 @@
 import { Image, ScrollView, Text, View, StyleSheet, RefreshControl } from "react-native";
-import { useRouter } from "expo-router";
-import { useUser } from "@/hooks/useUser";
 import { usePlan } from "@/hooks/usePlan";
 import { useWorkoutHistory } from "@/hooks/useWorkoutHistory";
 import { useRefresh } from "@/hooks/useRefresh";
 import { PlanTask } from "@/components/workout/PlanTask";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { colors, radius, spacing } from "@/constants/colors";
 import { type as typo } from "@/constants/typography";
 
@@ -15,11 +12,8 @@ const DAY_NAME = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado
 /** La relación con el entrenador en un sitio: quién es, lo que te ha enviado
  * y lo que opina de tus entrenos. Es lo que paga el cliente. */
 export default function CoachScreen() {
-  const router = useRouter();
   const { refreshing, onRefresh } = useRefresh();
-  const { data: user } = useUser();
-  const isPremium = user?.subscription_status === "ACTIVE" && user?.subscription_plan === "PREMIUM";
-  const { data: plan, isLoading, error } = usePlan(isPremium);
+  const { data: plan, isLoading, error } = usePlan(true);
   const { data: history } = useWorkoutHistory(10);
   const feedback = (history ?? []).filter((w) => w.trainer_feedback);
   const trainer = plan?.trainer;
@@ -47,23 +41,15 @@ export default function CoachScreen() {
             <Text style={styles.meta}>{plan.program_name}</Text>
           </View>
         </View>
-      ) : !isPremium ? (
-        <Card style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>Entrena con tu entrenador</Text>
-          <Text style={styles.emptyText}>
-            Con Premium tu entrenador te asigna el plan, te envía mensajes y vídeos, y revisa tus entrenos.
-          </Text>
-          <Button title="Ver planes" onPress={() => router.navigate("/paywall")} />
-        </Card>
       ) : error ? (
         <Text style={styles.error}>No hemos podido cargar a tu entrenador. Desliza hacia abajo para reintentar.</Text>
       ) : isLoading ? (
         <Text style={styles.empty}>Cargando…</Text>
       ) : (
         <Card style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>Aún no tienes entrenador asignado</Text>
+          <Text style={styles.emptyTitle}>Aún no tienes programa</Text>
           <Text style={styles.emptyText}>
-            Cuando un entrenador te asigne un programa, aquí verás sus mensajes y su opinión sobre tus entrenos.
+            Cuando tu entrenador te asigne un programa, aquí verás sus mensajes y su opinión sobre tus entrenos.
           </Text>
         </Card>
       )}

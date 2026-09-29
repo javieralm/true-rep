@@ -1,10 +1,10 @@
 import { db } from "@/lib/db";
 import { ok, parseBody, handler } from "@/lib/api";
-import { requirePremium } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
 import { analyzeVideoSchema } from "@truerep/shared";
 
 export const POST = handler(async (req: Request) => {
-  const user = await requirePremium();
+  const user = await requireClientAccess();
 
   const input = await parseBody(req, analyzeVideoSchema);
 

@@ -12,17 +12,20 @@ vi.mock("@/lib/db", () => ({
       findUnique: vi.fn(),
       upsert: vi.fn(),
     },
+    trainerClient: {
+      findFirst: vi.fn(),
+      update: vi.fn(),
+    },
   },
 }));
 
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import {
-  requireActiveSubscription,
+  requireClientAccess,
   requireUser,
   requireTrainer,
   requireSuperadmin,
-  requirePremium,
   getOrSyncUser,
 } from "@/lib/auth";
 
@@ -38,52 +41,6 @@ const baseUser = {
   streak_last_workout_date: null,
   xp: 0,
 };
-
-describe("requireActiveSubscription", () => {
-  beforeEach(() => {
-    vi.mocked(db.user.findUnique).mockReset();
-  });
-
-  it("rejects a FREE subscription", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "FREE",
-      subscription_expires_at: null,
-    } as never);
-
-    await expect(requireActiveSubscription()).rejects.toBeInstanceOf(Response);
-  });
-
-  it("rejects an ACTIVE subscription whose expiry date has already passed", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "ACTIVE",
-      subscription_expires_at: new Date("2020-01-01T00:00:00Z"),
-    } as never);
-
-    await expect(requireActiveSubscription()).rejects.toBeInstanceOf(Response);
-  });
-
-  it("allows an ACTIVE subscription with no expiry date set", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "ACTIVE",
-      subscription_expires_at: null,
-    } as never);
-
-    await expect(requireActiveSubscription()).resolves.toMatchObject({ id: "u1" });
-  });
-
-  it("allows an ACTIVE subscription with a future expiry date", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "ACTIVE",
-      subscription_expires_at: new Date("2099-01-01T00:00:00Z"),
-    } as never);
-
-    await expect(requireActiveSubscription()).resolves.toMatchObject({ id: "u1" });
-  });
-});
 
 describe("requireUser", () => {
   beforeEach(() => {
@@ -136,39 +93,50 @@ describe("requireSuperadmin", () => {
   });
 });
 
-describe("requirePremium", () => {
+describe("requireClientAccess", () => {
   beforeEach(() => {
     vi.mocked(db.user.findUnique).mockReset();
+    vi.mocked(db.trainerClient.findFirst).mockReset();
+    vi.mocked(db.trainerClient.update).mockReset();
     vi.mocked(auth).mockReset().mockResolvedValue({ userId: "clerk_1" } as never);
   });
 
-  it("rejects a BASE plan even with an active subscription", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "ACTIVE",
-      subscription_expires_at: null,
-      subscription_plan: "BASE",
-    } as never);
-    await expect(requirePremium()).rejects.toBeInstanceOf(Response);
+  it("deja pasar a un entrenador sin mirar relaciones", async () => {
+    vi.mocked(db.user.findUnique).mockResolvedValue({ ...baseUser, role: "TRAINER" } as never);
+    await expect(requireClientAccess()).resolves.toMatchObject({ role: "TRAINER" });
+    expect(db.trainerClient.findFirst).not.toHaveBeenCalled();
   });
 
-  it("rejects an inactive subscription before even checking the plan", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "FREE",
-      subscription_plan: "PREMIUM",
-    } as never);
-    await expect(requirePremium()).rejects.toBeInstanceOf(Response);
+  it("rechaza a quien no tiene entrenador ni invitación", async () => {
+    vi.mocked(db.user.findUnique).mockResolvedValue(baseUser as never);
+    vi.mocked(db.trainerClient.findFirst).mockResolvedValue(null);
+    const err = await requireClientAccess().catch((e: Response) => e);
+    expect((err as Response).status).toBe(403);
   });
 
-  it("resolves for an active PREMIUM subscription", async () => {
-    vi.mocked(db.user.findUnique).mockResolvedValue({
-      ...baseUser,
-      subscription_status: "ACTIVE",
-      subscription_expires_at: null,
-      subscription_plan: "PREMIUM",
+  it("acepta la invitación pendiente de su email y le deja pasar", async () => {
+    vi.mocked(db.user.findUnique).mockResolvedValue(baseUser as never);
+    const invite = { id: "tc1", status: "INVITED", billing: "CASH", paid_until: null, client_id: null };
+    vi.mocked(db.trainerClient.findFirst)
+      .mockResolvedValueOnce(null) // sin relación vinculada
+      .mockResolvedValueOnce(invite as never); // invitación para a@b.com
+    vi.mocked(db.trainerClient.update).mockResolvedValue({ ...invite, status: "ACTIVE", client_id: "u1" } as never);
+
+    await expect(requireClientAccess()).resolves.toMatchObject({ id: "u1" });
+    expect(db.trainerClient.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ client_id: "u1", status: "ACTIVE" }) })
+    );
+  });
+
+  it("402 cuando el pago en efectivo ha vencido", async () => {
+    vi.mocked(db.user.findUnique).mockResolvedValue(baseUser as never);
+    vi.mocked(db.trainerClient.findFirst).mockResolvedValue({
+      status: "ACTIVE",
+      billing: "CASH",
+      paid_until: new Date("2020-01-01T00:00:00Z"),
     } as never);
-    await expect(requirePremium()).resolves.toMatchObject({ subscription_plan: "PREMIUM" });
+    const err = await requireClientAccess().catch((e: Response) => e);
+    expect((err as Response).status).toBe(402);
   });
 });
 

@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
-import { requireActiveSubscription } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
 
 export const POST = handler(async (_req: Request, { params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
-  // Tier Base: la comunidad/retos requiere suscripción activa
-  const user = await requireActiveSubscription();
+  // Retos: solo clientes con acceso activo
+  const user = await requireClientAccess();
 
   const challenge = await db.challenge.findUnique({
     where: { id },

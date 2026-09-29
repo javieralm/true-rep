@@ -155,6 +155,43 @@ export interface ClientPlan {
   messages: { week: number; day: number; type: ProgramItemType; data: ProgramTaskData | null }[];
 }
 
+export type ClientStatus = "INVITED" | "ACTIVE" | "PAUSED" | "ENDED";
+export type BillingMode = "STRIPE" | "CASH";
+
+/** Si el usuario puede usar la app como cliente y, si no, por qué. */
+export type AccessState = "active" | "no_invitation" | "paused" | "payment_required" | "ended";
+
+/** Respuesta de /api/me/access */
+export interface MyAccess {
+  state: AccessState;
+  /** Los entrenadores no son clientes de nadie: siempre entran. */
+  is_trainer: boolean;
+  trainer: { username: string; avatar_url: string | null } | null;
+  billing: BillingMode | null;
+  paid_until: string | null;
+}
+
+/** Fila de /api/clients (dashboard del entrenador) */
+export interface TrainerClientRow {
+  id: string;
+  email: string;
+  status: ClientStatus;
+  billing: BillingMode;
+  paid_until: string | null;
+  invited_at: string;
+  accepted_at: string | null;
+  /** null mientras el invitado no ha entrado en la app */
+  user: { id: string; username: string; email: string; avatar_url: string | null; streak: number } | null;
+  program: {
+    id: string;
+    name: string;
+    current_week: number;
+    completed_workouts: number;
+    total_items: number;
+    completion_percent: number;
+  } | null;
+}
+
 export interface User {
   id: string;
   email: string;

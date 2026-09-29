@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
+  inviteClientSchema,
+  updateClientSchema,
   createRoutineSchema,
   logWorkoutSchema,
   createChallengeSchema,
@@ -238,5 +240,30 @@ describe("gamification", () => {
     expect(nextStreak(5, new Date("2026-07-11T06:00:00Z"), now)).toBe(5); // mismo día
     expect(nextStreak(5, new Date("2026-07-08T10:00:00Z"), now)).toBe(1); // racha rota
     expect(nextStreak(0, null, now)).toBe(1); // primer workout
+  });
+});
+
+describe("inviteClientSchema", () => {
+  it("normaliza el email a minúsculas y sin espacios", () => {
+    const r = inviteClientSchema.parse({ email: "  Ana@Mail.COM ", billing: "CASH" });
+    expect(r.email).toBe("ana@mail.com");
+  });
+
+  it("rechaza emails inválidos, formas de pago desconocidas y fechas mal formadas", () => {
+    expect(inviteClientSchema.safeParse({ email: "ana", billing: "CASH" }).success).toBe(false);
+    expect(inviteClientSchema.safeParse({ email: "a@b.com", billing: "PAYPAL" }).success).toBe(false);
+    expect(inviteClientSchema.safeParse({ email: "a@b.com", billing: "CASH", paid_until: "29/09/2026" }).success).toBe(false);
+  });
+});
+
+describe("updateClientSchema", () => {
+  it("acepta pausar y quitar la fecha de pago", () => {
+    expect(updateClientSchema.safeParse({ status: "PAUSED" }).success).toBe(true);
+    expect(updateClientSchema.safeParse({ paid_until: null }).success).toBe(true);
+  });
+
+  it("no deja volver a INVITED ni mandar un cambio vacío", () => {
+    expect(updateClientSchema.safeParse({ status: "INVITED" }).success).toBe(false);
+    expect(updateClientSchema.safeParse({}).success).toBe(false);
   });
 });

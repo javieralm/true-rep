@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { ok, handler } from "@/lib/api";
-import { requirePremium } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
 import { programPosition, weekRange } from "@/lib/programs";
 import type { ClientPlan, ProgramTaskData } from "@truerep/shared";
 
@@ -8,10 +8,10 @@ import type { ClientPlan, ProgramTaskData } from "@truerep/shared";
 const MESSAGES_LIMIT = 20;
 
 /** La semana del programa asignado, el entrenador que lo asignó y lo que le ha
- * enviado. Misma puerta que /me/schedule: los programas personalizados son
- * Premium. Sin programa asignado responde null, que no es un error. */
+ * enviado. Sin programa asignado responde null, que no es un error: el
+ * entrenador puede no haberle asignado nada todavía. */
 export const GET = handler(async () => {
-  const user = await requirePremium();
+  const user = await requireClientAccess();
 
   const assignment = await db.programAssignment.findFirst({
     where: { user_id: user.id, is_active: true, program: { deleted_at: null } },

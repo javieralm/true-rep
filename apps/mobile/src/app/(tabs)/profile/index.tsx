@@ -1,8 +1,8 @@
 import { ScrollView, Text, View, StyleSheet, Switch, Pressable, RefreshControl } from "react-native";
-import { useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
+import { useAccess } from "@/hooks/useAccess";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRefresh } from "@/hooks/useRefresh";
 import { api } from "@/lib/api";
@@ -11,16 +11,13 @@ import { Button } from "@/components/ui/Button";
 import { colors, spacing } from "@/constants/colors";
 
 export default function ProfileScreen() {
-  const router = useRouter();
   const { refreshing, onRefresh } = useRefresh();
   const { signOut } = useAuth();
   const { data: user } = useUser();
   const { data: achievements } = useAchievements(user?.id);
   const unlocked = achievements?.filter((a) => a.unlocked_at) ?? [];
 
-  const isActive = user?.subscription_status === "ACTIVE";
-  const isPremium = isActive && user?.subscription_plan === "PREMIUM";
-  const planLabel = !isActive ? "Sin plan" : isPremium ? "Premium ⭐" : "Base";
+  const { data: access } = useAccess();
 
   const qc = useQueryClient();
   const updatePrefs = useMutation({
@@ -41,27 +38,22 @@ export default function ProfileScreen() {
       <Card style={styles.header}>
         <Text style={styles.username}>{user?.username ?? "…"}</Text>
         <Text style={styles.meta}>
-          {user?.xp ?? 0} XP · 🔥 {user?.streak ?? 0} day streak · {planLabel}
+          {user?.xp ?? 0} XP · {user?.streak ?? 0} {user?.streak === 1 ? "día" : "días"} de racha
         </Text>
       </Card>
 
-      <Card style={styles.planCard}>
-        <Text style={styles.section}>Tu plan: {planLabel}</Text>
-        {!isActive ? (
-          <Button title="Suscríbete" onPress={() => router.navigate("/paywall")} />
-        ) : (
-          <>
-            {!isPremium && (
-              <Button title="Mejorar a Premium" onPress={() => router.navigate("/paywall")} />
-            )}
-            <Button
-              title="Gestionar suscripción"
-              variant="outline"
-              onPress={() => router.navigate("/paywall")}
-            />
-          </>
-        )}
-      </Card>
+      {access?.trainer && (
+        <Card style={styles.planCard}>
+          <Text style={styles.section}>Tu entrenador: {access.trainer.username}</Text>
+          <Text style={styles.meta}>
+            {access.billing === "CASH"
+              ? access.paid_until
+                ? `Pagas en efectivo · acceso hasta el ${new Date(access.paid_until).toLocaleDateString("es-ES")}`
+                : "Pagas en efectivo a tu entrenador"
+              : "Pagas con tarjeta a través de TrueRep"}
+          </Text>
+        </Card>
+      )}
 
       <Card style={styles.planCard}>
         <View style={styles.prefRow}>

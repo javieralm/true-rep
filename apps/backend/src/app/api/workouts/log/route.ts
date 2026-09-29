@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { ok, fail, parseBody, handler } from "@/lib/api";
-import { requireActiveSubscription } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
+import { clientRelation, evaluateAccess } from "@/lib/access";
 import { calcXp, nextStreak, checkAchievements } from "@/lib/gamification";
 import { logWorkoutSchema } from "@truerep/shared";
 import type { Exercise } from "@truerep/shared";
@@ -47,7 +48,7 @@ function validateAgainstRoutine(
 
 export const POST = handler(async (req: Request) => {
   // Tier Base: registrar entrenamientos requiere suscripción activa
-  const user = await requireActiveSubscription();
+  const user = await requireClientAccess();
   const input = await parseBody(req, logWorkoutSchema);
 
   // Un usuario solo puede loguear contra rutinas publicadas (mismo criterio
@@ -88,11 +89,13 @@ export const POST = handler(async (req: Request) => {
     }
 
     const freshUser = await tx.user.findUniqueOrThrow({ where: { id: user.id } });
-    // Re-chequeo de suscripción: una cancelación puede llegar por webhook
-    // mientras este request esperaba el lock.
-    if (freshUser.subscription_status !== "ACTIVE") throw fail("Active subscription required", 402);
-    if (freshUser.subscription_expires_at && freshUser.subscription_expires_at < now) {
-      throw fail("Subscription expired", 402);
+    // Re-chequeo del acceso: el entrenador puede pausar al cliente (o una
+    // cancelación de Stripe llegar por webhook) mientras este request
+    // esperaba el lock.
+    if (freshUser.role !== "TRAINER" && !freshUser.is_superadmin) {
+      const state = evaluateAccess(await clientRelation(tx, freshUser), freshUser, now);
+      if (state === "payment_required") throw fail("Payment required", 402);
+      if (state !== "active") throw fail("Client access required", 403);
     }
 
     // Re-leer la rutina dentro de la transacción: si un trainer la editó o

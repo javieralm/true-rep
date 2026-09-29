@@ -1,6 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { fail } from "@/lib/api";
+import { clientRelation, evaluateAccess } from "@/lib/access";
 import type { User } from "@prisma/client";
 
 /**
@@ -56,23 +57,19 @@ export async function requireSuperadmin(): Promise<User> {
   return user;
 }
 
-/** Gate de tier Base: cualquier suscripción activa (BASE o PREMIUM), y no vencida */
-export async function requireActiveSubscription(): Promise<User> {
+/** Puerta de todo lo que hace un cliente (entrenar, su plan, sus stats): tiene
+ * que ser cliente de un entrenador, con la relación activa y pagada. Sustituye
+ * a los antiguos niveles Base/Premium: ahora no hay planes de TrueRep, hay
+ * clientes de entrenadores. Los entrenadores pasan siempre (prueban sus rutinas).
+ *
+ * 402 si falta el pago; 403 si no hay invitación o el entrenador le ha pausado. */
+export async function requireClientAccess(): Promise<User> {
   const user = await requireUser();
-  if (user.subscription_status !== "ACTIVE")
-    throw fail("Active subscription required", 402);
-  // El webhook de Stripe puede llegar con lag; una fila ACTIVE con
-  // expires_at ya pasado no debe seguir dando acceso.
-  if (user.subscription_expires_at && user.subscription_expires_at < new Date())
-    throw fail("Subscription expired", 402);
-  return user;
-}
-
-/** Gate de tier Premium: coaches, análisis de vídeo, stats avanzadas */
-export async function requirePremium(): Promise<User> {
-  const user = await requireActiveSubscription();
-  if (user.subscription_plan !== "PREMIUM")
-    throw fail("Premium plan required", 402);
+  if (user.role === "TRAINER" || user.is_superadmin) return user;
+  const relation = await clientRelation(db, user);
+  const state = evaluateAccess(relation, user, new Date());
+  if (state === "payment_required") throw fail("Payment required", 402);
+  if (state !== "active") throw fail("Client access required", 403);
   return user;
 }
 

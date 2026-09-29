@@ -11,14 +11,19 @@ const staleUser = {
   xp: 50,
   streak: 5,
   streak_last_workout_date: new Date("2026-07-30T08:00:00Z"), // "yesterday" relative to `now` in the route
+  role: "USER",
+  is_superadmin: false,
   subscription_status: "ACTIVE",
   subscription_expires_at: null as Date | null,
 };
 
+// Cliente de un entrenador que paga por Stripe (su suscripción manda).
+const relation = { status: "ACTIVE", billing: "STRIPE", paid_until: null as Date | null };
+
 const NOW = new Date("2026-07-31T09:00:00Z");
 
 vi.mock("@/lib/auth", () => ({
-  requireActiveSubscription: vi.fn(async () => staleUser),
+  requireClientAccess: vi.fn(async () => staleUser),
 }));
 
 vi.mock("@/lib/db", () => {
@@ -39,6 +44,7 @@ vi.mock("@/lib/db", () => {
       create: vi.fn(async ({ data }: WorkoutCreateArgs) => ({ id: "w1", ...data })),
     },
     routine: { findFirst: vi.fn() },
+    trainerClient: { findFirst: vi.fn(), update: vi.fn() },
   };
   return {
     db: {
@@ -92,6 +98,7 @@ describe("POST /api/workouts/log", () => {
     tx.workout.findFirst.mockReset().mockResolvedValue(null);
     tx.routine.findFirst.mockReset().mockResolvedValue(routine);
     tx.user.findUniqueOrThrow.mockReset().mockResolvedValue(staleUser);
+    tx.trainerClient.findFirst.mockReset().mockResolvedValue(relation);
     tx.user.update.mockReset().mockImplementation(async ({ data }: UserUpdateArgs) => ({
       ...staleUser,
       xp: staleUser.xp + (data.xp?.increment ?? 0),
@@ -187,6 +194,13 @@ describe("POST /api/workouts/log", () => {
     });
     const res = await POST(req(validBody));
     expect(res.status).toBe(402);
+    expect(tx.workout.create).not.toHaveBeenCalled();
+  });
+
+  it("rechaza si el entrenador pausó al cliente mientras esperaba el lock", async () => {
+    tx.trainerClient.findFirst.mockResolvedValue({ ...relation, status: "PAUSED" });
+    const res = await POST(req(validBody));
+    expect(res.status).toBe(403);
     expect(tx.workout.create).not.toHaveBeenCalled();
   });
 

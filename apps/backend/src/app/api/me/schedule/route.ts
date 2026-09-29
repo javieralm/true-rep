@@ -1,11 +1,11 @@
 import { db } from "@/lib/db";
 import { ok, handler } from "@/lib/api";
-import { requirePremium } from "@/lib/auth";
+import { requireClientAccess } from "@/lib/auth";
 import { programPosition } from "@/lib/programs";
 
-/** Rutinas de hoy del programa asignado (feature Premium: rutinas personalizadas) */
+/** Lo que el entrenador ha puesto para hoy en el programa asignado */
 export const GET = handler(async () => {
-  const user = await requirePremium();
+  const user = await requireClientAccess();
 
   const assignment = await db.programAssignment.findFirst({
     where: { user_id: user.id, is_active: true, program: { deleted_at: null } },

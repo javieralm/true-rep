@@ -1,13 +1,11 @@
 import { ScrollView, Text, View, StyleSheet, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useUser } from "@/hooks/useUser";
 import { useStats } from "@/hooks/useStats";
 import { useWorkoutHistory } from "@/hooks/useWorkoutHistory";
 import { useRefresh } from "@/hooks/useRefresh";
 import { Card } from "@/components/ui/Card";
 import { PressableCard } from "@/components/ui/PressableCard";
-import { Button } from "@/components/ui/Button";
 import { colors, spacing } from "@/constants/colors";
 import { type as typo } from "@/constants/typography";
 
@@ -34,23 +32,8 @@ function WeeklyBars({ weekly }: { weekly: { workouts: number }[] }) {
 export default function ProgressScreen() {
   const router = useRouter();
   const { refreshing, onRefresh } = useRefresh();
-  const { data: user } = useUser();
-  const isActive = user?.subscription_status === "ACTIVE";
-  const isPremium = isActive && user?.subscription_plan === "PREMIUM";
-  const { data: stats } = useStats(!!isActive);
+  const { data: stats } = useStats(true);
   const { data: history } = useWorkoutHistory(10);
-
-  if (user && !isActive) {
-    return (
-      <View style={styles.locked}>
-        <Text style={styles.lockedTitle}>Tu progreso te espera</Text>
-        <Text style={styles.lockedText}>
-          Con el plan Base llevas el seguimiento de tus entrenamientos, reps y racha semana a semana.
-        </Text>
-        <Button title="Ver planes" onPress={() => router.navigate("/paywall")} />
-      </View>
-    );
-  }
 
   const latestWeight = (entries: { weight_kg: number }[]) =>
     entries[entries.length - 1]?.weight_kg;
@@ -111,14 +94,7 @@ export default function ProgressScreen() {
 
       <Card>
         <Text style={styles.section}>Pesos por ejercicio</Text>
-        {!isPremium ? (
-          <View style={{ gap: spacing.sm }}>
-            <Text style={styles.empty}>
-              Estadísticas avanzadas: progresión de cargas por ejercicio, disponible en Premium.
-            </Text>
-            <Button title="Mejorar a Premium" variant="outline" onPress={() => router.navigate("/paywall")} />
-          </View>
-        ) : !stats?.weights || stats.weights.length === 0 ? (
+        {!stats?.weights || stats.weights.length === 0 ? (
           <Text style={styles.empty}>
             Aún no hay registros de peso. Apunta el peso al completar ejercicios en tus workouts.
           </Text>

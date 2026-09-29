@@ -2,8 +2,11 @@ import { useEffect } from "react";
 import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@clerk/clerk-expo";
-import type { ColorValue } from "react-native";
+import { View, type ColorValue } from "react-native";
 import { registerForPushNotifications } from "@/lib/push";
+import { useAccess } from "@/hooks/useAccess";
+import { AccessBlocked } from "@/components/AccessBlocked";
+import { ErrorState } from "@/components/ui/ErrorState";
 import { colors } from "@/constants/colors";
 
 // ColorValue y no string: desde SDK 57 el tabBarIcon recibe el color como
@@ -18,6 +21,7 @@ function icon(name: keyof typeof Ionicons.glyphMap) {
 
 export default function TabsLayout() {
   const { isSignedIn } = useAuth();
+  const access = useAccess(!!isSignedIn);
 
   useEffect(() => {
     if (isSignedIn) void registerForPushNotifications();
@@ -26,6 +30,16 @@ export default function TabsLayout() {
   // Sin comprobar isLoaded: el layout raíz no monta nada hasta que Clerk ha
   // cargado, así que aquí isSignedIn ya es una respuesta, no un "todavía no sé".
   if (!isSignedIn) return <Redirect href="/(auth)/login" />;
+
+  // Solo entra quien ha invitado un entrenador y tiene el acceso activo. Se
+  // decide aquí, una vez, y no en cada pantalla chocando con un 402/403.
+  if (access.isLoading) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+  if (access.error) return <ErrorState error={access.error} onRetry={() => void access.refetch()} />;
+  if (access.data?.state !== "active") {
+    return (
+      <AccessBlocked access={access.data} onRetry={() => void access.refetch()} retrying={access.isFetching} />
+    );
+  }
 
   return (
     // Etiquetas por su contenido ("Hoy", "Rutinas"), no paraguas genéricos

@@ -13,8 +13,7 @@ export default function TodayScreen() {
   const router = useRouter();
   const { refreshing, onRefresh } = useRefresh();
   const { data: user, isLoading: isUserLoading } = useUser();
-  const isPremium = user?.subscription_status === "ACTIVE" && user?.subscription_plan === "PREMIUM";
-  const { data: schedule, isLoading: isScheduleLoading, error: scheduleError } = useSchedule(isPremium);
+  const { data: schedule, isLoading: isScheduleLoading, error: scheduleError } = useSchedule(true);
 
   // Un usuario con progreso real no debe ver "0 XP" mientras carga: loading
   // y "de verdad no tiene datos" son estados distintos, se muestran distinto.
@@ -38,16 +37,7 @@ export default function TodayScreen() {
 
       {/* Acción dominante primero: lo que el entrenador ha puesto para hoy es
           lo que el usuario vino a hacer. Las stats son contexto de apoyo. */}
-      {!isPremium ? (
-        <Card style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>Tu plan, preparado por tu entrenador</Text>
-          <Text style={styles.emptyText}>
-            Con Premium tu entrenador te asigna cada semana las rutinas, los mensajes y las sesiones, y
-            aquí verás lo que toca hoy.
-          </Text>
-          <Button title="Ver planes" onPress={() => router.navigate("/paywall")} />
-        </Card>
-      ) : scheduleError ? (
+      {scheduleError ? (
         // Antes cualquier fallo se convertía en "sin plan" y el usuario con
         // programa asignado creía que no tenía nada para hoy.
         <Text style={styles.scheduleError}>

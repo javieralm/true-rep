@@ -156,6 +156,27 @@ export const logWorkoutSchema = z.object({
   idempotency_key: z.string().uuid(),
 });
 
+// ─── Clientes del entrenador ───
+export const billingModeSchema = z.enum(["STRIPE", "CASH"]);
+
+/** Fecha "pagado hasta" como YYYY-MM-DD (lo que da un <input type="date">). */
+const paidUntilSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Fecha inválida (AAAA-MM-DD)");
+
+export const inviteClientSchema = z.object({
+  email: z.string().trim().toLowerCase().email().max(254),
+  billing: billingModeSchema,
+  paid_until: paidUntilSchema.optional(),
+});
+
+export const updateClientSchema = z
+  .object({
+    // INVITED no se puede elegir: es el estado de partida, lo pone el sistema.
+    status: z.enum(["ACTIVE", "PAUSED", "ENDED"]).optional(),
+    billing: billingModeSchema.optional(),
+    paid_until: paidUntilSchema.nullable().optional(),
+  })
+  .refine((v) => Object.keys(v).length > 0, { message: "Nada que actualizar" });
+
 export const updateProfileSchema = z.object({
   username: z.string().min(2).max(30).optional(),
   avatar_url: z.string().url().optional(),

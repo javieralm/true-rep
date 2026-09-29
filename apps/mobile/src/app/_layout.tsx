@@ -69,7 +69,6 @@ function RootNavigator() {
         }}
       />
       <Stack.Screen name="feedback-camera" options={{ presentation: "modal", headerShown: true, title: "Análisis de técnica" }} />
-      <Stack.Screen name="paywall" options={{ presentation: "modal", headerShown: true, title: "Suscripción" }} />
     </Stack>
   );
 }
