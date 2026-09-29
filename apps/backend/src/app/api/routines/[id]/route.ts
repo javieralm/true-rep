@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { ok, fail, parseBody, handler } from "@/lib/api";
 import { requireTrainer, optionalUser } from "@/lib/auth";
 import { computeWeightSuggestions } from "@/lib/progression";
+import { withLibraryDefaults } from "@/lib/routine-exercises";
 import { updateRoutineSchema } from "@truerep/shared";
 import type { Exercise, ExerciseCompleted } from "@truerep/shared";
 
@@ -40,7 +41,16 @@ export const GET = handler(async (_req: Request, { params }: Params) => {
     );
   }
 
-  return ok({ ...routine, weight_suggestions });
+  const exercises = routine.exercises as unknown as Exercise[];
+  const libraryIds = exercises.flatMap((e) => (e.exercise_id ? [e.exercise_id] : []));
+  const library = libraryIds.length
+    ? await db.exercise.findMany({
+        where: { id: { in: libraryIds }, trainer_id: routine.trainer_id, deleted_at: null },
+        select: { id: true, measure: true, video_url: true },
+      })
+    : [];
+
+  return ok({ ...routine, exercises: withLibraryDefaults(exercises, library), weight_suggestions });
 });
 
 export const PATCH = handler(async (req: Request, { params }: Params) => {

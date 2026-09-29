@@ -1,4 +1,5 @@
-import { ScrollView, Text, View, StyleSheet } from "react-native";
+import { ScrollView, Text, View, StyleSheet, Pressable } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRoutine } from "@/hooks/useRoutines";
 import { useWorkoutStore } from "@/state/workoutStore";
@@ -44,12 +45,22 @@ export default function RoutineDetailScreen() {
             <Text style={styles.exName}>{ex.name}</Text>
             <Text style={styles.exMeta}>
               {ex.reps
-                ? `${ex.sets ? `${ex.sets} × ` : ""}${ex.reps}${ex.measure === "seconds" ? " s" : ""}`
+                ? `${ex.sets ? `${ex.sets} × ` : ""}${ex.reps}${ex.measure === "seconds" ? " (reps o seg.)" : ""}`
                 : ex.duration_seconds
                   ? `${ex.duration_seconds} s`
                   : ""}
             </Text>
             {ex.description && <Text style={styles.exDesc}>{ex.description}</Text>}
+            {ex.technique_video_url && (
+              <Pressable
+                onPress={() => void WebBrowser.openBrowserAsync(ex.technique_video_url!)}
+                accessibilityRole="link"
+                accessibilityLabel={`Ver el vídeo de técnica de ${ex.name}`}
+                style={({ pressed }) => [styles.videoLink, pressed && { opacity: 0.6 }]}
+              >
+                <Text style={styles.videoLinkText}>Ver técnica</Text>
+              </Pressable>
+            )}
             {suggestion && (
               <Text style={styles.suggestion}>
                 💡 Sugerencia: {suggestion.suggested_weight_kg}kg (la última vez, {suggestion.last_weight_kg}kg,
@@ -82,5 +93,7 @@ const styles = StyleSheet.create({
   exName: { ...typo.cardTitle, color: colors.textPrimary },
   exMeta: { ...typo.meta, color: colors.primaryText, marginTop: 2 },
   exDesc: { ...typo.meta, color: colors.textSecondary, marginTop: spacing.xs },
+  videoLink: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
+  videoLinkText: { ...typo.meta, fontWeight: "600", color: colors.primaryText },
   suggestion: { ...typo.meta, color: colors.primaryText, fontWeight: "600", marginTop: spacing.xs },
 });

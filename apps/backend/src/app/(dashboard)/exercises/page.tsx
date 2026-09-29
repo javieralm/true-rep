@@ -112,7 +112,7 @@ export default function ExercisesPage() {
               )}
             </div>
             <div className="mt-2 flex flex-wrap gap-1 text-[11px] uppercase text-[#666]">
-              {ex.measure === "seconds" && <span className="rounded bg-[#eee] px-2 py-0.5">Por segundos</span>}
+              {ex.measure === "seconds" && <span className="rounded bg-[#eee] px-2 py-0.5">Admite segundos</span>}
               {ex.muscle_group && <span className="rounded bg-[#eee] px-2 py-0.5">{ex.muscle_group}</span>}
               {ex.equipment && <span className="rounded bg-[#eee] px-2 py-0.5">{ex.equipment}</span>}
             </div>
@@ -148,8 +148,8 @@ export default function ExercisesPage() {
               className="w-full rounded-lg border border-[#ddd] p-2.5"
             />
             <fieldset className="flex items-center gap-4 text-sm">
-              <legend className="sr-only">Cómo se cuenta</legend>
-              <span className="text-[#666]">Se cuenta en</span>
+              <legend className="sr-only">Cómo se registra</legend>
+              <span className="text-[#666]">Se registra en</span>
               <label className="flex items-center gap-1.5">
                 <input
                   type="radio"
@@ -157,7 +157,7 @@ export default function ExercisesPage() {
                   checked={form.measure === "reps"}
                   onChange={() => setForm({ ...form, measure: "reps" })}
                 />
-                Repeticiones
+                Solo repeticiones
               </label>
               <label className="flex items-center gap-1.5">
                 <input
@@ -166,7 +166,7 @@ export default function ExercisesPage() {
                   checked={form.measure === "seconds"}
                   onChange={() => setForm({ ...form, measure: "seconds" })}
                 />
-                Segundos (L-sit, plancha…)
+                Repeticiones o segundos (L-sit, plancha…)
               </label>
             </fieldset>
             <input

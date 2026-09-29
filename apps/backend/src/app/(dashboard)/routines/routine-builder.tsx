@@ -45,8 +45,10 @@ function toRoutineExercise(lib: LibraryExercise): Exercise {
     exercise_id: lib.id,
     name: lib.name,
     sets: 3,
-    // Hereda cómo se cuenta de la librería; el objetivo por defecto cambia con ello.
-    ...(lib.measure === "seconds" ? { measure: "seconds" as const, reps: "20" } : { reps: "10" }),
+    // Hereda de la librería si admite segundos; el cliente elige al registrar
+    // (por defecto repeticiones).
+    ...(lib.measure === "seconds" ? { measure: "seconds" as const } : {}),
+    reps: "10",
     rest_seconds: 60,
     ...(lib.video_url ? { technique_video_url: lib.video_url } : {}),
   };
@@ -128,16 +130,16 @@ function ExerciseRow({
                   : { ...ex, measure: undefined }
               )
             }
-            aria-label="Cómo se cuenta"
+            aria-label="Cómo se registra"
             className="rounded border border-[#ddd] p-1.5"
           >
             <option value="reps">Reps</option>
-            <option value="seconds">Segundos</option>
+            <option value="seconds">Reps o seg.</option>
           </select>
           <input
             value={ex.reps ?? ""}
             onChange={(e) => onChange({ ...ex, reps: e.target.value })}
-            aria-label={ex.measure === "seconds" ? "Segundos objetivo" : "Repeticiones objetivo"}
+            aria-label="Objetivo por serie (repeticiones o segundos)"
             className="w-16 rounded border border-[#ddd] p-1.5"
           />
         </label>

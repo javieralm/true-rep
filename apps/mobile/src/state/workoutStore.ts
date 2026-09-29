@@ -27,6 +27,9 @@ interface WorkoutState {
   ) => void;
   setSetReps: (exerciseId: string, index: number, reps: number) => void;
   setSetSeconds: (exerciseId: string, index: number, seconds: number) => void;
+  /** Cambia todas las series del ejercicio a repeticiones o a segundos,
+   *  conservando el número escrito. */
+  setUnit: (exerciseId: string, unit: "reps" | "seconds") => void;
   setSetWeight: (exerciseId: string, index: number, weightKg: number | undefined) => void;
   setSetDone: (exerciseId: string, index: number, done: boolean) => void;
   setAllSetsDone: (exerciseId: string, done: boolean) => void;
@@ -34,6 +37,8 @@ interface WorkoutState {
    * estaban marcadas. */
   replaceSets: (exerciseId: string, sets: CompletedSet[]) => void;
   addSet: (exerciseId: string) => void;
+  /** Quita una serie; nunca la última que queda. */
+  removeSet: (exerciseId: string, index: number) => void;
   setFeltLike: (exerciseId: string, feltLike: ExerciseCompleted["felt_like"]) => void;
   setNote: (exerciseId: string, note: string) => void;
   reset: () => void;
@@ -53,10 +58,11 @@ function defaultReps(exercise: Exercise | undefined): number {
 /** Series iniciales de un ejercicio: tantas como prescriba la rutina. */
 export function initialSets(exercise: Exercise | undefined): CompletedSet[] {
   const count = Math.max(1, exercise?.sets ?? 1);
-  const target = defaultReps(exercise);
-  // En un ejercicio por segundos el objetivo de la rutina son segundos.
-  const set = exercise?.measure === "seconds" ? { reps: 0, seconds: target } : { reps: target };
-  return Array.from({ length: count }, () => ({ ...set }));
+  const reps = defaultReps(exercise);
+  // Siempre en repeticiones: aunque el ejercicio admita segundos, el cliente
+  // los elige al registrar (setUnit). Si la última vez usó segundos, la
+  // precarga de esa sesión ya llega en segundos.
+  return Array.from({ length: count }, () => ({ reps }));
 }
 
 /** Los agregados que consumen stats, export y auto-escalado se derivan siempre
@@ -160,6 +166,24 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     });
   },
 
+  setUnit: (exerciseId, unit) => {
+    set({
+      completed: get().completed.map((c) =>
+        c.exercise_id === exerciseId
+          ? withAggregates({
+              ...c,
+              sets: c.sets.map((s) => {
+                const { seconds, ...rest } = s;
+                return unit === "seconds"
+                  ? { ...rest, reps: 0, seconds: seconds ?? s.reps }
+                  : { ...rest, reps: s.reps || seconds || 0 };
+              }),
+            })
+          : c
+      ),
+    });
+  },
+
   setSetWeight: (exerciseId, index, weightKg) => {
     set({
       completed: get().completed.map((c) =>
@@ -208,8 +232,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
 
   // Una serie de más: se hizo más de lo prescrito. Hereda reps y peso de la
   // última, que es lo más probable que repita y ahorra teclear. Llega sin
-  // marcar: se marca al hacerla. No hay "quitar serie": una serie sin marcar
-  // no cuenta, que es lo mismo sin un botón más por fila.
+  // marcar: se marca al hacerla.
   addSet: (exerciseId) => {
     set({
       completed: get().completed.map((c) => {
@@ -217,6 +240,18 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
         const last = c.sets[c.sets.length - 1];
         return withAggregates({ ...c, sets: [...c.sets, last ? plainSet(last) : { reps: 0 }] });
       }),
+    });
+  },
+
+  // Para la serie añadida por error. Un ejercicio marcado con cero series no
+  // significa nada: para quitarlo entero se desmarca el ejercicio.
+  removeSet: (exerciseId, index) => {
+    set({
+      completed: get().completed.map((c) =>
+        c.exercise_id === exerciseId && c.sets.length > 1
+          ? withAggregates({ ...c, sets: c.sets.filter((_, i) => i !== index) })
+          : c
+      ),
     });
   },
 

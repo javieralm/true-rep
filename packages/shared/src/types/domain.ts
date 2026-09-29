@@ -46,7 +46,8 @@ export interface Exercise {
   id: string;
   exercise_id?: string; // referencia a la librería si viene de ella
   name: string;
-  /** Sin definir = "reps". Con "seconds", `reps` es el objetivo en segundos. */
+  /** Sin definir = solo repeticiones. "seconds" = admite registrar segundos
+   *  (isométricos como el L-sit): el cliente elige al entrenar, reps por defecto. */
   measure?: ExerciseMeasure;
   reps?: string;
   sets?: number;

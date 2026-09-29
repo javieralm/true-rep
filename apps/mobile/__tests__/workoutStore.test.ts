@@ -221,6 +221,20 @@ describe("workoutStore · series marcadas y precarga", () => {
   });
 });
 
+describe("quitar series", () => {
+  it("quita la serie indicada, pero nunca la última que queda", () => {
+    store().start(A);
+    store().toggleExercise("e1");
+    store().addSet("e1");
+    store().removeSet("e1", 3);
+    expect(entry("e1")?.sets).toHaveLength(3);
+
+    store().toggleExercise("e2");
+    store().removeSet("e2", 0);
+    expect(entry("e2")?.sets).toHaveLength(1);
+  });
+});
+
 describe("toPayload · lo que llega al backend", () => {
   it("solo manda series hechas con reps, sin la marca local, y recalcula agregados", () => {
     store().start(A);
@@ -251,11 +265,23 @@ describe("ejercicios por segundos (L-sit, plancha)", () => {
   const timed = routine("r5", [{ id: "e5", sets: 2, reps: "20" }]);
   timed.exercises[0].measure = "seconds";
 
-  it("el objetivo de la rutina se precarga como segundos, no como reps", () => {
+  it("aunque admita segundos, arranca en repeticiones", () => {
     store().start(timed);
     store().toggleExercise("e5");
 
-    expect(entry("e5")?.sets).toEqual([{ reps: 0, seconds: 20 }, { reps: 0, seconds: 20 }]);
+    expect(entry("e5")?.sets).toEqual([{ reps: 20 }, { reps: 20 }]);
+  });
+
+  it("cambiar de unidad conserva el número escrito, en los dos sentidos", () => {
+    store().start(timed);
+    store().toggleExercise("e5");
+    store().setSetWeight("e5", 0, 5);
+
+    store().setUnit("e5", "seconds");
+    expect(entry("e5")?.sets).toEqual([{ reps: 0, seconds: 20, weight_kg: 5 }, { reps: 0, seconds: 20 }]);
+
+    store().setUnit("e5", "reps");
+    expect(entry("e5")?.sets).toEqual([{ reps: 20, weight_kg: 5 }, { reps: 20 }]);
   });
 
   it("una serie hecha con segundos se envía aunque tenga 0 reps", () => {

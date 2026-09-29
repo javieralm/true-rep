@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import { Ionicons } from "@expo/vector-icons";
 import type { Exercise } from "@truerep/shared";
 import { initialSets, type SessionExercise, useWorkoutStore } from "@/state/workoutStore";
@@ -40,11 +41,14 @@ const FELT = [
 
 export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onToggleExpanded, onCompleted }: Props) {
   const store = useWorkoutStore();
-  const timed = exercise.measure === "seconds";
+  // "seconds" en la definición = admite segundos. Lo que se usa lo decide el
+  // cliente con el selector; manda lo que ya haya en las series.
+  const allowsSeconds = exercise.measure === "seconds";
   const last = context.sessions[0]?.sets;
   // Antes de tocar nada, lo que se ve es la última vez (o lo prescrito): así
   // el caso normal, "he hecho lo mismo", es solo marcar.
   const sets: SessionExercise["sets"] = entry?.sets ?? (last?.length ? last : initialSets(exercise));
+  const timed = sets.some((s) => s.seconds != null);
   const doneSets = sets.filter((s) => s.done && amount(s) > 0);
   const allDone = sets.length > 0 && sets.every((s) => s.done);
   const status = allDone ? "done" : sets.some((s) => s.done) ? "partial" : "none";
@@ -76,7 +80,7 @@ export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onTo
 
   const prescription = [
     exercise.sets ? `${exercise.sets} series` : null,
-    exercise.reps ? `${exercise.reps}${timed ? " s" : ""}` : null,
+    exercise.reps ?? null,
   ]
     .filter(Boolean)
     .join(" × ");
@@ -147,6 +151,44 @@ export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onTo
 
       {expanded && (
         <View style={styles.body}>
+          {exercise.technique_video_url && (
+            <Pressable
+              onPress={() => void WebBrowser.openBrowserAsync(exercise.technique_video_url!)}
+              accessibilityRole="link"
+              accessibilityLabel={`Ver el vídeo de técnica de ${exercise.name}`}
+              style={({ pressed }) => [styles.textButton, pressed && styles.pressedSoft]}
+            >
+              <Ionicons name="play-circle-outline" size={18} color={colors.primaryText} />
+              <Text style={styles.textButtonLabel}>Ver técnica</Text>
+            </Pressable>
+          )}
+
+          {allowsSeconds && (
+            <View style={styles.unitRow} accessibilityRole="radiogroup" accessibilityLabel="Registrar en">
+              <Text style={styles.unitLabel}>Registrar en</Text>
+              {(["reps", "seconds"] as const).map((u) => {
+                const selected = (u === "seconds") === timed;
+                return (
+                  <Pressable
+                    key={u}
+                    onPress={() => {
+                      if (selected) return;
+                      ensure();
+                      store.setUnit(exercise.id, u);
+                    }}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected }}
+                    style={({ pressed }) => [styles.unitChip, selected && styles.unitChipActive, pressed && styles.pressed]}
+                  >
+                    <Text style={[styles.unitChipText, selected && styles.unitChipTextActive]}>
+                      {u === "reps" ? "Repeticiones" : "Segundos"}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          )}
+
           {context.lastNote && (
             <View style={styles.lastNote}>
               <Text style={styles.lastNoteLabel}>Tu observación del {formatShortDate(context.lastNote.date)}</Text>
@@ -238,19 +280,37 @@ export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onTo
             </View>
           )}
 
-          <Pressable
-            onPress={() => {
-              ensure();
-              animateNextLayout();
-              store.addSet(exercise.id);
-            }}
-            accessibilityRole="button"
-            accessibilityLabel={`Añadir una serie a ${exercise.name}`}
-            style={({ pressed }) => [styles.addSet, pressed && styles.pressed]}
-          >
-            <Ionicons name="add" size={18} color={colors.primaryText} />
-            <Text style={styles.addSetText}>Añadir serie</Text>
-          </Pressable>
+          <View style={styles.setActions}>
+            <Pressable
+              onPress={() => {
+                ensure();
+                animateNextLayout();
+                store.addSet(exercise.id);
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={`Añadir una serie a ${exercise.name}`}
+              style={({ pressed }) => [styles.addSet, pressed && styles.pressed]}
+            >
+              <Ionicons name="add" size={18} color={colors.primaryText} />
+              <Text style={styles.addSetText}>Añadir serie</Text>
+            </Pressable>
+            {/* Para la serie añadida por error: quita la última. */}
+            {sets.length > 1 && (
+              <Pressable
+                onPress={() => {
+                  ensure();
+                  animateNextLayout();
+                  store.removeSet(exercise.id, sets.length - 1);
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={`Quitar la última serie de ${exercise.name}`}
+                style={({ pressed }) => [styles.addSet, pressed && styles.pressed]}
+              >
+                <Ionicons name="remove" size={18} color={colors.textSecondary} />
+                <Text style={styles.removeSetText}>Quitar serie</Text>
+              </Pressable>
+            )}
+          </View>
 
           <TextInput
             value={entry?.note ?? ""}
@@ -438,6 +498,23 @@ const styles = StyleSheet.create({
   warningText: { ...typo.meta, color: colors.warningText, flex: 1 },
   addSet: { minHeight: 44, flexDirection: "row", alignItems: "center", gap: spacing.xs, alignSelf: "flex-start" },
   addSetText: { ...typo.meta, fontWeight: "600", color: colors.primaryText },
+  removeSetText: { ...typo.meta, fontWeight: "600", color: colors.textSecondary },
+  setActions: { flexDirection: "row", gap: spacing.lg },
+  textButton: { minHeight: 44, flexDirection: "row", alignItems: "center", gap: spacing.xs, alignSelf: "flex-start" },
+  textButtonLabel: { ...typo.meta, fontWeight: "600", color: colors.primaryText },
+  unitRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs, flexWrap: "wrap" },
+  unitLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary, marginRight: spacing.xs },
+  unitChip: {
+    minHeight: 44,
+    paddingHorizontal: spacing.md,
+    borderRadius: radius.full,
+    borderWidth: 1,
+    borderColor: colors.border,
+    justifyContent: "center",
+  },
+  unitChipActive: { borderColor: colors.primary, backgroundColor: "#FFF3ED" },
+  unitChipText: { ...typo.meta, color: colors.textSecondary },
+  unitChipTextActive: { color: colors.primaryText, fontWeight: "700" },
   feltRow: { flexDirection: "row", gap: spacing.xs },
   feltChip: {
     flex: 1,
