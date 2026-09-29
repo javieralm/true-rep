@@ -59,8 +59,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_tests_access_test",
-      "community": 115,
-      "community_name": "access.test.ts",
+      "community": 98,
+      "community_name": "workouts-log.route.test.ts",
       "norm_label": "access.test.ts"
     },
     {
@@ -70,8 +70,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_backend_tests_access_test_now",
-      "community": 115,
-      "community_name": "access.test.ts",
+      "community": 98,
+      "community_name": "workouts-log.route.test.ts",
       "norm_label": "now"
     },
     {
@@ -81,8 +81,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_tests_access_test_nosub",
-      "community": 115,
-      "community_name": "access.test.ts",
+      "community": 98,
+      "community_name": "workouts-log.route.test.ts",
       "norm_label": "nosub"
     },
     {
@@ -92,8 +92,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_tests_access_test_activesub",
-      "community": 115,
-      "community_name": "access.test.ts",
+      "community": 98,
+      "community_name": "workouts-log.route.test.ts",
       "norm_label": "activesub"
     },
     {
@@ -103,8 +103,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_tests_access_test_cash",
-      "community": 115,
-      "community_name": "access.test.ts",
+      "community": 98,
+      "community_name": "workouts-log.route.test.ts",
       "norm_label": "cash()"
     },
     {
@@ -136,8 +136,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_tests_progression_test",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "progression.test.ts"
     },
     {
@@ -147,8 +147,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_tests_routines_route_test",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "routines.route.test.ts"
     },
     {
@@ -166,7 +166,7 @@
       "label": "validRoutine",
       "file_type": "code",
       "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L20",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "apps_backend_tests_validators_test_validroutine",
       "community": 20,
@@ -378,8 +378,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_package",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "package.json"
     },
     {
@@ -389,8 +389,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "apps_backend_package_name",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "name"
     },
     {
@@ -400,8 +400,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "apps_backend_package_version",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "version"
     },
     {
@@ -411,8 +411,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_backend_package_private",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "private"
     },
     {
@@ -422,8 +422,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_package_scripts",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "scripts"
     },
     {
@@ -433,8 +433,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_dev",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "dev"
     },
     {
@@ -444,8 +444,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_build",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "build"
     },
     {
@@ -455,8 +455,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_start",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "start"
     },
     {
@@ -466,8 +466,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_lint",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "lint"
     },
     {
@@ -477,8 +477,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_type_check",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "type-check"
     },
     {
@@ -488,8 +488,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_test",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "test"
     },
     {
@@ -499,8 +499,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_db_migrate",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "db:migrate"
     },
     {
@@ -510,8 +510,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_db_deploy",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "db:deploy"
     },
     {
@@ -521,8 +521,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_db_seed",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "db:seed"
     },
     {
@@ -532,8 +532,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_backend_package_scripts_db_studio",
-      "community": 15,
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "db:studio"
     },
     {
@@ -543,8 +543,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_backend_package_prisma",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "prisma"
     },
     {
@@ -554,8 +554,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "apps_backend_package_prisma_seed",
-      "community": 114,
-      "community_name": "package.json",
+      "community": 2,
+      "community_name": "Backend Build Scripts",
       "norm_label": "seed"
     },
     {
@@ -620,8 +620,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "apps_backend_package_dependencies_dnd_kit_sortable",
-      "community": 117,
-      "community_name": "@dnd-kit/sortable",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "@dnd-kit/sortable"
     },
     {
@@ -631,8 +631,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "dnd_kit_sortable",
-      "community": 117,
-      "community_name": "@dnd-kit/sortable",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "@dnd-kit/sortable"
     },
     {
@@ -686,8 +686,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "apps_backend_package_dependencies_supabase_supabase_js",
-      "community": 133,
-      "community_name": "@supabase/supabase-js",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "@supabase/supabase-js"
     },
     {
@@ -697,8 +697,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "apps_backend_package_json_supabase_supabase_js",
-      "community": 133,
-      "community_name": "@supabase/supabase-js",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "@supabase/supabase-js"
     },
     {
@@ -774,8 +774,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "apps_backend_package_dependencies_openai",
-      "community": 118,
-      "community_name": "openai",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "openai"
     },
     {
@@ -785,8 +785,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "openai",
-      "community": 118,
-      "community_name": "openai",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "openai"
     },
     {
@@ -796,8 +796,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "apps_backend_package_dependencies_react",
-      "community": 123,
-      "community_name": "react",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "react"
     },
     {
@@ -807,8 +807,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "apps_backend_package_json_react",
-      "community": 123,
-      "community_name": "react",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "react"
     },
     {
@@ -818,8 +818,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "apps_backend_package_dependencies_react_dom",
-      "community": 132,
-      "community_name": "react-dom",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "react-dom"
     },
     {
@@ -829,8 +829,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "apps_backend_package_json_react_dom",
-      "community": 132,
-      "community_name": "react-dom",
+      "community": 7,
+      "community_name": "Backend Dependencies",
       "norm_label": "react-dom"
     },
     {
@@ -1144,78 +1144,12 @@
     {
       "label": "page.tsx",
       "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "page.tsx"
-    },
-    {
-      "label": "INTERVALS",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page_intervals",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "intervals"
-    },
-    {
-      "label": "countryName",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page_countryname",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "countryname"
-    },
-    {
-      "label": "toMinor()",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page_tominor",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "tominor()"
-    },
-    {
-      "label": "toMajor()",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page_tomajor",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "tomajor()"
-    },
-    {
-      "label": "BillingPage()",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_dashboard_billing_page_billingpage",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "billingpage()"
-    },
-    {
-      "label": "page.tsx",
-      "file_type": "code",
       "source_file": "apps/backend/src/app/(dashboard)/clients/[id]/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_clients_id_page",
-      "community": 116,
-      "community_name": "page.tsx",
+      "community": 9,
+      "community_name": "Shared Domain Types",
       "norm_label": "page.tsx"
     },
     {
@@ -1225,8 +1159,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_clients_id_page_tracking",
-      "community": 116,
-      "community_name": "page.tsx",
+      "community": 9,
+      "community_name": "Shared Domain Types",
       "norm_label": "tracking"
     },
     {
@@ -1236,8 +1170,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_clients_id_page_day_names",
-      "community": 116,
-      "community_name": "page.tsx",
+      "community": 9,
+      "community_name": "Shared Domain Types",
       "norm_label": "day_names"
     },
     {
@@ -1247,8 +1181,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_clients_id_page_clienttrackingpage",
-      "community": 116,
-      "community_name": "page.tsx",
+      "community": 9,
+      "community_name": "Shared Domain Types",
       "norm_label": "clienttrackingpage()"
     },
     {
@@ -1489,8 +1423,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_new_page",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "page.tsx"
     },
     {
@@ -1500,8 +1434,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_new_page_newroutinepage",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "newroutinepage()"
     },
     {
@@ -1511,8 +1445,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_page",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "page.tsx"
     },
     {
@@ -1522,8 +1456,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_page_routinespage",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "routinespage()"
     },
     {
@@ -1533,8 +1467,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "routine-builder.tsx"
     },
     {
@@ -1544,8 +1478,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_routinedraft",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "routinedraft"
     },
     {
@@ -1555,8 +1489,8 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_emptydraft",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "emptydraft"
     },
     {
@@ -1566,8 +1500,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_toroutineexercise",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "toroutineexercise()"
     },
     {
@@ -1577,8 +1511,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_librarycard",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "librarycard()"
     },
     {
@@ -1588,8 +1522,8 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_exerciserow",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "exerciserow()"
     },
     {
@@ -1599,8 +1533,8 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "apps_backend_src_app_dashboard_routines_routine_builder_routinebuilder",
-      "community": 9,
-      "community_name": "Shared Domain Types",
+      "community": 92,
+      "community_name": "routine-builder.tsx",
       "norm_label": "routinebuilder()"
     },
     {
@@ -1731,8 +1665,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_join_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "route.ts"
     },
     {
@@ -1742,8 +1676,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_join_route_post",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "post"
     },
     {
@@ -1753,8 +1687,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_leaderboard_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -1764,8 +1698,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_leaderboard_route_get",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "get"
     },
     {
@@ -1775,8 +1709,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -1786,8 +1720,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_id_route_get",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "get"
     },
     {
@@ -1797,8 +1731,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "route.ts"
     },
     {
@@ -1808,8 +1742,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_route_get",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "get"
     },
     {
@@ -1819,8 +1753,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_challenges_route_post",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "post"
     },
     {
@@ -1830,8 +1764,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_client_relations_id_route",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -1841,8 +1775,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_client_relations_id_route_params",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "params"
     },
     {
@@ -1852,8 +1786,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_client_relations_id_route_ownrelation",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "ownrelation()"
     },
     {
@@ -1863,8 +1797,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_client_relations_id_route_patch",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "patch"
     },
     {
@@ -1874,8 +1808,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_client_relations_id_route_delete",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "delete"
     },
     {
@@ -1885,7 +1819,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_clients_id_export_route",
-      "community": 109,
+      "community": 111,
       "community_name": "route.ts",
       "norm_label": "route.ts"
     },
@@ -1896,7 +1830,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_clients_id_export_route_params",
-      "community": 109,
+      "community": 111,
       "community_name": "route.ts",
       "norm_label": "params"
     },
@@ -1907,7 +1841,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_clients_id_export_route_csv_header",
-      "community": 109,
+      "community": 111,
       "community_name": "route.ts",
       "norm_label": "csv_header"
     },
@@ -1918,7 +1852,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_clients_id_export_route_get",
-      "community": 109,
+      "community": 111,
       "community_name": "route.ts",
       "norm_label": "get"
     },
@@ -2094,8 +2028,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_health_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2105,8 +2039,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_health_route_get",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "get()"
     },
     {
@@ -2116,8 +2050,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_access_route",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "route.ts"
     },
     {
@@ -2127,8 +2061,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_access_route_get",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "get"
     },
     {
@@ -2160,8 +2094,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_preferences_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2171,8 +2105,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_preferences_route_patch",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "patch"
     },
     {
@@ -2182,8 +2116,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_push_token_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2193,8 +2127,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_push_token_route_post",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "post"
     },
     {
@@ -2226,8 +2160,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_stats_route",
-      "community": 109,
-      "community_name": "route.ts",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2237,8 +2171,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_me_stats_route_get",
-      "community": 109,
-      "community_name": "route.ts",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "get"
     },
     {
@@ -2281,8 +2215,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_programs_id_route",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2292,8 +2226,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_programs_id_route_params",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "params"
     },
     {
@@ -2303,8 +2237,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_programs_id_route_get",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "get"
     },
     {
@@ -2314,8 +2248,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_programs_id_route_patch",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "patch"
     },
     {
@@ -2325,8 +2259,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_programs_id_route_delete",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "delete"
     },
     {
@@ -2424,8 +2358,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_routines_route",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2435,8 +2369,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_routines_route_get",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "get"
     },
     {
@@ -2446,53 +2380,9 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_routines_route_post",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "post"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "POST",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_stripe_connect_onboarding_link_route_post",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "post"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_stripe_connect_status_route",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "GET",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_stripe_connect_status_route_get",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "get"
     },
     {
       "label": "route.ts",
@@ -2541,67 +2431,12 @@
     {
       "label": "route.ts",
       "file_type": "code",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_trainer_prices_route",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "route.ts"
-    },
-    {
-      "label": "INTERVALS",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_trainer_prices_route_intervals",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "intervals"
-    },
-    {
-      "label": "activePrices()",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_trainer_prices_route_activeprices",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "activeprices()"
-    },
-    {
-      "label": "GET",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_trainer_prices_route_get",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "get"
-    },
-    {
-      "label": "PUT",
-      "file_type": "code",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "apps_backend_src_app_api_trainer_prices_route_put",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "put"
-    },
-    {
-      "label": "route.ts",
-      "file_type": "code",
       "source_file": "apps/backend/src/app/api/users/[id]/achievements/route.ts",
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_id_achievements_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "route.ts"
     },
     {
@@ -2611,8 +2446,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_id_achievements_route_get",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "get"
     },
     {
@@ -2622,8 +2457,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_id_leaderboard_rank_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2633,8 +2468,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_id_leaderboard_rank_route_get",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "get"
     },
     {
@@ -2666,8 +2501,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_me_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2677,8 +2512,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_me_route_get",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "get"
     },
     {
@@ -2688,8 +2523,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_users_me_route_patch",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "patch"
     },
     {
@@ -2699,8 +2534,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_id_review_route",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 104,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2710,8 +2545,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_id_review_route_params",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 104,
+      "community_name": "route.ts",
       "norm_label": "params"
     },
     {
@@ -2732,8 +2567,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_id_status_route",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2743,8 +2578,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_id_status_route_get",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "get"
     },
     {
@@ -2754,8 +2589,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_analyze_route",
-      "community": 95,
-      "community_name": "handler",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "route.ts"
     },
     {
@@ -2765,8 +2600,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_analyze_route_post",
-      "community": 95,
-      "community_name": "handler",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "post"
     },
     {
@@ -2820,8 +2655,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_upload_url_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 93,
+      "community_name": "route.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2831,8 +2666,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_video_feedback_upload_url_route_post",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 93,
+      "community_name": "route.ts",
       "norm_label": "post"
     },
     {
@@ -2930,8 +2765,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_workouts_log_route",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "route.ts"
     },
     {
@@ -2941,8 +2776,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_workouts_log_route_routineforvalidation",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "routineforvalidation"
     },
     {
@@ -2952,8 +2787,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_workouts_log_route_validateagainstroutine",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "validateagainstroutine()"
     },
     {
@@ -2974,8 +2809,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_workouts_route",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "route.ts"
     },
     {
@@ -2985,8 +2820,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_app_api_workouts_route_get",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "get"
     },
     {
@@ -3128,8 +2963,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_lib_access",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "access.ts"
     },
     {
@@ -3139,8 +2974,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_backend_src_lib_access_db",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "db"
     },
     {
@@ -3161,8 +2996,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "apps_backend_src_lib_access_evaluateaccess",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "evaluateaccess()"
     },
     {
@@ -3172,8 +3007,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "apps_backend_src_lib_access_clientrelation",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "clientrelation()"
     },
     {
@@ -3194,8 +3029,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_lib_api_ok",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "ok()"
     },
     {
@@ -3205,8 +3040,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_backend_src_lib_api_fail",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "fail()"
     },
     {
@@ -3249,8 +3084,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "apps_backend_src_lib_api_handler",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 111,
+      "community_name": "route.ts",
       "norm_label": "handler()"
     },
     {
@@ -3293,8 +3128,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "apps_backend_src_lib_auth_requiretrainer",
-      "community": 1,
-      "community_name": "Backend API Routes",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "requiretrainer()"
     },
     {
@@ -3315,8 +3150,8 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "apps_backend_src_lib_auth_requireclientaccess",
-      "community": 95,
-      "community_name": "handler",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "requireclientaccess()"
     },
     {
@@ -3359,7 +3194,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_lib_cloudinary",
-      "community": 104,
+      "community": 93,
       "community_name": "route.ts",
       "norm_label": "cloudinary.ts"
     },
@@ -3370,7 +3205,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_backend_src_lib_cloudinary_signeduploadparams",
-      "community": 104,
+      "community": 93,
       "community_name": "route.ts",
       "norm_label": "signeduploadparams()"
     },
@@ -3392,8 +3227,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_lib_csv",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "csv.ts"
     },
     {
@@ -3403,8 +3238,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "apps_backend_src_lib_csv_csvescape",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "csvescape()"
     },
     {
@@ -3414,8 +3249,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_backend_src_lib_csv_tocsvrow",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "tocsvrow()"
     },
     {
@@ -3425,8 +3260,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docref_rfc_4180",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "rfc-4180"
     },
     {
@@ -3436,8 +3271,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_lib_db",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "db.ts"
     },
     {
@@ -3447,8 +3282,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "apps_backend_src_lib_db_globalforprisma",
-      "community": 19,
-      "community_name": "Trainer Dashboard Layout",
+      "community": 78,
+      "community_name": "expo-image-picker",
       "norm_label": "globalforprisma"
     },
     {
@@ -3645,8 +3480,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_backend_src_lib_progression",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "progression.ts"
     },
     {
@@ -3656,8 +3491,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_backend_src_lib_progression_workoutlog",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "workoutlog"
     },
     {
@@ -3667,8 +3502,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_backend_src_lib_progression_computeweightsuggestions",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "computeweightsuggestions()"
     },
     {
@@ -3686,7 +3521,7 @@
       "label": "stripe()",
       "file_type": "code",
       "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L12",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "apps_backend_src_lib_stripe_stripe",
       "community": 93,
@@ -3714,28 +3549,6 @@
       "community": 93,
       "community_name": "route.ts",
       "norm_label": "pricetoplan()"
-    },
-    {
-      "label": "RECURRING",
-      "file_type": "code",
-      "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "apps_backend_src_lib_stripe_recurring",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "recurring"
-    },
-    {
-      "label": "accountCanCharge()",
-      "file_type": "code",
-      "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L42",
-      "_origin": "ast",
-      "id": "apps_backend_src_lib_stripe_accountcancharge",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "accountcancharge()"
     },
     {
       "label": "video-feedback.ts",
@@ -3785,7 +3598,7 @@
       "label": "isAdminRoute",
       "file_type": "code",
       "source_file": "apps/backend/src/middleware.ts",
-      "source_location": "L16",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "apps_backend_src_middleware_isadminroute",
       "community": 3,
@@ -3796,7 +3609,7 @@
       "label": "config",
       "file_type": "code",
       "source_file": "apps/backend/src/middleware.ts",
-      "source_location": "L23",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "apps_backend_src_middleware_config",
       "community": 3,
@@ -4151,8 +3964,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "api.test.ts"
     },
     {
@@ -4162,8 +3975,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test_mockfetch",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "mockfetch"
     },
     {
@@ -4173,8 +3986,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test_jsonres",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "jsonres()"
     },
     {
@@ -4184,8 +3997,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test_htmlres",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "htmlres()"
     },
     {
@@ -4195,8 +4008,8 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test_success",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "success()"
     },
     {
@@ -4206,8 +4019,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "apps_mobile_tests_api_test_failure",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "failure()"
     },
     {
@@ -4437,8 +4250,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "apps_mobile_tests_workoutstore_test_store",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "store()"
     },
     {
@@ -4448,8 +4261,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "apps_mobile_tests_workoutstore_test_entry",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "entry()"
     },
     {
@@ -5031,8 +4844,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "apps_mobile_package_dependencies_babel_runtime",
-      "community": 134,
-      "community_name": "@babel/runtime",
+      "community": 75,
+      "community_name": "@clerk/clerk-expo",
       "norm_label": "@babel/runtime"
     },
     {
@@ -5042,8 +4855,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "babel_runtime",
-      "community": 134,
-      "community_name": "@babel/runtime",
+      "community": 75,
+      "community_name": "@clerk/clerk-expo",
       "norm_label": "@babel/runtime"
     },
     {
@@ -5075,8 +4888,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "apps_mobile_package_dependencies_expo_metro_runtime",
-      "community": 75,
-      "community_name": "@clerk/clerk-expo",
+      "community": 112,
+      "community_name": "@expo/metro-runtime",
       "norm_label": "@expo/metro-runtime"
     },
     {
@@ -5086,8 +4899,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "expo_metro_runtime",
-      "community": 75,
-      "community_name": "@clerk/clerk-expo",
+      "community": 112,
+      "community_name": "@expo/metro-runtime",
       "norm_label": "@expo/metro-runtime"
     },
     {
@@ -5889,8 +5702,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_today_index",
-      "community": 0,
-      "community_name": "Mobile Screens and Navigation",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "index.tsx"
     },
     {
@@ -5911,8 +5724,8 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_today_index_styles",
-      "community": 0,
-      "community_name": "Mobile Screens and Navigation",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "styles"
     },
     {
@@ -5922,8 +5735,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_today_routine_id",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "[id].tsx"
     },
     {
@@ -6109,8 +5922,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_id",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "[id].tsx"
     },
     {
@@ -6120,8 +5933,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_id_challengedetailscreen",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "challengedetailscreen()"
     },
     {
@@ -6131,8 +5944,8 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_id_styles",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "styles"
     },
     {
@@ -6142,8 +5955,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_index",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "index.tsx"
     },
     {
@@ -6153,8 +5966,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_index_challengesscreen",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "challengesscreen()"
     },
     {
@@ -6164,8 +5977,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_progress_challenges_index_styles",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "styles"
     },
     {
@@ -6219,8 +6032,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_tabs_workouts_id",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "[id].tsx"
     },
     {
@@ -6296,8 +6109,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "_layout.tsx"
     },
     {
@@ -6307,8 +6120,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout_queryclient",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "queryclient"
     },
     {
@@ -6318,8 +6131,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout_userefetchonforeground",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "userefetchonforeground()"
     },
     {
@@ -6329,8 +6142,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout_authtokenbridge",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "authtokenbridge()"
     },
     {
@@ -6340,8 +6153,8 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout_rootnavigator",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "rootnavigator()"
     },
     {
@@ -6351,8 +6164,8 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "apps_mobile_src_app_layout_rootlayout",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "rootlayout()"
     },
     {
@@ -6516,8 +6329,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_components_social_leaderboardrow",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "leaderboardrow.tsx"
     },
     {
@@ -6527,8 +6340,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_mobile_src_components_social_leaderboardrow_leaderboardrow",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "leaderboardrow()"
     },
     {
@@ -6538,8 +6351,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "apps_mobile_src_components_social_leaderboardrow_styles",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "styles"
     },
     {
@@ -6549,8 +6362,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_badge",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "badge.tsx"
     },
     {
@@ -6560,8 +6373,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_badge_difficultybadge",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "difficultybadge()"
     },
     {
@@ -6571,8 +6384,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_badge_styles",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "styles"
     },
     {
@@ -6626,8 +6439,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_card",
-      "community": 0,
-      "community_name": "Mobile Screens and Navigation",
+      "community": 83,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "card.tsx"
     },
     {
@@ -6648,8 +6461,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_card_styles",
-      "community": 0,
-      "community_name": "Mobile Screens and Navigation",
+      "community": 83,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "styles"
     },
     {
@@ -6670,8 +6483,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_mobile_src_components_ui_errorstate_errorstate",
-      "community": 103,
-      "community_name": "expo-router",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "errorstate()"
     },
     {
@@ -6868,8 +6681,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_components_workout_routinedetailscreen",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "routinedetailscreen.tsx"
     },
     {
@@ -6879,8 +6692,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "apps_mobile_src_components_workout_routinedetailscreen_routinedetailscreen",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "routinedetailscreen()"
     },
     {
@@ -6890,8 +6703,8 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "apps_mobile_src_components_workout_routinedetailscreen_styles",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 0,
+      "community_name": "Mobile Screens and Navigation",
       "norm_label": "styles"
     },
     {
@@ -6945,8 +6758,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_constants_labels",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 83,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "labels.ts"
     },
     {
@@ -6956,8 +6769,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_mobile_src_constants_labels_difficulty_label",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 83,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "difficulty_label"
     },
     {
@@ -6978,8 +6791,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_useaccess",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 103,
+      "community_name": "expo-router",
       "norm_label": "useaccess.ts"
     },
     {
@@ -6989,8 +6802,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_useaccess_useaccess",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 103,
+      "community_name": "expo-router",
       "norm_label": "useaccess()"
     },
     {
@@ -7022,8 +6835,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_usechallenges",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "usechallenges.ts"
     },
     {
@@ -7033,8 +6846,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_usechallenges_usechallenges",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "usechallenges()"
     },
     {
@@ -7044,8 +6857,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_usechallenges_usechallenge",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "usechallenge()"
     },
     {
@@ -7055,8 +6868,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_usechallenges_usejoinchallenge",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "usejoinchallenge()"
     },
     {
@@ -7110,8 +6923,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_useplan",
-      "community": 96,
-      "community_name": "@babel/runtime",
+      "community": 83,
+      "community_name": "react-native-safe-area-context",
       "norm_label": "useplan.ts"
     },
     {
@@ -7132,8 +6945,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_userefresh",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "userefresh.ts"
     },
     {
@@ -7143,8 +6956,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_userefresh_userefresh",
-      "community": 83,
-      "community_name": "react-native-safe-area-context",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "userefresh()"
     },
     {
@@ -7154,8 +6967,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_useroutines",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "useroutines.ts"
     },
     {
@@ -7165,8 +6978,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "apps_mobile_src_hooks_useroutines_useroutine",
-      "community": 92,
-      "community_name": "routine-builder.tsx",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "useroutine()"
     },
     {
@@ -7275,8 +7088,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "apps_mobile_src_lib_api_registertokengetter",
-      "community": 106,
-      "community_name": "expo-router",
+      "community": 15,
+      "community_name": "Mobile Root Layout and Auth Bridge",
       "norm_label": "registertokengetter()"
     },
     {
@@ -8133,8 +7946,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "packages_shared_src_index",
-      "community": 95,
-      "community_name": "handler",
+      "community": 1,
+      "community_name": "Backend API Routes",
       "norm_label": "index.ts"
     },
     {
@@ -8177,8 +7990,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_subscriptionplan",
-      "community": 93,
-      "community_name": "route.ts",
+      "community": 91,
+      "community_name": "domain.ts",
       "norm_label": "subscriptionplan"
     },
     {
@@ -8232,8 +8045,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_exercise",
-      "community": 109,
-      "community_name": "route.ts",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "exercise"
     },
     {
@@ -8287,8 +8100,8 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_program",
-      "community": 97,
-      "community_name": "page.tsx",
+      "community": 9,
+      "community_name": "Shared Domain Types",
       "norm_label": "program"
     },
     {
@@ -8342,8 +8155,8 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_clientplan",
-      "community": 91,
-      "community_name": "domain.ts",
+      "community": 95,
+      "community_name": "handler",
       "norm_label": "clientplan"
     },
     {
@@ -8375,8 +8188,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_accessstate",
-      "community": 91,
-      "community_name": "domain.ts",
+      "community": 19,
+      "community_name": "Trainer Dashboard Layout",
       "norm_label": "accessstate"
     },
     {
@@ -8430,8 +8243,8 @@
       "source_location": "L228",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_weightsuggestion",
-      "community": 112,
-      "community_name": "@expo/metro-runtime",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "weightsuggestion"
     },
     {
@@ -8452,8 +8265,8 @@
       "source_location": "L243",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_exercisecompleted",
-      "community": 109,
-      "community_name": "route.ts",
+      "community": 99,
+      "community_name": "Routine",
       "norm_label": "exercisecompleted"
     },
     {
@@ -8496,8 +8309,8 @@
       "source_location": "L292",
       "_origin": "ast",
       "id": "packages_shared_src_types_domain_challenge",
-      "community": 110,
-      "community_name": "route.ts",
+      "community": 96,
+      "community_name": "@babel/runtime",
       "norm_label": "challenge"
     },
     {
@@ -8543,50 +8356,6 @@
       "community": 91,
       "community_name": "domain.ts",
       "norm_label": "apiresponse"
-    },
-    {
-      "label": "PriceInterval",
-      "file_type": "code",
-      "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L336",
-      "_origin": "ast",
-      "id": "packages_shared_src_types_domain_priceinterval",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "priceinterval"
-    },
-    {
-      "label": "ConnectState",
-      "file_type": "code",
-      "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L339",
-      "_origin": "ast",
-      "id": "packages_shared_src_types_domain_connectstate",
-      "community": 91,
-      "community_name": "domain.ts",
-      "norm_label": "connectstate"
-    },
-    {
-      "label": "ConnectStatus",
-      "file_type": "code",
-      "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L342",
-      "_origin": "ast",
-      "id": "packages_shared_src_types_domain_connectstatus",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "connectstatus"
-    },
-    {
-      "label": "TrainerPriceRow",
-      "file_type": "code",
-      "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L348",
-      "_origin": "ast",
-      "id": "packages_shared_src_types_domain_trainerpricerow",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "trainerpricerow"
     },
     {
       "label": "index.ts",
@@ -8771,8 +8540,8 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "packages_shared_src_validators_index_updateroutineschema",
-      "community": 20,
-      "community_name": "Routine Creation Page",
+      "community": 109,
+      "community_name": "route.ts",
       "norm_label": "updateroutineschema"
     },
     {
@@ -8881,75 +8650,9 @@
       "source_location": "L214",
       "_origin": "ast",
       "id": "packages_shared_src_validators_index_paginationschema",
-      "community": 78,
-      "community_name": "expo-image-picker",
+      "community": 94,
+      "community_name": "db.ts",
       "norm_label": "paginationschema"
-    },
-    {
-      "label": "TRAINER_CURRENCIES",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L221",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_trainer_currencies",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "trainer_currencies"
-    },
-    {
-      "label": "priceIntervalSchema",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L222",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_priceintervalschema",
-      "community": 20,
-      "community_name": "Routine Creation Page",
-      "norm_label": "priceintervalschema"
-    },
-    {
-      "label": "priceAmountSchema",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L226",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_priceamountschema",
-      "community": 20,
-      "community_name": "Routine Creation Page",
-      "norm_label": "priceamountschema"
-    },
-    {
-      "label": "trainerPricesSchema",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L230",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_trainerpricesschema",
-      "community": 93,
-      "community_name": "route.ts",
-      "norm_label": "trainerpricesschema"
-    },
-    {
-      "label": "TRAINER_COUNTRIES",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L246",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_trainer_countries",
-      "community": 111,
-      "community_name": "route.ts",
-      "norm_label": "trainer_countries"
-    },
-    {
-      "label": "connectOnboardingSchema",
-      "file_type": "code",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L248",
-      "_origin": "ast",
-      "id": "packages_shared_src_validators_index_connectonboardingschema",
-      "community": 20,
-      "community_name": "Routine Creation Page",
-      "norm_label": "connectonboardingschema"
     },
     {
       "label": "tsconfig.json",
@@ -10822,138 +10525,6 @@
       "norm_label": "completed"
     },
     {
-      "label": "stripe-connect-fase-b.md",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "stripe-connect-fase-b.md"
-    },
-    {
-      "label": "Plan: cobro con Stripe Connect (fases B y C)",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "plan: cobro con stripe connect (fases b y c)"
-    },
-    {
-      "label": "0. Primero, en la sesi\u00f3n nueva",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_0_primero_en_la_sesi\u00f3n_nueva",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "0. primero, en la sesion nueva"
-    },
-    {
-      "label": "Resultado del planificador (2026-09-29, entorno de prueba `acct_1UKwyqRh3hzEOCZE`)",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_resultado_del_planificador_2026_09_29_entorno_de_prueba_acct_1ukwyqrh3hzeocze",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "resultado del planificador (2026-09-29, entorno de prueba `acct_1ukwyqrh3hzeocze`)"
-    },
-    {
-      "label": "1. Contexto de negocio (para el planificador)",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_1_contexto_de_negocio_para_el_planificador",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "1. contexto de negocio (para el planificador)"
-    },
-    {
-      "label": "2. Estado actual del c\u00f3digo",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L77",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_2_estado_actual_del_c\u00f3digo",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "2. estado actual del codigo"
-    },
-    {
-      "label": "3. Fase B1 \u2014 alta del entrenador y sus precios",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L99",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_3_fase_b1_alta_del_entrenador_y_sus_precios",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "3. fase b1 \u2014 alta del entrenador y sus precios"
-    },
-    {
-      "label": "4. Fase B2 \u2014 pago del cliente, avisos y acceso",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L137",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_4_fase_b2_pago_del_cliente_avisos_y_acceso",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "4. fase b2 \u2014 pago del cliente, avisos y acceso"
-    },
-    {
-      "label": "5. Fase C \u2014 comisi\u00f3n y cuota de efectivo",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L176",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_5_fase_c_comisi\u00f3n_y_cuota_de_efectivo",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "5. fase c \u2014 comision y cuota de efectivo"
-    },
-    {
-      "label": "6. Verificaci\u00f3n en cada fase",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L193",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_6_verificaci\u00f3n_en_cada_fase",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "6. verificacion en cada fase"
-    },
-    {
-      "label": "7. Despliegue (mismo procedimiento que la fase A)",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L205",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_7_despliegue_mismo_procedimiento_que_la_fase_a",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "7. despliegue (mismo procedimiento que la fase a)"
-    },
-    {
-      "label": "8. Pendiente de confirmar con el usuario durante la ejecuci\u00f3n",
-      "file_type": "document",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L215",
-      "_origin": "ast",
-      "id": "docs_plans_stripe_connect_fase_b_8_pendiente_de_confirmar_con_el_usuario_durante_la_ejecuci\u00f3n",
-      "community": 94,
-      "community_name": "db.ts",
-      "norm_label": "8. pendiente de confirmar con el usuario durante la ejecucion"
-    },
-    {
       "label": "skills-system-design.md",
       "file_type": "document",
       "source_file": "docs/skills-system-design.md",
@@ -12367,9 +11938,9 @@
       "author": null,
       "contributor": null,
       "rationale": "No any, no @ts-ignore. The whole point of Prisma + Zod + shared types is an unbroken type chain; one any collapses it.",
-      "community": 15,
+      "community": 2,
       "norm_label": "typescript strict, no escape hatches",
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community_name": "Backend Build Scripts",
       "id": "true_rep_typescript_strict"
     },
     {
@@ -12397,9 +11968,9 @@
       "author": null,
       "contributor": null,
       "rationale": "Lint, type-check and unit tests gate every push, so the strict-TypeScript and validator rules are enforced by machine rather than by review discipline.",
-      "community": 15,
+      "community": 2,
       "norm_label": "ci pipeline",
-      "community_name": "Mobile Root Layout and Auth Bridge",
+      "community_name": "Backend Build Scripts",
       "id": "true_rep_ci_pipeline"
     },
     {
@@ -12698,7 +12269,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "apps_backend_tests_validators_test",
       "target": "apps_backend_src_lib_gamification",
@@ -12709,7 +12280,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "apps_backend_tests_validators_test",
       "target": "apps_backend_src_lib_gamification_calcxp",
@@ -12720,7 +12291,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "source": "apps_backend_tests_validators_test",
       "target": "apps_backend_src_lib_gamification_nextstreak",
@@ -12730,7 +12301,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L20",
+      "source_location": "L19",
       "weight": 1.0,
       "source": "apps_backend_tests_validators_test",
       "target": "apps_backend_tests_validators_test_validroutine",
@@ -12855,17 +12426,6 @@
       "weight": 1.0,
       "source": "apps_backend_tests_validators_test",
       "target": "packages_shared_src_validators_index_pushtokenschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/__tests__/validators.test.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_tests_validators_test",
-      "target": "packages_shared_src_validators_index_trainerpricesschema",
       "confidence_score": 1.0
     },
     {
@@ -13863,155 +13423,6 @@
       "source": "apps_backend_prisma_seed",
       "target": "apps_backend_prisma_seed_prisma",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_app_dashboard_billing_page_billingpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_app_dashboard_billing_page_countryname",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_app_dashboard_billing_page_intervals",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L27",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_app_dashboard_billing_page_tomajor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_app_dashboard_billing_page_tominor",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_lib_client_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "apps_backend_src_lib_client_api_apifetch",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_index",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_types_domain_connectstatus",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_types_domain_priceinterval",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_types_domain_trainerpricerow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_validators_index_trainer_countries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page",
-      "target": "packages_shared_src_validators_index_trainer_currencies",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "apps/backend/src/app/(dashboard)/billing/page.tsx",
-      "source_location": "L74",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_dashboard_billing_page_billingpage",
-      "target": "apps_backend_src_lib_client_api_apifetch"
     },
     {
       "relation": "contains",
@@ -18120,301 +17531,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_app_api_stripe_connect_onboarding_link_route_post",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_api_fail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_api_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_api_ok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_api_parsebody",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_auth_requiretrainer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_env",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_env_requireenv",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "apps_backend_src_lib_stripe_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "packages_shared_src_index",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_onboarding_link_route",
-      "target": "packages_shared_src_validators_index_connectonboardingschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_app_api_stripe_connect_status_route_get",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_api_fail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_api_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_api_ok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_auth_requiretrainer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "apps_backend_src_lib_stripe_accountcancharge",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "packages_shared_src_index",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/stripe/connect/status/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_stripe_connect_status_route",
-      "target": "packages_shared_src_types_domain_connectstatus",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/app/api/subscriptions/checkout/route.ts",
       "source_location": "L7",
       "weight": 1.0,
@@ -18694,200 +17810,6 @@
       "weight": 1.0,
       "source": "apps_backend_src_app_api_subscriptions_portal_route",
       "target": "apps_backend_src_lib_stripe_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_app_api_trainer_prices_route_activeprices",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_app_api_trainer_prices_route_get",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_app_api_trainer_prices_route_intervals",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L28",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_app_api_trainer_prices_route_put",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_api_fail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_api_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_api_ok",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_api_parsebody",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_auth",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_auth_requiretrainer",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_stripe_recurring",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "apps_backend_src_lib_stripe_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "packages_shared_src_index",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "packages_shared_src_types_domain_trainerpricerow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/app/api/trainer/prices/route.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "apps_backend_src_app_api_trainer_prices_route",
-      "target": "packages_shared_src_validators_index_trainerpricesschema",
       "confidence_score": 1.0
     },
     {
@@ -21286,7 +20208,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L14",
+      "source_location": "L12",
       "weight": 1.0,
       "source": "apps_backend_src_lib_stripe_stripe",
       "target": "apps_backend_src_lib_env_requireenv"
@@ -21513,16 +20435,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L42",
-      "weight": 1.0,
-      "source": "apps_backend_src_lib_stripe",
-      "target": "apps_backend_src_lib_stripe_accountcancharge",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/lib/stripe.ts",
       "source_location": "L18",
       "weight": 1.0,
       "source": "apps_backend_src_lib_stripe",
@@ -21543,17 +20455,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L35",
-      "weight": 1.0,
-      "source": "apps_backend_src_lib_stripe",
-      "target": "apps_backend_src_lib_stripe_recurring",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L12",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "apps_backend_src_lib_stripe",
       "target": "apps_backend_src_lib_stripe_stripe",
@@ -21586,17 +20488,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/lib/stripe.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "apps_backend_src_lib_stripe_accountcancharge",
-      "target": "apps_backend_src_lib_stripe_stripe",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/backend/src/lib/stripe.ts",
       "source_location": "L28",
       "weight": 1.0,
       "source": "apps_backend_src_lib_stripe_pricetoplan",
@@ -21617,7 +20508,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/middleware.ts",
-      "source_location": "L23",
+      "source_location": "L22",
       "weight": 1.0,
       "source": "apps_backend_src_middleware",
       "target": "apps_backend_src_middleware_config",
@@ -21627,7 +20518,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/backend/src/middleware.ts",
-      "source_location": "L16",
+      "source_location": "L15",
       "weight": 1.0,
       "source": "apps_backend_src_middleware",
       "target": "apps_backend_src_middleware_isadminroute",
@@ -30138,26 +29029,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L339",
-      "weight": 1.0,
-      "source": "packages_shared_src_types_domain",
-      "target": "packages_shared_src_types_domain_connectstate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L342",
-      "weight": 1.0,
-      "source": "packages_shared_src_types_domain",
-      "target": "packages_shared_src_types_domain_connectstatus",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/types/domain.ts",
       "source_location": "L134",
       "weight": 1.0,
       "source": "packages_shared_src_types_domain",
@@ -30278,16 +29149,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L336",
-      "weight": 1.0,
-      "source": "packages_shared_src_types_domain",
-      "target": "packages_shared_src_types_domain_priceinterval",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/types/domain.ts",
       "source_location": "L96",
       "weight": 1.0,
       "source": "packages_shared_src_types_domain",
@@ -30398,16 +29259,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/shared/src/types/domain.ts",
-      "source_location": "L348",
-      "weight": 1.0,
-      "source": "packages_shared_src_types_domain",
-      "target": "packages_shared_src_types_domain_trainerpricerow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/types/domain.ts",
       "source_location": "L195",
       "weight": 1.0,
       "source": "packages_shared_src_types_domain",
@@ -30504,16 +29355,6 @@
       "weight": 1.0,
       "source": "packages_shared_src_validators_index",
       "target": "packages_shared_src_validators_index_checkoutschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L248",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_connectonboardingschema",
       "confidence_score": 1.0
     },
     {
@@ -30640,26 +29481,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L226",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_priceamountschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L222",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_priceintervalschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
       "source_location": "L52",
       "weight": 1.0,
       "source": "packages_shared_src_validators_index",
@@ -30694,36 +29515,6 @@
       "weight": 1.0,
       "source": "packages_shared_src_validators_index",
       "target": "packages_shared_src_validators_index_pushtokenschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L246",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_trainer_countries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L221",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_trainer_currencies",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "packages/shared/src/validators/index.ts",
-      "source_location": "L230",
-      "weight": 1.0,
-      "source": "packages_shared_src_validators_index",
-      "target": "packages_shared_src_validators_index_trainerpricesschema",
       "confidence_score": 1.0
     },
     {
@@ -32320,116 +31111,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b",
-      "target": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_0_primero_en_la_sesi\u00f3n_nueva",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_1_contexto_de_negocio_para_el_planificador",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L77",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_2_estado_actual_del_c\u00f3digo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L99",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_3_fase_b1_alta_del_entrenador_y_sus_precios",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L137",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_4_fase_b2_pago_del_cliente_avisos_y_acceso",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L176",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_5_fase_c_comisi\u00f3n_y_cuota_de_efectivo",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L193",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_6_verificaci\u00f3n_en_cada_fase",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L205",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_7_despliegue_mismo_procedimiento_que_la_fase_a",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L215",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_plan_cobro_con_stripe_connect_fases_b_y_c",
-      "target": "docs_plans_stripe_connect_fase_b_8_pendiente_de_confirmar_con_el_usuario_durante_la_ejecuci\u00f3n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/plans/stripe-connect-fase-b.md",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "docs_plans_stripe_connect_fase_b_0_primero_en_la_sesi\u00f3n_nueva",
-      "target": "docs_plans_stripe_connect_fase_b_resultado_del_planificador_2026_09_29_entorno_de_prueba_acct_1ukwyqrh3hzeocze",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "docs/skills-system-design.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -33466,5 +32147,5 @@
       "source_file": "true-rep.md"
     }
   ],
-  "built_at_commit": "10416f68e6b1a4eaf2bd41315ee693f021be2d70"
+  "built_at_commit": "79cc6eadd0212eaf739dfb9a3ed28f107f69d3c1"
 }

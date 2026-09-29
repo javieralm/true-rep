@@ -1,16 +1,16 @@
 # Graph Report - true-rep  (2026-09-29)
 
 ## Corpus Check
-- 195 files · ~85,380 words
+- 189 files · ~81,507 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1116 nodes · 1983 edges · 135 communities (73 shown, 62 thin omitted)
+- 1077 nodes · 1899 edges · 126 communities (69 shown, 57 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 5 edges (avg confidence: 0.69)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `10416f68`
+- Built from commit: `79cc6ead`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -123,16 +123,10 @@
 - route.ts
 - @expo/metro-runtime
 - eslint.config.js
-- package.json
-- access.test.ts
-- page.tsx
-- @dnd-kit/sortable
-- openai
 - expo-auth-session
 - expo-crypto
 - expo-font
 - expo-image-picker
-- react
 - @expo/vector-icons
 - expo-web-browser
 - react
@@ -140,21 +134,18 @@
 - react-native
 - react-native-safe-area-context
 - zustand
-- react-dom
-- @supabase/supabase-js
-- @babel/runtime
 
 ## God Nodes (most connected - your core abstractions)
-1. `ok()` - 46 edges
-2. `handler()` - 46 edges
-3. `fail()` - 37 edges
+1. `ok()` - 43 edges
+2. `handler()` - 43 edges
+3. `fail()` - 34 edges
 4. `api()` - 30 edges
-5. `requireTrainer()` - 24 edges
-6. `parseBody()` - 23 edges
-7. `colors` - 22 edges
+5. `colors` - 22 edges
+6. `parseBody()` - 21 edges
+7. `requireTrainer()` - 21 edges
 8. `requireUser()` - 20 edges
 9. `spacing` - 20 edges
-10. `apiFetch()` - 16 edges
+10. `compilerOptions` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `CI Pipeline` --references--> `type-check`  [EXTRACTED]
@@ -163,10 +154,10 @@
   .github/workflows/ci.yml → apps/backend/package.json
 - `ExercisesPage()` --indirect_call--> `load()`  [INFERRED]
   apps/backend/src/app/(dashboard)/exercises/page.tsx → apps/mobile/src/lib/exerciseHistory.ts
-- `RoutineDraft` --references--> `Difficulty`  [EXTRACTED]
-  apps/backend/src/app/(dashboard)/routines/routine-builder.tsx → packages/shared/src/types/domain.ts
 - `RoutineDraft` --references--> `Exercise`  [EXTRACTED]
   apps/backend/src/app/(dashboard)/routines/routine-builder.tsx → packages/shared/src/types/domain.ts
+- `ExerciseSession` --references--> `CompletedSet`  [EXTRACTED]
+  apps/mobile/src/lib/exerciseHistory.ts → packages/shared/src/types/domain.ts
 
 ## Import Cycles
 - None detected.
@@ -176,19 +167,19 @@
 - **AI Video Feedback Flow** — apps_backend_src_app_api_video_feedback_upload_url_route_post, apps_backend_src_lib_cloudinary_signeduploadparams, apps_backend_src_lib_cloudinary_keyframeurls, apps_backend_src_app_api_video_feedback_analyze_route_post, apps_backend_src_lib_openai_analyzeform, apps_backend_src_app_api_video_feedback_id_status_route_get [EXTRACTED 1.00]
 - **Auth and Role Gating** — apps_backend_src_middleware_isdashboardroute, apps_backend_src_lib_auth_requireuser, apps_backend_src_lib_auth_requiretrainer, apps_backend_src_lib_auth_optionaluser, apps_backend_src_app_api_webhooks_clerk_route_post [EXTRACTED 1.00]
 
-## Communities (135 total, 62 thin omitted)
+## Communities (126 total, 57 thin omitted)
 
 ### Community 0 - "Mobile Screens and Navigation"
-Cohesion: 0.18
-Nodes (15): styles, Status, styles, UploadParams, styles, COPY, styles, Button() (+7 more)
+Cohesion: 0.14
+Nodes (21): styles, Status, styles, UploadParams, styles, styles, COPY, styles (+13 more)
 
 ### Community 1 - "Backend API Routes"
-Cohesion: 0.10
-Nodes (26): DELETE, ownRelation(), Params, PATCH, DELETE, Params, PATCH, GET (+18 more)
+Cohesion: 0.12
+Nodes (20): DELETE, Params, PATCH, GET, POST, GET(), PATCH, POST (+12 more)
 
 ### Community 2 - "Backend Build Scripts"
-Cohesion: 0.12
-Nodes (17): devDependencies, prisma, tailwindcss, @tailwindcss/postcss, tsx, @types/node, @types/react, typescript (+9 more)
+Cohesion: 0.06
+Nodes (35): devDependencies, prisma, tailwindcss, @tailwindcss/postcss, tsx, @types/node, @types/react, typescript (+27 more)
 
 ### Community 3 - "Auth, Payments and AI Integrations"
 Cohesion: 0.50
@@ -203,12 +194,12 @@ Cohesion: 0.06
 Nodes (32): backgroundColor, foregroundImage, adaptiveIcon, package, permissions, projectId, typedRoutes, expo (+24 more)
 
 ### Community 7 - "Backend Dependencies"
-Cohesion: 0.10
-Nodes (21): dependencies, @clerk/nextjs, cloudinary, @dnd-kit/core, @dnd-kit/utilities, next, @prisma/client, stripe (+13 more)
+Cohesion: 0.06
+Nodes (31): dependencies, @clerk/nextjs, cloudinary, @dnd-kit/core, @dnd-kit/sortable, @dnd-kit/utilities, next, openai (+23 more)
 
 ### Community 9 - "Shared Domain Types"
 Cohesion: 0.17
-Nodes (8): AdminUser, ProgramRow, ProgramsPage(), EditRoutinePage(), emptyDraft, RoutineBuilder(), RoutineDraft, apiFetch()
+Nodes (8): AdminUser, DAY_NAMES, Tracking, ProgramRow, ProgramsPage(), EditRoutinePage(), apiFetch(), Program
 
 ### Community 10 - "Mobile Package Scripts"
 Cohesion: 0.07
@@ -231,16 +222,16 @@ Cohesion: 0.13
 Nodes (14): devDependencies, @types/react, engines, node, @types/react, name, packageManager, private (+6 more)
 
 ### Community 15 - "Mobile Root Layout and Auth Bridge"
-Cohesion: 0.17
-Nodes (13): scripts, build, db:deploy, db:migrate, db:seed, db:studio, dev, lint (+5 more)
+Cohesion: 0.18
+Nodes (6): AuthTokenBridge(), queryClient, RootNavigator(), useRefetchOnForeground(), registerTokenGetter(), mockFetch
 
 ### Community 19 - "Trainer Dashboard Layout"
-Cohesion: 0.11
-Nodes (18): GET, GET, PATCH, POST, GET, GET, GET, GET (+10 more)
+Cohesion: 0.15
+Nodes (17): GET, POST, GET, GET, GET, RoutineForValidation, DashboardLayout(), clientRelation() (+9 more)
 
 ### Community 20 - "Routine Creation Page"
-Cohesion: 0.08
-Nodes (32): calcXp(), checkAchievements(), nextStreak(), validRoutine, analyzeVideoSchema, assignProgramSchema, billingModeSchema, checkoutSchema (+24 more)
+Cohesion: 0.09
+Nodes (28): calcXp(), checkAchievements(), nextStreak(), validRoutine, analyzeVideoSchema, assignProgramSchema, billingModeSchema, checkoutSchema (+20 more)
 
 ### Community 24 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -332,59 +323,59 @@ Nodes (38): 10 · B3 — `api()` robusto ✅, 11 · B5 — `useSchedule` ✅, 12
 
 ### Community 75 - "@clerk/clerk-expo"
 Cohesion: 0.29
-Nodes (7): dependencies, expo-camera, @expo/metro-runtime, expo-secure-store, expo-camera, @expo/metro-runtime, expo-secure-store
+Nodes (7): dependencies, @babel/runtime, expo-camera, expo-secure-store, @babel/runtime, expo-camera, expo-secure-store
 
 ### Community 77 - "expo-constants"
 Cohesion: 0.31
 Nodes (7): GET, Params, POST, isSameLocalDay(), localHour(), PushMessage, sendPushNotifications()
 
 ### Community 78 - "expo-image-picker"
-Cohesion: 0.13
-Nodes (14): Params, PATCH, setRoleSchema, POST, GET, GET, POST, GET() (+6 more)
+Cohesion: 0.17
+Nodes (6): Params, PATCH, setRoleSchema, GET, GET, globalForPrisma
 
 ### Community 83 - "react-native-safe-area-context"
-Cohesion: 0.12
-Nodes (22): CoachScreen(), DAY_NAME, styles, ChallengesScreen(), styles, ProgressScreen(), styles, DAY_NAME (+14 more)
+Cohesion: 0.11
+Nodes (20): CoachScreen(), DAY_NAME, styles, ProgressScreen(), styles, DAY_NAME, PlanScreen(), styles (+12 more)
 
 ### Community 90 - "Diseño técnico: Sistema de Skills (diferenciación de TrueRep)"
 Cohesion: 0.11
 Nodes (17): 10. Fases de implementación, 11. Tests (mínimos por fase), 12. Decisiones abiertas (para ti), 1. Objetivo, 2. Modelo de datos (1 migración nueva), 3. IA skill-aware (el foso — dirección #1 y #4), 4. Flujo de verificación (dirección #4), 5. Endpoints API (patrón `handler` + Zod + gates existentes) (+9 more)
 
 ### Community 91 - "domain.ts"
-Cohesion: 0.12
-Nodes (16): AccessState, Achievement, AnalysisStatus, ApiResponse, ClientPlan, ConnectState, DaySchedule, MeStats (+8 more)
+Cohesion: 0.14
+Nodes (14): Achievement, AnalysisStatus, ApiResponse, DaySchedule, MeStats, MyAccess, PendingReviewFeedback, ProgramAssignment (+6 more)
 
 ### Community 92 - "routine-builder.tsx"
-Cohesion: 0.22
-Nodes (7): DifficultyBadge(), styles, RoutineDetailScreen(), styles, DIFFICULTY_LABEL, useRoutine(), Difficulty
+Cohesion: 0.29
+Nodes (4): emptyDraft, RoutineBuilder(), RoutineDraft, Difficulty
 
 ### Community 93 - "route.ts"
-Cohesion: 0.13
-Nodes (18): POST, GET, POST, POST, GET, INTERVALS, PUT, ClerkUserEvent (+10 more)
+Cohesion: 0.22
+Nodes (11): POST, POST, POST, ClerkUserEvent, POST, POST, signedUploadParams(), requireEnv() (+3 more)
 
 ### Community 94 - "db.ts"
-Cohesion: 0.17
-Nodes (11): 0. Primero, en la sesión nueva, 1. Contexto de negocio (para el planificador), 2. Estado actual del código, 3. Fase B1 — alta del entrenador y sus precios, 4. Fase B2 — pago del cliente, avisos y acceso, 5. Fase C — comisión y cuota de efectivo, 6. Verificación en cada fase, 7. Despliegue (mismo procedimiento que la fase A) (+3 more)
+Cohesion: 0.15
+Nodes (11): GET, POST, DELETE, GET, Params, PATCH, GET, POST (+3 more)
 
 ### Community 95 - "handler"
-Cohesion: 0.14
-Nodes (16): GET, Params, GET, POST, GET, GET, GET, POST (+8 more)
+Cohesion: 0.19
+Nodes (10): GET, Params, GET, POST, GET, GET, LIVE_STATUSES, programPosition() (+2 more)
 
 ### Community 96 - "@babel/runtime"
-Cohesion: 0.18
-Nodes (10): ProfileScreen(), styles, TodayScreen(), useAccess(), useAchievements(), useSchedule(), useUser(), api() (+2 more)
+Cohesion: 0.16
+Nodes (18): ProfileScreen(), styles, ChallengeDetailScreen(), ChallengesScreen(), styles, TodayScreen(), RoutineDetailScreen(), useAchievements() (+10 more)
 
 ### Community 97 - "page.tsx"
-Cohesion: 0.20
-Nodes (9): Item, ProgramEditorPage(), ProgramFull, RoutineLite, TASK_META, Program, ProgramItem, ProgramItemType (+1 more)
+Cohesion: 0.22
+Nodes (8): Item, ProgramEditorPage(), ProgramFull, RoutineLite, TASK_META, ProgramItem, ProgramItemType, ProgramTaskData
 
 ### Community 98 - "workouts-log.route.test.ts"
-Cohesion: 0.20
-Nodes (8): POST, NOW, relation, routine, staleUser, UserUpdateArgs, validBody, WorkoutCreateArgs
+Cohesion: 0.12
+Nodes (11): POST, activeSub, noSub, NOW, NOW, relation, routine, staleUser (+3 more)
 
 ### Community 99 - "Routine"
-Cohesion: 0.09
-Nodes (43): elapsedMinutes(), styles, WorkoutSessionScreen(), ExerciseLogCard(), FELT, Props, styles, amount() (+35 more)
+Cohesion: 0.07
+Nodes (53): csvEscape(), toCsvRow(), computeWeightSuggestions(), WorkoutLog, elapsedMinutes(), styles, WorkoutSessionScreen(), ExerciseLogCard() (+45 more)
 
 ### Community 100 - "page.tsx"
 Cohesion: 0.40
@@ -395,20 +386,16 @@ Cohesion: 0.67
 Nodes (3): euro(), PricingPage(), PLAN_FEATURES
 
 ### Community 103 - "expo-router"
-Cohesion: 0.22
-Nodes (8): AuthLayout(), icon(), TabsLayout(), AccessBlocked(), ErrorState(), registerForPushNotifications(), mockUseAccess, mockUseAuth
+Cohesion: 0.24
+Nodes (8): AuthLayout(), icon(), TabsLayout(), AccessBlocked(), useAccess(), registerForPushNotifications(), mockUseAccess, mockUseAuth
 
 ### Community 104 - "route.ts"
-Cohesion: 0.21
-Nodes (9): POST, keyframeUrls(), signedUploadParams(), analyzeForm(), openaiClient(), runVideoAnalysis(), afterCallbacks, feedback (+1 more)
+Cohesion: 0.23
+Nodes (9): Params, POST, keyframeUrls(), analyzeForm(), openaiClient(), runVideoAnalysis(), afterCallbacks, feedback (+1 more)
 
 ### Community 105 - "TODOS"
 Cohesion: 0.18
 Nodes (10): Admin trainer-approval flow, Base de datos conectada (2026-09-28), Completed, Known local environment quirk (not a bug), Minas conocidas antes de desplegar (leer antes de tocar producción), Multi-trainer marketplace mechanics, Push notifications + cron reminders, Real-time leaderboards / social challenges (+2 more)
-
-### Community 106 - "expo-router"
-Cohesion: 0.12
-Nodes (6): AuthTokenBridge(), queryClient, RootNavigator(), useRefetchOnForeground(), registerTokenGetter(), expo-router
 
 ### Community 107 - "TrueRep — Design System (minimal)"
 Cohesion: 0.29
@@ -419,48 +406,36 @@ Cohesion: 0.29
 Nodes (7): ClientsPage(), isOverdue(), STATUS_CLASS, STATUS_LABEL, BillingMode, ClientStatus, TrainerClientRow
 
 ### Community 109 - "route.ts"
-Cohesion: 0.18
-Nodes (10): CSV_HEADER, GET, Params, GET, DELETE, GET, Params, PATCH (+2 more)
+Cohesion: 0.33
+Nodes (5): DELETE, GET, Params, PATCH, updateRoutineSchema
 
 ### Community 110 - "route.ts"
-Cohesion: 0.20
-Nodes (12): ChallengeDetailScreen(), styles, LeaderboardRow(), styles, useChallenge(), useJoinChallenge(), ChallengeLeaderboard, useGlobalLeaderboard() (+4 more)
+Cohesion: 0.43
+Nodes (5): ChallengeLeaderboard, useGlobalLeaderboard(), useLeaderboard(), getSupabase(), LeaderboardRow
 
 ### Community 111 - "route.ts"
-Cohesion: 0.18
-Nodes (8): BillingPage(), countryName, INTERVALS, ConnectStatus, PriceInterval, TrainerPriceRow, TRAINER_COUNTRIES, TRAINER_CURRENCIES
-
-### Community 112 - "@expo/metro-runtime"
-Cohesion: 0.25
-Nodes (8): csvEscape(), toCsvRow(), computeWeightSuggestions(), WorkoutLog, entry(), store(), RFC-4180, WeightSuggestion
-
-### Community 114 - "package.json"
-Cohesion: 0.33
-Nodes (5): name, prisma, seed, private, version
-
-### Community 115 - "access.test.ts"
-Cohesion: 0.40
-Nodes (3): activeSub, noSub, NOW
+Cohesion: 0.14
+Nodes (14): GET, GET, DELETE, ownRelation(), Params, PATCH, CSV_HEADER, GET (+6 more)
 
 ## Knowledge Gaps
-- **551 isolated node(s):** `NOW`, `noSub`, `activeSub`, `baseUser`, `validRoutine` (+546 more)
+- **532 isolated node(s):** `NOW`, `noSub`, `activeSub`, `baseUser`, `validRoutine` (+527 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **62 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **57 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `expo-router` connect `expo-router` to `Mobile Screens and Navigation`, `Routine`, `Expo App Config`, `expo-router`, `route.ts`, `react-native-safe-area-context`, `routine-builder.tsx`?**
-  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `expo-router` connect `expo-router` to `Mobile Screens and Navigation`, `@babel/runtime`, `Routine`, `Expo App Config`, `expo-router`, `Mobile Root Layout and Auth Bridge`, `react-native-safe-area-context`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Why does `plugins` connect `Expo App Config` to `expo-router`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **What connects `NOW`, `noSub`, `activeSub` to the rest of the system?**
-  _551 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _532 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Mobile Screens and Navigation` be split into smaller, more focused modules?**
+  _Cohesion score 0.13663663663663664 - nodes in this community are weakly interconnected._
 - **Should `Backend API Routes` be split into smaller, more focused modules?**
-  _Cohesion score 0.10158730158730159 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12096774193548387 - nodes in this community are weakly interconnected._
 - **Should `Backend Build Scripts` be split into smaller, more focused modules?**
-  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05714285714285714 - nodes in this community are weakly interconnected._
 - **Should `Backend TypeScript Config` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
-- **Should `Expo App Config` be split into smaller, more focused modules?**
-  _Cohesion score 0.06060606060606061 - nodes in this community are weakly interconnected._

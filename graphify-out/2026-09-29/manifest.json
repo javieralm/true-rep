@@ -10,8 +10,8 @@
     "semantic_hash": "fc272d0e4abd47530d3513434e329d95"
   },
   "apps/backend/__tests__/validators.test.ts": {
-    "mtime": 1790674214.8530009,
-    "ast_hash": "d577583d9da66bb19218e6ededbcacd7",
+    "mtime": 1790672155.4732265,
+    "ast_hash": "686fd3a7c0715db6dc3d213cd09797af",
     "semantic_hash": ""
   },
   "apps/backend/next-env.d.ts": {
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "apps/backend/package.json": {
-    "mtime": 1790674129.970001,
-    "ast_hash": "8c0f3ca4d1d9afdac369af4be9d31387",
+    "mtime": 1790591232.5425463,
+    "ast_hash": "0bc54c9bf447cf47bd0ad2bb5fc0cb15",
     "semantic_hash": ""
   },
   "apps/backend/postcss.config.mjs": {
@@ -45,8 +45,8 @@
     "semantic_hash": "46dfc0894869d485d91200aaf469657b"
   },
   "apps/backend/src/app/(dashboard)/layout.tsx": {
-    "mtime": 1790674303.975344,
-    "ast_hash": "354e5e2f5b5f30a7dde4a107afb44a33",
+    "mtime": 1790582021.1168194,
+    "ast_hash": "b7a18e37e267cad3c2329130a0a8c5e4",
     "semantic_hash": ""
   },
   "apps/backend/src/app/(dashboard)/routines/new/page.tsx": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "apps/backend/src/app/api/webhooks/stripe/route.ts": {
-    "mtime": 1790674147.6304445,
-    "ast_hash": "79fcfe9226b2bad0efbcec0850b04638",
+    "mtime": 1790591232.552073,
+    "ast_hash": "0b5c527904080ac4ff3e6b71f210a844",
     "semantic_hash": ""
   },
   "apps/backend/src/app/api/workouts/log/route.ts": {
@@ -205,13 +205,13 @@
     "semantic_hash": ""
   },
   "apps/backend/src/lib/stripe.ts": {
-    "mtime": 1790674259.7299056,
-    "ast_hash": "65eaf2e9eb735d01bd3aab89462c4c7f",
+    "mtime": 1790591232.557901,
+    "ast_hash": "0a28a2dae7e3dfabb9e43f1480ca8452",
     "semantic_hash": ""
   },
   "apps/backend/src/middleware.ts": {
-    "mtime": 1790674303.9457703,
-    "ast_hash": "ba32d173a77af8c3b3d9271e5451e627",
+    "mtime": 1790591232.557901,
+    "ast_hash": "2e3102a6acfe29c04e96a0c158fdf0c1",
     "semantic_hash": ""
   },
   "apps/backend/tsconfig.json": {
@@ -345,13 +345,13 @@
     "semantic_hash": "e61c24efa66887fa907d1e1da07c7281"
   },
   "packages/shared/src/types/domain.ts": {
-    "mtime": 1790674204.1503215,
-    "ast_hash": "652355ab384f0258e3dacee7b1a7ae42",
+    "mtime": 1790671966.5950823,
+    "ast_hash": "ea9256d78dcaed2539f58631c8affb1c",
     "semantic_hash": ""
   },
   "packages/shared/src/validators/index.ts": {
-    "mtime": 1790674259.695725,
-    "ast_hash": "52353b2562b7cec4d90cebee880315ae",
+    "mtime": 1790671966.5950823,
+    "ast_hash": "1c0c38805cdb69dafcba9fdcdae55113",
     "semantic_hash": ""
   },
   "packages/shared/tsconfig.json": {
@@ -967,36 +967,6 @@
   "apps/mobile/src/hooks/useAccess.ts": {
     "mtime": 1790672192.5698166,
     "ast_hash": "957176e1ee69ba2afc81a055661d2442",
-    "semantic_hash": ""
-  },
-  "apps/backend/prisma/migrations/20260929140000_stripe_connect_b1/migration.sql": {
-    "mtime": 1790674175.9962852,
-    "ast_hash": "b33d9eb6529881a631fd864bb0aad4ec",
-    "semantic_hash": ""
-  },
-  "apps/backend/src/app/(dashboard)/billing/page.tsx": {
-    "mtime": 1790674320.7088778,
-    "ast_hash": "25226b80e25ddd789defd09be57f6769",
-    "semantic_hash": ""
-  },
-  "apps/backend/src/app/api/stripe/connect/onboarding-link/route.ts": {
-    "mtime": 1790674259.7770493,
-    "ast_hash": "e39de0cc5de89112ed7c220831e5a046",
-    "semantic_hash": ""
-  },
-  "apps/backend/src/app/api/stripe/connect/status/route.ts": {
-    "mtime": 1790674259.7917743,
-    "ast_hash": "48d7d4d3154e89be8f649d4165487e4f",
-    "semantic_hash": ""
-  },
-  "apps/backend/src/app/api/trainer/prices/route.ts": {
-    "mtime": 1790674270.9929519,
-    "ast_hash": "608e0772024f1a445807a1a4fb9f151d",
-    "semantic_hash": ""
-  },
-  "docs/plans/stripe-connect-fase-b.md": {
-    "mtime": 1790674115.0342555,
-    "ast_hash": "3dc4e2ea44dbc818c2418ef957e27787",
     "semantic_hash": ""
   }
 }

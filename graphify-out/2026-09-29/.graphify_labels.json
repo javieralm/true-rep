@@ -113,16 +113,10 @@
   "111": "route.ts",
   "112": "@expo/metro-runtime",
   "113": "eslint.config.js",
-  "114": "package.json",
-  "115": "access.test.ts",
-  "116": "page.tsx",
-  "117": "@dnd-kit/sortable",
-  "118": "openai",
   "119": "expo-auth-session",
   "120": "expo-crypto",
   "121": "expo-font",
   "122": "expo-image-picker",
-  "123": "react",
   "124": "@expo/vector-icons",
   "125": "expo-web-browser",
   "126": "react",
@@ -130,8 +124,5 @@
   "128": "react-native",
   "129": "react-native-safe-area-context",
   "130": "zustand",
-  "131": "jest.config.js",
-  "132": "react-dom",
-  "133": "@supabase/supabase-js",
-  "134": "@babel/runtime"
+  "131": "jest.config.js"
 }
