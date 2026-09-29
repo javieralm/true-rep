@@ -15,6 +15,8 @@ export const GET = handler(async () => {
       role: true,
       is_superadmin: true,
       created_at: true,
+      trainer_requested_at: true,
+      trainer_application_note: true,
       stripe_charges_enabled: true,
       commission_percent_override: true,
       commission_percent_applied: true,

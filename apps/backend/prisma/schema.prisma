@@ -21,6 +21,10 @@ model User {
   avatar_url                  String?
   role                        Role               @default(USER)
   is_superadmin               Boolean            @default(false) // promueve trainers desde /admin
+  /// Solicitud para ser entrenador desde la web. Pendiente = pedida y role USER;
+  /// el superadmin la aprueba (role TRAINER) o la rechaza (se borra).
+  trainer_requested_at        DateTime?
+  trainer_application_note    String?
   subscription_status         SubscriptionStatus @default(FREE)
   subscription_id             String?
   stripe_customer_id          String? // reusado entre checkouts para no fragmentar el historial de pago

@@ -4,10 +4,10 @@ import { UserButton } from "@clerk/nextjs";
 import { getOrSyncUser } from "@/lib/auth";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  // Backoffice solo para trainers: los usuarios normales no ven el dashboard
+  // Backoffice solo para trainers aprobados; el resto va a su solicitud.
   const user = await getOrSyncUser();
   if (!user) redirect("/sign-in");
-  if (user.role !== "TRAINER") redirect("/");
+  if (user.role !== "TRAINER") redirect("/onboarding");
 
   return (
     <div className="flex min-h-screen">
@@ -16,6 +16,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           True<span className="text-primary">Rep</span>
         </Link>
         <nav className="mt-8 flex flex-col gap-3 text-sm">
+          <Link href="/onboarding">Primeros pasos</Link>
           <Link href="/exercises">Librería de ejercicios</Link>
           <Link href="/routines">Rutinas</Link>
           <Link href="/routines/new">Crear rutina</Link>

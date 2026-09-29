@@ -12,6 +12,7 @@ const isDashboardRoute = createRouteMatcher([
   "/video-review(.*)",
   "/settings(.*)",
   "/analytics(.*)",
+  "/onboarding(.*)",
 ]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 

@@ -7,26 +7,18 @@ export default function LandingPage() {
         True<span className="text-primary">Rep</span>
       </h1>
       <p className="mt-6 text-xl text-[#666]">
-        Calisthenics training with expert routines, community challenges, and AI-powered form
-        feedback. Every rep counts.
+        La plataforma para entrenadores de calistenia: programas, progreso y cobros de tus clientes en un solo sitio.
       </p>
-      <div className="mt-10 flex justify-center gap-4">
-        <Link
-          href="/pricing"
-          className="rounded-lg bg-primary px-6 py-3 font-semibold text-white"
-        >
-          View Pricing
+      <div className="mt-10 flex flex-wrap justify-center gap-4">
+        <Link href="/sign-up" className="rounded-lg bg-primary px-6 py-3 font-semibold text-white">
+          Soy entrenador
         </Link>
-        <Link
-          href="/routines"
-          className="rounded-lg border border-[#ddd] px-6 py-3 font-semibold"
-        >
-          Trainer Dashboard
+        <Link href="/sign-in" className="rounded-lg border border-[#ddd] px-6 py-3 font-semibold">
+          Ya tengo cuenta
         </Link>
       </div>
-      <p className="mt-16 text-sm text-[#999]">
-        iOS &amp; Android apps coming soon · <Link href="/privacy">Privacy</Link> ·{" "}
-        <Link href="/terms">Terms</Link>
+      <p className="mt-16 text-sm text-[#666]">
+        ¿Eres cliente? Descarga la app de TrueRep y entra con el email con el que te invitó tu entrenador.
       </p>
     </main>
   );

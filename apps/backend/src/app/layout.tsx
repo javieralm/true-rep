@@ -3,9 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TrueRep — Calisthenics Training",
-  description:
-    "Subscription-based calisthenics training with expert routines, gamification, community challenges, and AI-powered form feedback.",
+  title: "TrueRep — Plataforma para entrenadores de calistenia",
+  description: "Programas, progreso y cobros de tus clientes de calistenia en un solo sitio.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

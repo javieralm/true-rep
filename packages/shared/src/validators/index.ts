@@ -278,3 +278,8 @@ export const platformSettingsSchema = z.object({
 
 /** Porcentaje propio de un entrenador (ofertas). null = vuelve a los tramos. */
 export const commissionOverrideSchema = z.object({ commission_percent_override: percentSchema.nullable() });
+
+/** POST /api/trainer-application: quien quiere ser entrenador se presenta. */
+export const trainerApplicationSchema = z.object({
+  note: z.string().trim().max(500).optional(),
+});

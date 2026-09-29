@@ -15,6 +15,8 @@ type AdminUser = {
   commission_percent_applied: number | null;
   active_stripe_clients: number;
   active_cash_clients: number;
+  trainer_requested_at: string | null;
+  trainer_application_note: string | null;
 };
 
 /** "7,5" → 7.5; vacío → null */
@@ -183,6 +185,8 @@ export default function AdminTrainersPage() {
     }
   }
 
+  const pending = users.filter((u) => u.trainer_requested_at && u.role !== "TRAINER");
+
   if (error) {
     return (
       <main className="mx-auto max-w-md px-6 py-24 text-center">
@@ -198,6 +202,43 @@ export default function AdminTrainersPage() {
       <p className="mt-2 text-sm text-[#666]">
         Promueve usuarios a trainer para darles acceso al backoffice y ajusta lo que cobra TrueRep.
       </p>
+
+      {pending.length > 0 && (
+        <section className="mt-8 rounded-xl border border-primary p-4">
+          <h2 className="font-semibold">Solicitudes para ser entrenador ({pending.length})</h2>
+          <ul className="mt-3 flex flex-col gap-3">
+            {pending.map((u) => (
+              <li key={u.id} className="flex flex-wrap items-start justify-between gap-3 border-b border-[#eee] pb-3">
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium">{u.username}</p>
+                  <p className="text-xs text-[#999]">
+                    {u.email} · {new Date(u.trainer_requested_at!).toLocaleDateString("es-ES")}
+                  </p>
+                  {u.trainer_application_note && (
+                    <p className="mt-1 whitespace-pre-wrap text-sm text-[#444]">{u.trainer_application_note}</p>
+                  )}
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    disabled={busy === u.id}
+                    onClick={() => patch(u, { role: "TRAINER" })}
+                    className="rounded-lg bg-primary px-3 py-1.5 font-semibold text-white disabled:opacity-50"
+                  >
+                    Aprobar
+                  </button>
+                  <button
+                    disabled={busy === u.id}
+                    onClick={() => patch(u, { reject_application: true })}
+                    className="text-danger underline disabled:opacity-50"
+                  >
+                    Rechazar
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <PlatformSettingsForm />
 
