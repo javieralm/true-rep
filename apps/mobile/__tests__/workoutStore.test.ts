@@ -267,3 +267,16 @@ describe("ejercicios por segundos (L-sit, plancha)", () => {
     expect(toPayload(store().completed)[0].sets).toEqual([{ reps: 0, seconds: 25 }]);
   });
 });
+
+describe("observación por ejercicio", () => {
+  it("se envía recortada, y una en blanco no se envía", () => {
+    store().start(A);
+    store().toggleExercise("e1");
+    store().setAllSetsDone("e1", true);
+    store().setNote("e1", "  molestia en el hombro  ");
+    expect(toPayload(store().completed)[0].note).toBe("molestia en el hombro");
+
+    store().setNote("e1", "   ");
+    expect(toPayload(store().completed)[0]).not.toHaveProperty("note");
+  });
+});

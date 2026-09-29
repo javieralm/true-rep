@@ -147,24 +147,30 @@ export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onTo
 
       {expanded && (
         <View style={styles.body}>
-          {context.sessions.length > 0 && (
-            <View style={styles.copyRow}>
-              <Text style={styles.copyLabel}>Copiar de</Text>
-              {context.sessions.map((s) => (
-                <Pressable
-                  key={s.date}
-                  onPress={() => {
-                    ensure();
-                    store.replaceSets(exercise.id, s.sets);
-                  }}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Copiar las series del ${formatShortDate(s.date)}`}
-                  style={({ pressed }) => [styles.copyChip, pressed && styles.pressed]}
-                >
-                  <Text style={styles.copyChipText}>{formatShortDate(s.date)}</Text>
-                </Pressable>
-              ))}
+          {context.lastNote && (
+            <View style={styles.lastNote}>
+              <Text style={styles.lastNoteLabel}>Tu observación del {formatShortDate(context.lastNote.date)}</Text>
+              <Text style={styles.lastNoteText}>{context.lastNote.text}</Text>
             </View>
+          )}
+
+          {/* Solo la última sesión: es la referencia que importa y un botón
+              basta. La precarga ya parte de ella; esto sirve para volver a
+              sus valores después de haber cambiado algo. */}
+          {last && (
+            <Pressable
+              onPress={() => {
+                ensure();
+                store.replaceSets(exercise.id, last);
+              }}
+              accessibilityRole="button"
+              style={({ pressed }) => [styles.copyChip, pressed && styles.pressed]}
+            >
+              <Ionicons name="copy-outline" size={16} color={colors.textPrimary} />
+              <Text style={styles.copyChipText}>
+                Copiar la última sesión · {formatShortDate(context.sessions[0].date)}
+              </Text>
+            </Pressable>
           )}
 
           <View style={styles.row}>
@@ -245,6 +251,20 @@ export function ExerciseLogCard({ exercise, entry, context, mode, expanded, onTo
             <Ionicons name="add" size={18} color={colors.primaryText} />
             <Text style={styles.addSetText}>Añadir serie</Text>
           </Pressable>
+
+          <TextInput
+            value={entry?.note ?? ""}
+            onChangeText={(t) => {
+              ensure();
+              store.setNote(exercise.id, t);
+            }}
+            placeholder="Observación (opcional): cómo ha ido, molestias…"
+            placeholderTextColor={colors.textMuted}
+            multiline
+            maxLength={500}
+            accessibilityLabel={`Observación sobre ${exercise.name}`}
+            style={styles.noteInput}
+          />
 
           <View style={styles.feltRow} accessibilityRole="radiogroup" accessibilityLabel="Cómo te ha costado">
             {FELT.map((f) => {
@@ -357,9 +377,25 @@ const styles = StyleSheet.create({
   summary: { ...typo.body, fontWeight: "500", color: colors.textPrimary, fontVariant: ["tabular-nums"] },
   meta: { ...typo.label, fontWeight: "400", color: colors.textSecondary },
   body: { gap: spacing.sm, paddingTop: spacing.sm, paddingLeft: spacing.sm },
-  copyRow: { flexDirection: "row", alignItems: "center", gap: spacing.xs, flexWrap: "wrap" },
-  copyLabel: { ...typo.label, fontWeight: "400", color: colors.textSecondary, marginRight: spacing.xs },
+  lastNote: { backgroundColor: colors.surface, borderRadius: radius.sm, padding: spacing.md, gap: 2 },
+  lastNoteLabel: { ...typo.label, color: colors.textSecondary },
+  lastNoteText: { ...typo.meta, color: colors.textPrimary },
+  noteInput: {
+    minHeight: 44,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    ...typo.meta,
+    color: colors.textPrimary,
+    textAlignVertical: "top",
+  },
   copyChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    gap: spacing.xs,
     minHeight: 44,
     paddingHorizontal: spacing.md,
     borderRadius: radius.full,

@@ -40,7 +40,13 @@ describe("exerciseContext", () => {
   });
 
   it("sin historial no hay récord ni tendencia", () => {
-    expect(exerciseContext([], "e1")).toEqual({ sessions: [], best: null, average: null, trendPct: null });
+    expect(exerciseContext([], "e1")).toEqual({
+      sessions: [],
+      best: null,
+      average: null,
+      trendPct: null,
+      lastNote: null,
+    });
   });
 });
 
@@ -73,5 +79,19 @@ describe("ejercicios por segundos", () => {
     expect(isRecord({ reps: 0, seconds: 30 }, { reps: 0, seconds: 25 })).toBe(true);
     expect(setWarning({ reps: 0, seconds: 90 }, { reps: 0, seconds: 30 })).toMatch(/90 s, muy por encima/);
     expect(setWarning({ reps: 0, seconds: 0 }, undefined)).toMatch(/sin segundos/);
+  });
+});
+
+describe("observaciones", () => {
+  it("devuelve la observación más reciente del ejercicio, aunque ese workout no tenga series", () => {
+    const withNote = (date: string, note: string): Workout => ({
+      ...workout(date, undefined),
+      exercises_completed: [{ exercise_id: "e1", reps_done: 10, felt_like: "medium", note }],
+    });
+    const ctx = exerciseContext(
+      [withNote("2026-09-20", "hombro cargado"), withNote("2026-09-27", "  molestia en la 3ª serie "), withNote("2026-09-28", "  ")],
+      "e1"
+    );
+    expect(ctx.lastNote).toEqual({ date: "2026-09-27T10:00:00.000Z", text: "molestia en la 3ª serie" });
   });
 });

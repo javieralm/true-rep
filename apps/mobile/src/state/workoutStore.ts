@@ -35,6 +35,7 @@ interface WorkoutState {
   replaceSets: (exerciseId: string, sets: CompletedSet[]) => void;
   addSet: (exerciseId: string) => void;
   setFeltLike: (exerciseId: string, feltLike: ExerciseCompleted["felt_like"]) => void;
+  setNote: (exerciseId: string, note: string) => void;
   reset: () => void;
 }
 
@@ -86,7 +87,10 @@ function plainSet(s: CompletedSet): CompletedSet {
 export function toPayload(completed: SessionExercise[]): ExerciseCompleted[] {
   return completed.flatMap((c) => {
     const sets = c.sets.filter((s) => s.done && (s.seconds ?? s.reps) > 0).map(plainSet);
-    return sets.length > 0 ? [withAggregates({ ...c, sets })] : [];
+    // Una observación en blanco no se guarda: en la próxima sesión no hay nada que enseñar.
+    const { note, ...rest } = c;
+    const text = note?.trim();
+    return sets.length > 0 ? [withAggregates({ ...rest, ...(text ? { note: text } : {}), sets })] : [];
   });
 }
 
@@ -221,6 +225,12 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
       completed: get().completed.map((c) =>
         c.exercise_id === exerciseId ? { ...c, felt_like: feltLike } : c
       ),
+    });
+  },
+
+  setNote: (exerciseId, note) => {
+    set({
+      completed: get().completed.map((c) => (c.exercise_id === exerciseId ? { ...c, note } : c)),
     });
   },
 

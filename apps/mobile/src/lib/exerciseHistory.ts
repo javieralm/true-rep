@@ -16,6 +16,8 @@ export interface ExerciseContext {
   average: CompletedSet | null;
   /** % de cambio de carga entre la sesión más antigua de las 3 y la última. */
   trendPct: number | null;
+  /** La observación más reciente que dejó el cliente en este ejercicio. */
+  lastNote: { date: string; text: string } | null;
 }
 
 /** Lo que se hizo en una serie: segundos en los ejercicios por tiempo
@@ -82,7 +84,16 @@ export function exerciseContext(workouts: Workout[], exerciseId: string): Exerci
   const trendPct =
     sessions.length >= 2 ? pctChange(load(sessions[0].sets), load(sessions[sessions.length - 1].sets)) : null;
 
-  return { sessions, best, average, trendPct };
+  // La observación no depende de que haya desglose por serie.
+  const lastNote =
+    workouts
+      .flatMap((w) => {
+        const text = w.exercises_completed.find((c) => c.exercise_id === exerciseId)?.note?.trim();
+        return text ? [{ date: w.completed_at, text }] : [];
+      })
+      .sort((a, b) => b.date.localeCompare(a.date))[0] ?? null;
+
+  return { sessions, best, average, trendPct, lastNote };
 }
 
 /** Aviso no bloqueante sobre un valor raro comparado con la vez anterior.

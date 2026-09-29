@@ -87,6 +87,21 @@ export const GET = handler(async (req: Request, { params }: Params) => {
       }))
   );
 
+  // Observaciones del cliente por ejercicio: el entrenador las usa para
+  // ajustar la rutina. La más reciente primero.
+  const observations = [...workouts]
+    .sort((a, b) => b.completed_at.getTime() - a.completed_at.getTime())
+    .flatMap((w) =>
+      (w.exercises_completed as unknown as ExerciseCompleted[])
+        .filter((e) => e.note?.trim())
+        .map((e) => ({
+          exercise_id: e.exercise_id,
+          exercise_name: exerciseNames.get(e.exercise_id) ?? e.exercise_id,
+          note: e.note!.trim(),
+          date: w.completed_at,
+        }))
+    );
+
   return ok({
     user: assignment.user,
     program: assignment.program,
@@ -95,5 +110,6 @@ export const GET = handler(async (req: Request, { params }: Params) => {
     week,
     days,
     weights,
+    observations,
   });
 });

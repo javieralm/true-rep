@@ -211,6 +211,9 @@ export interface ExerciseCompleted {
    *  progresión de pesos: lo que interesa es la serie tope, no el promedio. */
   weight_kg?: number;
   felt_like: "easy" | "medium" | "hard";
+  /** Observación del cliente sobre el ejercicio ("molestia en el hombro en la
+   *  3ª serie"). Se le enseña en la siguiente sesión y la ve su entrenador. */
+  note?: string;
   /** Detalle por serie. Opcional a propósito: los workouts registrados antes de
    *  que existiera no lo tienen, y `reps_done`/`weight_kg` siguen siendo la
    *  fuente de verdad para stats, export y progresión. Quien quiera el desglose

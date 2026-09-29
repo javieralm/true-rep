@@ -25,6 +25,12 @@ type Tracking = {
     reps_done: number;
     date: string;
   }>;
+  observations: Array<{
+    exercise_id: string;
+    exercise_name: string;
+    note: string;
+    date: string;
+  }>;
 };
 
 const DAY_NAMES = ["", "Día 1", "Día 2", "Día 3", "Día 4", "Día 5", "Día 6", "Día 7"];
@@ -154,6 +160,27 @@ export default function ClientTrackingPage({ params }: { params: Promise<{ id: s
           );
         })}
       </div>
+
+      {/* Observaciones del cliente: lo que ha notado en cada ejercicio, para
+          ajustar la rutina. Van antes que los pesos porque piden una acción. */}
+      <h2 className="mt-10 text-lg font-bold">Observaciones del cliente</h2>
+      {data.observations.length === 0 ? (
+        <p className="mt-2 text-sm text-[#999]">Sin observaciones esta semana.</p>
+      ) : (
+        <ul className="mt-4 max-w-2xl space-y-3">
+          {data.observations.map((o, i) => (
+            <li key={i} className="rounded-lg border border-[#ddd] bg-white p-3">
+              <p className="text-sm font-semibold">
+                {o.exercise_name}{" "}
+                <span className="font-normal text-[#666]">
+                  · {new Date(o.date).toLocaleDateString("es-ES")}
+                </span>
+              </p>
+              <p className="mt-1 text-sm">{o.note}</p>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {/* Pesos de la semana */}
       <h2 className="mt-10 text-lg font-bold">Pesos registrados esta semana</h2>

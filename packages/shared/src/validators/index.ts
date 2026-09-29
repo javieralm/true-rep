@@ -130,6 +130,7 @@ export const logWorkoutSchema = z.object({
         reps_done: z.number().int().min(0),
         weight_kg: z.number().min(0).max(500).optional(),
         felt_like: z.enum(["easy", "medium", "hard"]),
+        note: z.string().trim().max(500).optional(),
         // Desglose por serie. Opcional: los clientes que no lo mandan siguen
         // siendo válidos, y reps_done/weight_kg se mantienen como agregados.
         // El tope de 30 es para que una app rota no meta un array enorme en
