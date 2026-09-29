@@ -51,7 +51,7 @@ Mobile → API (Clerk Bearer token) → middleware/`requireUser()` validates →
 1. TypeScript strict; no `any`, no `@ts-ignore`.
 2. Every API response uses `{ data, status: 'success'|'error', message?, timestamp }` (helpers in `lib/api.ts`).
 3. Schema changes only via Prisma migrations.
-4. Protected routes call `requireUser()`/`requireTrainer()`; no token = 401. El dashboard `(dashboard)` es solo para `role === "TRAINER"` (guard en su layout); `/admin/*` solo para `is_superadmin`. Solo un superadmin promueve trainers (`role` = aprobación); el primer superadmin se marca a mano en la DB.
+4. Protected routes call `requireUser()`/`requireTrainer()`; no token = 401. El dashboard `(dashboard)` es solo para `role === "TRAINER"` (guard en su layout); `/admin/*` solo para `is_superadmin`. Cualquiera puede solicitar ser trainer desde `/onboarding` (web), pero solo un superadmin lo aprueba en `/admin` (`role` = aprobación); el primer superadmin se marca a mano en la DB. Un trainer solo ve y toca datos de sus propios clientes (`clientOf()` en `lib/access.ts`).
 5. Mobile UI works at 320px; touch targets ≥ 44px.
 6. No secrets in client code; Stripe/Clerk webhook signatures always verified.
 7. External API calls (OpenAI, Stripe, Cloudinary) wrapped in try-catch with user-facing errors.
