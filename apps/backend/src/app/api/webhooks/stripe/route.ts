@@ -1,7 +1,7 @@
 import type Stripe from "stripe";
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
-import { stripe, priceToPlan } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe";
 import { requireEnv } from "@/lib/env";
 
 export const POST = handler(async (req: Request) => {
@@ -53,14 +53,11 @@ export const POST = handler(async (req: Request) => {
       const sub = event.data.object;
       // En APIs recientes el fin de periodo está en cada item, no en la suscripción.
       const periodEnd = sub.items.data[0]?.current_period_end;
-      // El plan puede cambiar desde el Billing Portal (upgrade/downgrade): derivarlo del price
-      const plan = priceToPlan(sub.items.data[0]?.price?.id);
       await db.user.updateMany({
         where: { subscription_id: sub.id },
         data: {
           subscription_status: STRIPE_ACTIVE_STATUSES.has(sub.status) ? "ACTIVE" : "CANCELLED",
           subscription_expires_at: periodEnd ? new Date(periodEnd * 1000) : null,
-          ...(plan ? { subscription_plan: plan } : {}),
         },
       });
       break;

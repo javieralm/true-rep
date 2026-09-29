@@ -197,10 +197,6 @@ export const createChallengeSchema = z
     message: "ends_at must be after starts_at",
   });
 
-export const checkoutSchema = z.object({
-  plan: z.enum(["base", "premium"]),
-});
-
 export const analyzeVideoSchema = z.object({
   video_url: z
     .string()
@@ -249,3 +245,6 @@ export const connectOnboardingSchema = z.object({
   // Solo cuenta al crear la cuenta; al continuar un alta ya empezada se ignora.
   country: z.enum(TRAINER_COUNTRIES).optional(),
 });
+
+/** POST /api/me/billing/checkout: el cliente elige una periodicidad de su entrenador. */
+export const clientCheckoutSchema = z.object({ interval: priceIntervalSchema });

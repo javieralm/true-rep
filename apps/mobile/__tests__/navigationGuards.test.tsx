@@ -5,6 +5,7 @@ import React from "react";
 import { render } from "@testing-library/react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { useAccess } from "@/hooks/useAccess";
+import { useBilling } from "@/hooks/useBilling";
 
 import TabsLayout from "@/app/(tabs)/_layout";
 import AuthLayout from "@/app/(auth)/_layout";
@@ -30,9 +31,12 @@ jest.mock("@clerk/clerk-expo", () => ({ useAuth: jest.fn() }));
 jest.mock("@/lib/push", () => ({ registerForPushNotifications: jest.fn() }));
 jest.mock("@expo/vector-icons", () => ({ Ionicons: () => null }));
 jest.mock("@/hooks/useAccess", () => ({ useAccess: jest.fn() }));
+jest.mock("@/hooks/useBilling", () => ({ ...jest.requireActual("@/hooks/useBilling"), useBilling: jest.fn() }));
 
 const mockUseAuth = useAuth as unknown as jest.Mock;
 const mockUseAccess = useAccess as unknown as jest.Mock;
+const mockUseBilling = useBilling as unknown as jest.Mock;
+const mutation = () => ({ mutate: jest.fn(), isPending: false, variables: undefined, error: null });
 const access = (state: string) => ({
   isLoading: false,
   isFetching: false,
@@ -44,6 +48,7 @@ const access = (state: string) => ({
 beforeEach(() => {
   mockUseAuth.mockReset();
   mockUseAccess.mockReset().mockReturnValue(access("active"));
+  mockUseBilling.mockReset().mockReturnValue({ billing: { data: undefined }, checkout: mutation(), portal: mutation() });
 });
 
 describe("guarda de (tabs)", () => {
@@ -72,6 +77,29 @@ describe("guarda de (tabs)", () => {
     const { getByText } = await render(<TabsLayout />);
 
     expect(getByText(/Marta ha pausado tu acceso/)).toBeTruthy();
+  });
+
+  it("pago pendiente por Stripe: ofrece los precios de su entrenador", async () => {
+    mockUseAuth.mockReturnValue({ isSignedIn: true, isLoaded: true, signOut: jest.fn() });
+    const pending = access("payment_required");
+    mockUseAccess.mockReturnValue({ ...pending, data: { ...pending.data, billing: "STRIPE" } });
+    const checkout = mutation();
+    mockUseBilling.mockReturnValue({
+      billing: {
+        data: {
+          can_subscribe: true,
+          prices: [{ interval: "QUARTER", amount: 45000, currency: "dkk" }],
+          subscription: null,
+        },
+      },
+      checkout,
+      portal: mutation(),
+    });
+
+    const { getByText } = await render(<TabsLayout />);
+
+    const button = getByText(/^Pagar .*450,00.* cada 3 meses$/);
+    expect(button).toBeTruthy();
   });
 
   it("sin sesión redirige al login y no monta las pestañas", async () => {

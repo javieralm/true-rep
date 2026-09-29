@@ -43,6 +43,23 @@ Connect está activo en pruebas (plataforma en ES). Correcciones al plan:
   plataforma ES se crea una cuenta DK con esta configuración, su enlace de alta y
   un precio trimestral en DKK en su cuenta.
 
+### Estado (2026-09-29)
+
+- **B1 hecha y desplegada** (`5dcca6e`): alta del entrenador, estado de la cuenta,
+  precios y página "Cobros". Un único endpoint `POST /api/stripe/connect/onboarding-link`
+  crea la cuenta y el enlace; el `refresh_url` es `/billing?refresh=1`.
+- **B2 escrita:** `/api/me/billing` (+ `/checkout`, `/portal`), webhook
+  `/api/webhooks/stripe-connect`, `evaluateAccess` con la suscripción de la relación,
+  pantalla de pago en el móvil y "Gestionar pago" en Perfil, página `/pago` de vuelta.
+  Retirados `api/subscriptions/*`, `planPrices`, `priceToPlan`, `STRIPE_PRICE_*`.
+  Decisiones: el webhook solo escucha `customer.subscription.*` (traen el estado
+  completo; un pago fallido llega como `past_due`/`unpaid`); sin destino de eventos
+  v2 de cuentas: el checkout comprueba en directo si el entrenador puede cobrar.
+  La comisión usa tramos fijos en `lib/commission.ts` hasta la fase C. El portal usa
+  la configuración por defecto de la cuenta del entrenador (sin cambio de
+  periodicidad: se cambia cancelando y volviendo a pagar).
+- **Pendiente:** fase C y paso a live.
+
 ## 1. Contexto de negocio (para el planificador)
 
 TrueRep es una plataforma de entrenamiento de calistenia. Cada **entrenador**

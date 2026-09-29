@@ -3,6 +3,7 @@ import { useAuth } from "@clerk/clerk-expo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/hooks/useUser";
 import { useAccess } from "@/hooks/useAccess";
+import { useBilling } from "@/hooks/useBilling";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRefresh } from "@/hooks/useRefresh";
 import { api } from "@/lib/api";
@@ -18,6 +19,7 @@ export default function ProfileScreen() {
   const unlocked = achievements?.filter((a) => a.unlocked_at) ?? [];
 
   const { data: access } = useAccess();
+  const { billing, portal } = useBilling(access?.billing === "STRIPE");
 
   const qc = useQueryClient();
   const updatePrefs = useMutation({
@@ -50,8 +52,19 @@ export default function ProfileScreen() {
               ? access.paid_until
                 ? `Pagas en efectivo · acceso hasta el ${new Date(access.paid_until).toLocaleDateString("es-ES")}`
                 : "Pagas en efectivo a tu entrenador"
-              : "Pagas con tarjeta a través de TrueRep"}
+              : billing.data?.subscription?.current_period_end
+                ? `Pagas con tarjeta · se renueva el ${new Date(billing.data.subscription.current_period_end).toLocaleDateString("es-ES")}`
+                : "Pagas con tarjeta a tu entrenador"}
           </Text>
+          {billing.data?.subscription && (
+            <Button
+              title={portal.isPending ? "Abriendo…" : "Gestionar pago"}
+              variant="outline"
+              onPress={() => portal.mutate()}
+              disabled={portal.isPending}
+            />
+          )}
+          {portal.error && <Text style={styles.error}>{portal.error.message}</Text>}
         </Card>
       )}
 
@@ -128,6 +141,7 @@ const styles = StyleSheet.create({
   hourValue: { fontSize: 16, fontWeight: "600", color: colors.textPrimary, minWidth: 52, textAlign: "center" },
   username: { fontSize: 22, fontWeight: "700", color: colors.textPrimary },
   meta: { fontSize: 14, color: colors.textSecondary },
+  error: { fontSize: 14, color: colors.dangerText },
   section: { fontSize: 18, fontWeight: "600", color: colors.textPrimary },
   badges: { gap: spacing.sm },
   badge: { paddingVertical: spacing.md },

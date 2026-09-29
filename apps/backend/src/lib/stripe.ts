@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { requireEnv } from "@/lib/env";
-import type { SubscriptionPlan } from "@truerep/shared";
+import { db } from "@/lib/db";
 import type { PriceInterval } from "@prisma/client";
 
 let client: Stripe | null = null;
@@ -15,22 +15,6 @@ export function stripe(): Stripe {
   return client;
 }
 
-export function planPrices() {
-  return {
-    base: requireEnv("STRIPE_PRICE_BASE"),
-    premium: requireEnv("STRIPE_PRICE_PREMIUM"),
-  } as const;
-}
-
-/** Resuelve el tier a partir del price id de Stripe (webhook de upgrades/downgrades) */
-export function priceToPlan(priceId: string | undefined): SubscriptionPlan | null {
-  if (!priceId) return null;
-  const prices = planPrices();
-  if (priceId === prices.premium) return "PREMIUM";
-  if (priceId === prices.base) return "BASE";
-  return null;
-}
-
 /** Stripe no tiene "trimestral": es mensual cada 3 meses. */
 export const RECURRING: Record<PriceInterval, { interval: "month" | "year"; interval_count: number }> = {
   MONTH: { interval: "month", interval_count: 1 },
@@ -42,4 +26,18 @@ export const RECURRING: Record<PriceInterval, { interval: "month" | "year"; inte
 export async function accountCanCharge(accountId: string): Promise<boolean> {
   const account = await stripe().v2.core.accounts.retrieve(accountId, { include: ["configuration.merchant"] });
   return account.configuration?.merchant?.capabilities?.card_payments?.status === "active";
+}
+
+/** "Puede cobrar" guardado en la base de datos; si aún no consta, lo relee en
+ * Stripe (el entrenador puede haber terminado el alta sin volver a "Cobros"). */
+export async function trainerCanCharge(trainer: {
+  id: string;
+  stripe_account_id: string | null;
+  stripe_charges_enabled: boolean;
+}): Promise<boolean> {
+  if (!trainer.stripe_account_id) return false;
+  if (trainer.stripe_charges_enabled) return true;
+  const canCharge = await accountCanCharge(trainer.stripe_account_id);
+  if (canCharge) await db.user.update({ where: { id: trainer.id }, data: { stripe_charges_enabled: true } });
+  return canCharge;
 }

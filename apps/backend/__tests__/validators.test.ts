@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   inviteClientSchema,
   trainerPricesSchema,
+  clientCheckoutSchema,
   updateClientSchema,
   createRoutineSchema,
   logWorkoutSchema,
@@ -281,5 +282,13 @@ describe("trainerPricesSchema", () => {
     expect(trainerPricesSchema.safeParse({ currency: "eur", prices: { MONTH: 3000.5 } }).success).toBe(false);
     expect(trainerPricesSchema.safeParse({ currency: "jpy", prices: { MONTH: 3000 } }).success).toBe(false);
     expect(trainerPricesSchema.safeParse({ currency: "EUR", prices: { MONTH: 3000 } }).success).toBe(false);
+  });
+});
+
+describe("clientCheckoutSchema", () => {
+  it("solo acepta las periodicidades que existen", () => {
+    expect(clientCheckoutSchema.safeParse({ interval: "QUARTER" }).success).toBe(true);
+    expect(clientCheckoutSchema.safeParse({ interval: "WEEK" }).success).toBe(false);
+    expect(clientCheckoutSchema.safeParse({}).success).toBe(false);
   });
 });

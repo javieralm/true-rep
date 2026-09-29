@@ -351,3 +351,15 @@ export interface TrainerPriceRow {
   amount: number;
   currency: string;
 }
+
+/** Respuesta de GET /api/me/billing (cliente que paga por Stripe). */
+export interface MyBilling {
+  /** El entrenador ya puede cobrar con Stripe y tiene precios puestos. */
+  can_subscribe: boolean;
+  prices: TrainerPriceRow[];
+  subscription: {
+    /** Estado tal cual lo da Stripe: active, past_due, canceled… */
+    status: string;
+    current_period_end: string | null;
+  } | null;
+}

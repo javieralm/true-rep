@@ -151,20 +151,27 @@ model ProgramItem {
 /// acceso a la app: sin una relación ACTIVE (y pagada) no se entrena.
 /// Un cliente, un entrenador: se garantiza al invitar (ver POST /api/clients).
 model TrainerClient {
-  id                  String       @id @default(cuid())
-  trainer_id          String
-  trainer             User         @relation("TrainerClients", fields: [trainer_id], references: [id], onDelete: Cascade)
-  client_id           String?
-  client              User?        @relation("ClientTrainer", fields: [client_id], references: [id], onDelete: SetNull)
-  email               String // siempre en minúsculas
-  status              ClientStatus @default(INVITED)
-  billing             BillingMode  @default(CASH)
+  id                     String       @id @default(cuid())
+  trainer_id             String
+  trainer                User         @relation("TrainerClients", fields: [trainer_id], references: [id], onDelete: Cascade)
+  client_id              String?
+  client                 User?        @relation("ClientTrainer", fields: [client_id], references: [id], onDelete: SetNull)
+  email                  String // siempre en minúsculas
+  status                 ClientStatus @default(INVITED)
+  billing                BillingMode  @default(CASH)
   /// Efectivo: hasta cuándo ha pagado. Pasada la fecha, el acceso se corta solo.
-  paid_until          DateTime?
-  clerk_invitation_id String?
-  invited_at          DateTime     @default(now())
-  accepted_at         DateTime?
-  updated_at          DateTime     @updatedAt
+  paid_until             DateTime?
+  clerk_invitation_id    String?
+  /// Stripe (en la cuenta del entrenador): la suscripción del cliente, que
+  /// mantiene al día el webhook de Connect.
+  stripe_customer_id     String?
+  stripe_subscription_id String?      @unique
+  subscription_status    String? // estado tal cual lo da Stripe
+  current_period_end     DateTime?
+  price_id               String?
+  invited_at             DateTime     @default(now())
+  accepted_at            DateTime?
+  updated_at             DateTime     @updatedAt
 
   @@unique([trainer_id, email])
   @@index([email])
