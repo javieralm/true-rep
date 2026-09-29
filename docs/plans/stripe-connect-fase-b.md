@@ -14,6 +14,35 @@ Plan para ejecutar en una sesión con el servidor MCP de Stripe cargado
 4. Confirmar con el MCP que la cuenta tiene **Connect activado** y que se trabaja en
    **modo de pruebas**. No tocar modo live hasta el paso 7.
 
+### Resultado del planificador (2026-09-29, entorno de prueba `acct_1UKwyqRh3hzEOCZE`)
+
+Confirma el plan: plataforma **SaaS con direct charges**, Stripe cobra sus comisiones
+al entrenador y asume las pérdidas, panel completo, Checkout alojado en modo
+suscripción, portal del cliente, reintentos automáticos de Stripe para pagos fallidos.
+Connect está activo en pruebas (plataforma en ES). Correcciones al plan:
+
+- **Accounts v2, nombres exactos:** `dashboard: "full"`,
+  `defaults.responsibilities.fees_collector: "stripe"`,
+  `defaults.responsibilities.losses_collector: "stripe"`,
+  `configuration.merchant.capabilities.card_payments.requested: true`,
+  `identity.country`, `contact_email`. "Puede cobrar" =
+  `configuration.merchant.capabilities.card_payments.status === "active"`
+  (leer con `include: ["configuration.merchant"]`).
+- **Eventos de la cuenta:** son eventos v2 "thin" (`v2.core.account[requirements].updated`,
+  `v2.core.account[configuration.merchant].capability_status_updated`), que llegan
+  por un **event destination** propio, no por el endpoint de webhooks v1. Mientras
+  tanto, `GET /api/stripe/connect/status` relee la cuenta al volver del alta y al
+  abrir "Cobros", que basta para B1.
+- **Cuota de efectivo (fase C, 5.4):** el planificador recomienda cobrarla como
+  "SaaS fee": añadir la configuración `customer` a la cuenta v2 del entrenador y
+  crear la suscripción de plataforma con `customer_account: <acct del entrenador>`,
+  **no** un `Customer` v1 aparte.
+- **Comisión:** `application_fee_percent` en la suscripción (equivalente al
+  `application_fee_amount` que menciona para cargos sueltos).
+- **Entrenadores de otros países:** comprobado en pruebas (2026-09-29): desde la
+  plataforma ES se crea una cuenta DK con esta configuración, su enlace de alta y
+  un precio trimestral en DKK en su cuenta.
+
 ## 1. Contexto de negocio (para el planificador)
 
 TrueRep es una plataforma de entrenamiento de calistenia. Cada **entrenador**

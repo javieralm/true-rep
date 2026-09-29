@@ -6,6 +6,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 const isDashboardRoute = createRouteMatcher([
   "/routines(.*)",
   "/clients(.*)",
+  "/billing(.*)",
   "/exercises(.*)",
   "/programs(.*)",
   "/video-review(.*)",

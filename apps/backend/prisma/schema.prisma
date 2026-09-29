@@ -14,27 +14,34 @@ generator client {
 }
 
 model User {
-  id                       String             @id @default(cuid())
-  email                    String             @unique
-  clerk_id                 String             @unique
-  username                 String
-  avatar_url               String?
-  role                     Role               @default(USER)
-  is_superadmin            Boolean            @default(false) // promueve trainers desde /admin
-  subscription_status      SubscriptionStatus @default(FREE)
-  subscription_id          String?
-  stripe_customer_id       String? // reusado entre checkouts para no fragmentar el historial de pago
-  subscription_plan        SubscriptionPlan?
-  subscription_expires_at  DateTime?
-  xp                       Int                @default(0)
-  streak                   Int                @default(0)
-  streak_last_workout_date DateTime?
-  reminder_enabled         Boolean            @default(true)
-  reminder_hour            Int                @default(8) // hora local 0-23
-  timezone                 String             @default("Europe/Madrid")
-  last_reminder_sent_at    DateTime?
-  created_at               DateTime           @default(now())
-  updated_at               DateTime           @updatedAt
+  id                          String             @id @default(cuid())
+  email                       String             @unique
+  clerk_id                    String             @unique
+  username                    String
+  avatar_url                  String?
+  role                        Role               @default(USER)
+  is_superadmin               Boolean            @default(false) // promueve trainers desde /admin
+  subscription_status         SubscriptionStatus @default(FREE)
+  subscription_id             String?
+  stripe_customer_id          String? // reusado entre checkouts para no fragmentar el historial de pago
+  subscription_plan           SubscriptionPlan?
+  subscription_expires_at     DateTime?
+  xp                          Int                @default(0)
+  streak                      Int                @default(0)
+  streak_last_workout_date    DateTime?
+  reminder_enabled            Boolean            @default(true)
+  reminder_hour               Int                @default(8) // hora local 0-23
+  timezone                    String             @default("Europe/Madrid")
+  last_reminder_sent_at       DateTime?
+  /// Entrenador: su cuenta conectada de Stripe (Accounts v2, direct charges).
+  stripe_account_id           String?            @unique
+  stripe_charges_enabled      Boolean            @default(false)
+  /// Único Product del entrenador en su cuenta; sus precios cuelgan de él.
+  stripe_product_id           String?
+  /// Comisión propia que fija el superadmin (ofertas). null = tramos por defecto.
+  commission_percent_override Decimal?           @db.Decimal(5, 2)
+  created_at                  DateTime           @default(now())
+  updated_at                  DateTime           @updatedAt
 
   routines               Routine[]
   workouts               Workout[]
@@ -46,6 +53,7 @@ model User {
   program_assignments    ProgramAssignment[]
   push_tokens            PushToken[]
   trainer_clients        TrainerClient[]        @relation("TrainerClients")
+  trainer_prices         TrainerPrice[]
   client_of              TrainerClient[]        @relation("ClientTrainer")
 
   @@index([xp])
@@ -162,6 +170,38 @@ model TrainerClient {
   @@index([email])
   @@index([client_id])
   @@map("trainer_clients")
+}
+
+enum PriceInterval {
+  MONTH
+  QUARTER
+  YEAR
+}
+
+/// Precio del entrenador en su cuenta de Stripe. Un cambio de importe crea una
+/// fila nueva y desactiva la anterior: los suscriptores siguen en la suya.
+model TrainerPrice {
+  id              String        @id @default(cuid())
+  trainer_id      String
+  trainer         User          @relation(fields: [trainer_id], references: [id], onDelete: Cascade)
+  interval        PriceInterval
+  amount          Int // unidades mínimas (céntimos, øre…)
+  currency        String // ISO en minúsculas
+  stripe_price_id String        @unique
+  active          Boolean       @default(true)
+  created_at      DateTime      @default(now())
+
+  @@index([trainer_id, active])
+  @@map("trainer_prices")
+}
+
+/// Eventos de Stripe ya procesados, para no aplicar dos veces el mismo.
+model StripeEvent {
+  id          String   @id // event.id
+  type        String
+  received_at DateTime @default(now())
+
+  @@map("stripe_events")
 }
 
 model ProgramAssignment {

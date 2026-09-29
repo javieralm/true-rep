@@ -332,3 +332,21 @@ export interface ApiResponse<T> {
   message?: string;
   timestamp: string;
 }
+
+export type PriceInterval = "MONTH" | "QUARTER" | "YEAR";
+
+/** Estado de la cuenta de Stripe del entrenador. */
+export type ConnectState = "not_connected" | "onboarding" | "ready";
+
+/** Respuesta de GET /api/stripe/connect/status */
+export interface ConnectStatus {
+  state: ConnectState;
+  /** Enlace a su panel de Stripe (panel completo) cuando ya tiene cuenta. */
+  dashboard_url: string | null;
+}
+
+export interface TrainerPriceRow {
+  interval: PriceInterval;
+  amount: number;
+  currency: string;
+}

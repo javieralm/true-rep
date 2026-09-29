@@ -51,7 +51,8 @@ export const POST = handler(async (req: Request) => {
     }
     case "customer.subscription.updated": {
       const sub = event.data.object;
-      const periodEnd = sub.current_period_end;
+      // En APIs recientes el fin de periodo está en cada item, no en la suscripción.
+      const periodEnd = sub.items.data[0]?.current_period_end;
       // El plan puede cambiar desde el Billing Portal (upgrade/downgrade): derivarlo del price
       const plan = priceToPlan(sub.items.data[0]?.price?.id);
       await db.user.updateMany({

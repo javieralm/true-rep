@@ -215,3 +215,37 @@ export const paginationSchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   offset: z.coerce.number().int().min(0).default(0),
 });
+
+// ─── Cobros del entrenador (Stripe Connect) ───
+/** Monedas que ofrece el selector. Todas con 2 decimales. */
+export const TRAINER_CURRENCIES = ["eur", "dkk", "sek", "nok", "gbp", "usd"] as const;
+export const priceIntervalSchema = z.enum(["MONTH", "QUARTER", "YEAR"]);
+
+/** Importe en unidades mínimas. 300 = 3,00: por encima del mínimo de cobro de
+ * Stripe en todas las monedas del selector (el más alto, SEK/NOK, es 3,00). */
+const priceAmountSchema = z.number().int().min(300, "Importe mínimo: 3,00").max(1_000_000);
+
+/** PUT /api/trainer/prices: hasta un precio por periodicidad, todos en la misma
+ * moneda. null o ausente = esa periodicidad no se ofrece. */
+export const trainerPricesSchema = z
+  .object({
+    currency: z.enum(TRAINER_CURRENCIES),
+    prices: z.object({
+      MONTH: priceAmountSchema.nullable().optional(),
+      QUARTER: priceAmountSchema.nullable().optional(),
+      YEAR: priceAmountSchema.nullable().optional(),
+    }),
+  })
+  .refine((v) => Object.values(v.prices).some((a) => a != null), {
+    message: "Pon al menos un precio",
+    path: ["prices"],
+  });
+
+/** Países que ofrece el alta del entrenador (ISO 3166-1 alfa-2). Con direct
+ * charges cada entrenador cobra como comercio en su país. */
+export const TRAINER_COUNTRIES = ["ES", "DK", "SE", "NO", "GB", "IE", "PT", "FR", "DE", "IT", "NL", "BE", "AT", "FI", "US"] as const;
+
+export const connectOnboardingSchema = z.object({
+  // Solo cuenta al crear la cuenta; al continuar un alta ya empezada se ignora.
+  country: z.enum(TRAINER_COUNTRIES).optional(),
+});

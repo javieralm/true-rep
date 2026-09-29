@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   inviteClientSchema,
+  trainerPricesSchema,
   updateClientSchema,
   createRoutineSchema,
   logWorkoutSchema,
@@ -265,5 +266,20 @@ describe("updateClientSchema", () => {
   it("no deja volver a INVITED ni mandar un cambio vacío", () => {
     expect(updateClientSchema.safeParse({ status: "INVITED" }).success).toBe(false);
     expect(updateClientSchema.safeParse({}).success).toBe(false);
+  });
+});
+
+describe("trainerPricesSchema", () => {
+  it("acepta una sola periodicidad y deja las demás sin ofrecer", () => {
+    expect(trainerPricesSchema.safeParse({ currency: "dkk", prices: { MONTH: 45000, YEAR: null } }).success).toBe(true);
+  });
+
+  it("rechaza sin precios, importes bajo el mínimo o con decimales y monedas fuera del selector", () => {
+    expect(trainerPricesSchema.safeParse({ currency: "eur", prices: {} }).success).toBe(false);
+    expect(trainerPricesSchema.safeParse({ currency: "eur", prices: { MONTH: null } }).success).toBe(false);
+    expect(trainerPricesSchema.safeParse({ currency: "eur", prices: { MONTH: 299 } }).success).toBe(false);
+    expect(trainerPricesSchema.safeParse({ currency: "eur", prices: { MONTH: 3000.5 } }).success).toBe(false);
+    expect(trainerPricesSchema.safeParse({ currency: "jpy", prices: { MONTH: 3000 } }).success).toBe(false);
+    expect(trainerPricesSchema.safeParse({ currency: "EUR", prices: { MONTH: 3000 } }).success).toBe(false);
   });
 });
