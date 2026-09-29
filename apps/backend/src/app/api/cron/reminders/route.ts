@@ -20,7 +20,9 @@ export const GET = handler(async (req: Request) => {
   const users = await db.user.findMany({
     where: {
       reminder_enabled: true,
-      subscription_status: "ACTIVE",
+      // Clientes con el acceso activado por su entrenador. (Antes miraba el
+      // plan antiguo de TrueRep, que ya no tiene nadie: no salía ningún aviso.)
+      client_of: { some: { status: "ACTIVE" } },
       push_tokens: { some: { is_active: true } },
     },
     include: { push_tokens: { where: { is_active: true }, select: { token: true } } },

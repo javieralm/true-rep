@@ -15,14 +15,12 @@ export const LIVE_STATUSES = ["INVITED", "ACTIVE", "PAUSED"] as const;
  * - Stripe: la suscripción del cliente a su entrenador (Stripe Connect), en un
  *   estado que da acceso y sin pasarse del periodo pagado. past_due sigue
  *   dentro: Stripe está reintentando el cobro y cortará (unpaid/canceled) si no
- *   lo consigue. Quien aún no tiene suscripción con el entrenador pero venía
- *   de un plan antiguo de TrueRep conserva el acceso mientras le dure ese plan. */
+ *   lo consigue. Sin suscripción todavía: pago pendiente. */
 export function evaluateAccess(
   relation: Pick<
     TrainerClient,
     "status" | "billing" | "paid_until" | "stripe_subscription_id" | "subscription_status" | "current_period_end"
   > | null,
-  user: Pick<User, "subscription_status" | "subscription_expires_at">,
   now: Date
 ): AccessState {
   if (!relation || relation.status === "INVITED") return "no_invitation";
@@ -36,17 +34,10 @@ export function evaluateAccess(
     return endOfDay >= now ? "active" : "payment_required";
   }
 
-  if (relation.stripe_subscription_id) {
-    const paid =
-      ACCESS_SUBSCRIPTION_STATUSES.has(relation.subscription_status ?? "") &&
-      (!relation.current_period_end || relation.current_period_end >= now);
-    return paid ? "active" : "payment_required";
-  }
-
-  const legacyPaid =
-    user.subscription_status === "ACTIVE" &&
-    (!user.subscription_expires_at || user.subscription_expires_at >= now);
-  return legacyPaid ? "active" : "payment_required";
+  const paid =
+    ACCESS_SUBSCRIPTION_STATUSES.has(relation.subscription_status ?? "") &&
+    (!relation.current_period_end || relation.current_period_end >= now);
+  return paid ? "active" : "payment_required";
 }
 
 /** Estados de una suscripción de Stripe que dan acceso. */
@@ -97,4 +88,9 @@ export function stripeRelation(db: Db, clientId: string) {
     },
     orderBy: { updated_at: "desc" },
   });
+}
+
+/** Filtro de Prisma sobre User: clientes vivos (activos o pausados) de un entrenador. */
+export function clientOf(trainerId: string) {
+  return { client_of: { some: { trainer_id: trainerId, status: { in: ["ACTIVE" as const, "PAUSED" as const] } } } };
 }

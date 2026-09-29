@@ -2,6 +2,7 @@ import { after } from "next/server";
 import { db } from "@/lib/db";
 import { ok, fail, handler } from "@/lib/api";
 import { requireTrainer } from "@/lib/auth";
+import { clientOf } from "@/lib/access";
 import { runVideoAnalysis } from "@/lib/video-feedback";
 
 type Params = { params: Promise<{ id: string }> };
@@ -10,10 +11,12 @@ type Params = { params: Promise<{ id: string }> };
  * de OpenAI Vision. Gate manual (CEO review, 2026-07-31): el pipeline no se
  * automatiza hasta validar que el feedback genera valor real. */
 export const POST = handler(async (_req: Request, { params }: Params) => {
-  await requireTrainer();
+  const trainer = await requireTrainer();
   const { id } = await params;
 
-  const feedback = await db.videoFeedback.findUnique({ where: { id } });
+  // Solo vídeos de sus clientes: aprobar dispara un análisis de pago y da
+  // acceso al resultado.
+  const feedback = await db.videoFeedback.findFirst({ where: { id, user: clientOf(trainer.id) } });
   if (!feedback) return fail("Feedback not found", 404);
   if (feedback.analysis_status !== "PENDING_TRAINER_REVIEW") {
     return fail(`Feedback is not pending review (status: ${feedback.analysis_status})`, 409);

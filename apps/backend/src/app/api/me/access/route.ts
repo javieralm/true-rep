@@ -18,7 +18,7 @@ export const GET = handler(async () => {
 
   const relation = await clientRelation(db, user);
   const res: MyAccess = {
-    state: evaluateAccess(relation, user, new Date()),
+    state: evaluateAccess(relation, new Date()),
     is_trainer: false,
     trainer: relation && relation.status !== "INVITED" ? relation.trainer : null,
     billing: relation?.billing ?? null,

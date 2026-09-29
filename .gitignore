@@ -16,3 +16,6 @@ coverage/
 *.tsbuildinfo
 .claude/settings.local.json
 graphify-out/cache/
+
+# Informes locales de gstack (auditorías de seguridad): no se suben.
+.gstack/

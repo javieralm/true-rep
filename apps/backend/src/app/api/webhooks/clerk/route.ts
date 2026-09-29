@@ -7,7 +7,8 @@ type ClerkUserEvent = {
   type: "user.created" | "user.updated" | "user.deleted";
   data: {
     id: string;
-    email_addresses?: { email_address: string }[];
+    primary_email_address_id?: string | null;
+    email_addresses?: { id: string; email_address: string; verification?: { status?: string } | null }[];
     username?: string | null;
     first_name?: string | null;
     image_url?: string | null;
@@ -33,7 +34,11 @@ export const POST = handler(async (req: Request) => {
   }
 
   const { data } = event;
-  const email = data.email_addresses?.[0]?.email_address;
+  // Solo el email principal y verificado: es el que decide qué invitación de
+  // entrenador acepta este usuario (lib/access.ts), así que un email añadido
+  // sin verificar nunca debe llegar a users.email.
+  const primary = data.email_addresses?.find((e) => e.id === data.primary_email_address_id);
+  const email = primary?.verification?.status === "verified" ? primary.email_address.toLowerCase() : undefined;
 
   switch (event.type) {
     case "user.created":

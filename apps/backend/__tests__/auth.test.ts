@@ -175,7 +175,8 @@ describe("getOrSyncUser", () => {
   it("upserts a new user from Clerk data on first sync", async () => {
     vi.mocked(db.user.findUnique).mockResolvedValue(null);
     vi.mocked(currentUser).mockResolvedValue({
-      emailAddresses: [{ emailAddress: "new@user.com" }],
+      primaryEmailAddressId: "e1",
+      emailAddresses: [{ id: "e1", emailAddress: "New@User.com", verification: { status: "verified" } }],
       username: "newbie",
       firstName: "New",
       imageUrl: "https://img",
@@ -189,5 +190,17 @@ describe("getOrSyncUser", () => {
         create: expect.objectContaining({ clerk_id: "clerk_1", email: "new@user.com", username: "newbie" }),
       })
     );
+  });
+
+  it("no sincroniza con un email sin verificar: podría quedarse con la invitación de otro", async () => {
+    vi.mocked(db.user.findUnique).mockResolvedValue(null);
+    vi.mocked(db.user.upsert).mockClear();
+    vi.mocked(currentUser).mockResolvedValue({
+      primaryEmailAddressId: "e1",
+      emailAddresses: [{ id: "e1", emailAddress: "victima@mail.com", verification: { status: "unverified" } }],
+    } as never);
+
+    await expect(getOrSyncUser()).resolves.toBeNull();
+    expect(db.user.upsert).not.toHaveBeenCalled();
   });
 });

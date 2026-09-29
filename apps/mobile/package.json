@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.25.0",
-    "@clerk/clerk-expo": "^2.0.0",
+    "@clerk/clerk-expo": "^2.20.0",
     "@expo/metro-runtime": "~57.0.16",
     "@expo/vector-icons": "^15.1.1",
     "@supabase/supabase-js": "^2.45.0",

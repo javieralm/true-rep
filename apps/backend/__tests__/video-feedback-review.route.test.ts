@@ -19,7 +19,7 @@ vi.mock("@/lib/auth", () => ({
 vi.mock("@/lib/db", () => ({
   db: {
     videoFeedback: {
-      findUnique: vi.fn(),
+      findFirst: vi.fn(),
       update: vi.fn(async () => ({})),
     },
   },
@@ -51,20 +51,20 @@ const params = { params: Promise.resolve({ id: "f1" }) };
 describe("POST /api/video-feedback/[id]/review", () => {
   beforeEach(() => {
     afterCallbacks.length = 0;
-    vi.mocked(db.videoFeedback.findUnique).mockReset();
+    vi.mocked(db.videoFeedback.findFirst).mockReset();
     vi.mocked(db.videoFeedback.update).mockReset().mockResolvedValue({} as never);
     vi.mocked(runVideoAnalysis).mockClear();
     vi.mocked(requireTrainer).mockClear();
   });
 
   it("returns 404 when the feedback doesn't exist", async () => {
-    vi.mocked(db.videoFeedback.findUnique).mockResolvedValue(null);
+    vi.mocked(db.videoFeedback.findFirst).mockResolvedValue(null);
     const res = await POST(req(), params);
     expect(res.status).toBe(404);
   });
 
   it("returns 409 when the feedback isn't pending review", async () => {
-    vi.mocked(db.videoFeedback.findUnique).mockResolvedValue({
+    vi.mocked(db.videoFeedback.findFirst).mockResolvedValue({
       ...feedback,
       analysis_status: "COMPLETED",
     } as never);
@@ -80,7 +80,7 @@ describe("POST /api/video-feedback/[id]/review", () => {
   });
 
   it("moves status to PENDING and schedules the analysis on approval", async () => {
-    vi.mocked(db.videoFeedback.findUnique).mockResolvedValue(feedback as never);
+    vi.mocked(db.videoFeedback.findFirst).mockResolvedValue(feedback as never);
     const res = await POST(req(), params);
     const body = await res.json();
     expect(res.status).toBe(200);
@@ -92,5 +92,18 @@ describe("POST /api/video-feedback/[id]/review", () => {
     expect(afterCallbacks).toHaveLength(1);
     await afterCallbacks[0]();
     expect(runVideoAnalysis).toHaveBeenCalledWith("f1", feedback.video_url, feedback.exercise_name);
+  });
+
+  it("solo busca vídeos de clientes del propio entrenador", async () => {
+    vi.mocked(db.videoFeedback.findFirst).mockResolvedValue(null);
+    const res = await POST(req(), params);
+    expect(res.status).toBe(404);
+    expect(db.videoFeedback.findFirst).toHaveBeenCalledWith({
+      where: {
+        id: "f1",
+        user: { client_of: { some: { trainer_id: "trainer-1", status: { in: ["ACTIVE", "PAUSED"] } } } },
+      },
+    });
+    expect(runVideoAnalysis).not.toHaveBeenCalled();
   });
 });

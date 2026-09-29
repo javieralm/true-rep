@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { ok, fail, parseBody, handler } from "@/lib/api";
-import { requireTrainer, optionalUser } from "@/lib/auth";
+import { requireTrainer, requireClientAccess } from "@/lib/auth";
 import { computeWeightSuggestions } from "@/lib/progression";
 import { withLibraryDefaults } from "@/lib/routine-exercises";
 import { updateRoutineSchema } from "@truerep/shared";
@@ -12,19 +12,31 @@ type Params = { params: Promise<{ id: string }> };
 // suficiente para cubrir ~1 mes de entrenamiento sin escanear todo el historial.
 const SUGGESTION_LOOKBACK = 20;
 
+/** Una rutina: para su entrenador, o para un cliente suyo con acceso. Las
+ * rutinas son el trabajo del entrenador; no se enseñan a cualquiera. */
 export const GET = handler(async (_req: Request, { params }: Params) => {
   const { id } = await params;
+  const user = await requireClientAccess();
   const routine = await db.routine.findFirst({
-    where: { id, deleted_at: null },
+    where: {
+      id,
+      deleted_at: null,
+      ...(user.is_superadmin
+        ? {}
+        : {
+            OR: [
+              { trainer_id: user.id },
+              { trainer: { trainer_clients: { some: { client_id: user.id, status: "ACTIVE" } } } },
+            ],
+          }),
+    },
     include: { trainer: { select: { id: true, username: true, avatar_url: true } } },
   });
   if (!routine) return fail("Routine not found", 404);
 
-  // Auto-escalado: solo si hay un usuario logueado (el navegador anónimo no
-  // recibe sugerencias personalizadas).
-  const user = await optionalUser();
+  // Auto-escalado con el historial del propio usuario.
   let weight_suggestions: ReturnType<typeof computeWeightSuggestions> = [];
-  if (user) {
+  {
     const exerciseIds = (routine.exercises as unknown as Exercise[]).map((e) => e.id);
     const recentWorkouts = await db.workout.findMany({
       where: { user_id: user.id },

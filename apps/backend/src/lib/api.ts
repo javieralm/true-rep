@@ -42,8 +42,8 @@ export function parseQuery<T>(params: Record<string, string>, schema: ZodSchema<
 }
 
 /** Envuelve un handler: los `throw fail(...)` se devuelven como respuesta */
-export function handler(fn: (...args: any[]) => Promise<Response>) {
-  return async (...args: any[]): Promise<Response> => {
+export function handler<A extends unknown[]>(fn: (...args: A) => Promise<Response>) {
+  return async (...args: A): Promise<Response> => {
     try {
       return await fn(...args);
     } catch (e) {

@@ -18,7 +18,14 @@ const staleUser = {
 };
 
 // Cliente de un entrenador que paga por Stripe (su suscripción manda).
-const relation = { status: "ACTIVE", billing: "STRIPE", paid_until: null as Date | null };
+const relation = {
+  status: "ACTIVE",
+  billing: "STRIPE",
+  paid_until: null as Date | null,
+  stripe_subscription_id: "sub_1",
+  subscription_status: "active",
+  current_period_end: null as Date | null,
+};
 
 const NOW = new Date("2026-07-31T09:00:00Z");
 
@@ -188,10 +195,7 @@ describe("POST /api/workouts/log", () => {
   });
 
   it("rejects if the fresh in-transaction read shows an expired subscription", async () => {
-    tx.user.findUniqueOrThrow.mockResolvedValue({
-      ...staleUser,
-      subscription_expires_at: new Date("2020-01-01T00:00:00Z"),
-    });
+    tx.trainerClient.findFirst.mockResolvedValue({ ...relation, subscription_status: "unpaid" });
     const res = await POST(req(validBody));
     expect(res.status).toBe(402);
     expect(tx.workout.create).not.toHaveBeenCalled();

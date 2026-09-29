@@ -17,11 +17,12 @@ export async function getOrSyncUser(): Promise<User | null> {
 
   const cu = await currentUser();
   if (!cu) return null;
-  // Preferir el email primario/verificado de Clerk; el primero de la lista
-  // no siempre lo es (ej. tras vincular un segundo email).
+  // Solo el email principal y verificado: decide qué invitación de entrenador
+  // acepta (lib/access.ts). El primero de la lista no siempre es el principal,
+  // y uno sin verificar permitiría quedarse con la invitación de otra persona.
   const primary = cu.emailAddresses?.find((e) => e.id === cu.primaryEmailAddressId);
-  const email = primary?.emailAddress ?? cu.emailAddresses?.[0]?.emailAddress;
-  if (!email) return null;
+  if (primary?.verification?.status !== "verified") return null;
+  const email = primary.emailAddress.toLowerCase();
   // upsert (no plain create): dos requests concurrentes del mismo usuario nuevo
   // pueden pasar ambas el `existing === null` de arriba; sin upsert, la segunda
   // create() fallaría por el unique constraint de clerk_id.
@@ -67,7 +68,7 @@ export async function requireClientAccess(): Promise<User> {
   const user = await requireUser();
   if (user.role === "TRAINER" || user.is_superadmin) return user;
   const relation = await clientRelation(db, user);
-  const state = evaluateAccess(relation, user, new Date());
+  const state = evaluateAccess(relation, new Date());
   if (state === "payment_required") throw fail("Payment required", 402);
   if (state !== "active") throw fail("Client access required", 403);
   return user;

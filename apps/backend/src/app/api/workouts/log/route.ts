@@ -93,7 +93,7 @@ export const POST = handler(async (req: Request) => {
     // cancelación de Stripe llegar por webhook) mientras este request
     // esperaba el lock.
     if (freshUser.role !== "TRAINER" && !freshUser.is_superadmin) {
-      const state = evaluateAccess(await clientRelation(tx, freshUser), freshUser, now);
+      const state = evaluateAccess(await clientRelation(tx, freshUser), now);
       if (state === "payment_required") throw fail("Payment required", 402);
       if (state !== "active") throw fail("Client access required", 403);
     }
