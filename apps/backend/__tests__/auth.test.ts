@@ -19,7 +19,10 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
+vi.mock("@/lib/trainer-billing", () => ({ syncTrainerBillingLater: vi.fn() }));
+
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { syncTrainerBillingLater } from "@/lib/trainer-billing";
 import { db } from "@/lib/db";
 import {
   requireClientAccess,
@@ -116,7 +119,7 @@ describe("requireClientAccess", () => {
 
   it("acepta la invitación pendiente de su email y le deja pasar", async () => {
     vi.mocked(db.user.findUnique).mockResolvedValue(baseUser as never);
-    const invite = { id: "tc1", status: "INVITED", billing: "CASH", paid_until: null, client_id: null };
+    const invite = { id: "tc1", trainer_id: "t1", status: "INVITED", billing: "CASH", paid_until: null, client_id: null };
     vi.mocked(db.trainerClient.findFirst)
       .mockResolvedValueOnce(null) // sin relación vinculada
       .mockResolvedValueOnce(invite as never); // invitación para a@b.com
@@ -126,6 +129,8 @@ describe("requireClientAccess", () => {
     expect(db.trainerClient.update).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ client_id: "u1", status: "ACTIVE" }) })
     );
+    // Un cliente activo más: se recalcula lo que paga su entrenador.
+    expect(syncTrainerBillingLater).toHaveBeenCalledWith("t1");
   });
 
   it("402 cuando el pago en efectivo ha vencido", async () => {

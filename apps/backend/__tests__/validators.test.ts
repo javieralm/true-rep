@@ -3,6 +3,8 @@ import {
   inviteClientSchema,
   trainerPricesSchema,
   clientCheckoutSchema,
+  commissionTiersSchema,
+  commissionOverrideSchema,
   updateClientSchema,
   createRoutineSchema,
   logWorkoutSchema,
@@ -290,5 +292,30 @@ describe("clientCheckoutSchema", () => {
     expect(clientCheckoutSchema.safeParse({ interval: "QUARTER" }).success).toBe(true);
     expect(clientCheckoutSchema.safeParse({ interval: "WEEK" }).success).toBe(false);
     expect(clientCheckoutSchema.safeParse({}).success).toBe(false);
+  });
+});
+
+describe("commissionTiersSchema", () => {
+  it("acepta los tramos por defecto y un único tramo sin límite", () => {
+    const def = [{ max: 10, pct: 10 }, { max: 30, pct: 8 }, { max: null, pct: 6 }];
+    expect(commissionTiersSchema.safeParse(def).success).toBe(true);
+    expect(commissionTiersSchema.safeParse([{ max: null, pct: 7.5 }]).success).toBe(true);
+  });
+
+  it("rechaza tramos sin cierre, desordenados, con un hueco en medio o porcentajes imposibles", () => {
+    expect(commissionTiersSchema.safeParse([{ max: 10, pct: 10 }]).success).toBe(false);
+    expect(commissionTiersSchema.safeParse([{ max: 30, pct: 8 }, { max: 10, pct: 10 }, { max: null, pct: 6 }]).success).toBe(false);
+    expect(commissionTiersSchema.safeParse([{ max: null, pct: 8 }, { max: null, pct: 6 }]).success).toBe(false);
+    expect(commissionTiersSchema.safeParse([{ max: null, pct: 101 }]).success).toBe(false);
+    expect(commissionTiersSchema.safeParse([{ max: null, pct: 6.125 }]).success).toBe(false);
+    expect(commissionTiersSchema.safeParse([]).success).toBe(false);
+  });
+});
+
+describe("commissionOverrideSchema", () => {
+  it("acepta quitar el porcentaje propio o ponerlo entre 0 y 100", () => {
+    expect(commissionOverrideSchema.safeParse({ commission_percent_override: null }).success).toBe(true);
+    expect(commissionOverrideSchema.safeParse({ commission_percent_override: 0 }).success).toBe(true);
+    expect(commissionOverrideSchema.safeParse({ commission_percent_override: -1 }).success).toBe(false);
   });
 });

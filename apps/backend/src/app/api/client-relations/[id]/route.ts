@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { ok, fail, parseBody, handler } from "@/lib/api";
 import { requireTrainer } from "@/lib/auth";
 import { updateClientSchema } from "@truerep/shared";
+import { syncTrainerBillingLater } from "@/lib/trainer-billing";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -43,6 +44,8 @@ export const PATCH = handler(async (req: Request, { params }: Params) => {
       data: { is_active: false },
     });
   }
+  // Activar, pausar, terminar o cambiar la forma de pago mueve la comisión y la cuota de efectivo.
+  syncTrainerBillingLater(trainer.id);
   return ok(updated);
 });
 

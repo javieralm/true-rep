@@ -40,6 +40,11 @@ model User {
   stripe_product_id           String?
   /// Comisión propia que fija el superadmin (ofertas). null = tramos por defecto.
   commission_percent_override Decimal?           @db.Decimal(5, 2)
+  /// Comisión ya aplicada a las suscripciones de sus clientes: si no cambia,
+  /// no hace falta tocar Stripe.
+  commission_percent_applied  Decimal?           @db.Decimal(5, 2)
+  /// Suscripción del entrenador en TrueRep por sus clientes en efectivo.
+  cash_fee_subscription_id    String?            @unique
   created_at                  DateTime           @default(now())
   updated_at                  DateTime           @updatedAt
 
@@ -200,6 +205,21 @@ model TrainerPrice {
 
   @@index([trainer_id, active])
   @@map("trainer_prices")
+}
+
+/// Ajustes de cobro de TrueRep. Una sola fila (id = 1), editable desde /admin.
+model PlatformSettings {
+  id                       Int      @id @default(1)
+  /// [{max, pct}] ordenados; max null = sin límite. Ver lib/commission.ts.
+  commission_tiers         Json
+  /// Cuota mensual por cliente en efectivo activo, en unidades mínimas.
+  cash_fee_amount          Int      @default(200)
+  cash_fee_currency        String   @default("eur")
+  /// Precio de Stripe (cuenta de TrueRep) de la cuota actual.
+  cash_fee_stripe_price_id String?
+  updated_at               DateTime @updatedAt
+
+  @@map("platform_settings")
 }
 
 /// Eventos de Stripe ya procesados, para no aplicar dos veces el mismo.

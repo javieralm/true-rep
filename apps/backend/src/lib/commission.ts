@@ -2,7 +2,7 @@
  * max = hasta cuántos clientes aplica (null = sin límite). */
 export type CommissionTier = { max: number | null; pct: number };
 
-// ponytail: constante hasta la fase C, que la mueve a PlatformSettings (editable desde /admin).
+// Valores de partida; los que mandan están en PlatformSettings (editables desde /admin).
 export const DEFAULT_TIERS: CommissionTier[] = [
   { max: 10, pct: 10 },
   { max: 30, pct: 8 },

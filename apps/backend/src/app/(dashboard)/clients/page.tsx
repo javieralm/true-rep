@@ -152,8 +152,11 @@ export default function ClientsPage() {
         </button>
         {billing === "STRIPE" && (
           <p className="w-full text-xs text-[#666]">
-            El cobro con tu propia cuenta de Stripe llegará en breve. Hasta entonces, un cliente por Stripe solo
-            entra si ya tiene una suscripción activa.
+            Tu cliente pagará desde la app con los precios que pongas en{" "}
+            <Link href="/billing" className="text-secondary underline">
+              Cobros
+            </Link>
+            .
           </p>
         )}
       </form>

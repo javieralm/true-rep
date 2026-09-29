@@ -22,10 +22,30 @@ export const RECURRING: Record<PriceInterval, { interval: "month" | "year"; inte
   YEAR: { interval: "year", interval_count: 1 },
 };
 
+/** Parte de cobro (merchant) de la cuenta del entrenador. "none" = la cuenta
+ * existe solo para pagar la cuota de efectivo a TrueRep y aún no ha conectado Stripe. */
+export async function merchantStatus(accountId: string): Promise<"none" | "pending" | "active"> {
+  const account = await stripe().v2.core.accounts.retrieve(accountId, { include: ["configuration.merchant"] });
+  const merchant = account.configuration?.merchant;
+  if (!merchant) return "none";
+  return merchant.capabilities?.card_payments?.status === "active" ? "active" : "pending";
+}
+
 /** "Puede cobrar" en Accounts v2: la capacidad de tarjeta del perfil de comercio. */
 export async function accountCanCharge(accountId: string): Promise<boolean> {
-  const account = await stripe().v2.core.accounts.retrieve(accountId, { include: ["configuration.merchant"] });
-  return account.configuration?.merchant?.capabilities?.card_payments?.status === "active";
+  return (await merchantStatus(accountId)) === "active";
+}
+
+/** Direct charges: el entrenador es el comercio, Stripe le cobra sus comisiones
+ * y asume las pérdidas, y tiene el panel de Stripe completo. Sirve igual para
+ * crear la cuenta que para añadir la parte de cobro a una que ya existía. */
+export function merchantAccountParams(country: string) {
+  return {
+    dashboard: "full" as const,
+    identity: { country },
+    defaults: { responsibilities: { fees_collector: "stripe" as const, losses_collector: "stripe" as const } },
+    configuration: { merchant: { capabilities: { card_payments: { requested: true } } } },
+  };
 }
 
 /** "Puede cobrar" guardado en la base de datos; si aún no consta, lo relee en

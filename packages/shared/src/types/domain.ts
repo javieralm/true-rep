@@ -363,3 +363,16 @@ export interface MyBilling {
     current_period_end: string | null;
   } | null;
 }
+
+export interface CommissionTier {
+  /** Hasta cuántos clientes activos aplica; null = sin límite. */
+  max: number | null;
+  pct: number;
+}
+
+/** Respuesta de GET/PUT /api/admin/settings */
+export interface PlatformSettingsDto {
+  commission_tiers: CommissionTier[];
+  cash_fee_amount: number;
+  cash_fee_currency: string;
+}

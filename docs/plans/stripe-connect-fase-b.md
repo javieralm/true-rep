@@ -58,7 +58,16 @@ Connect está activo en pruebas (plataforma en ES). Correcciones al plan:
   La comisión usa tramos fijos en `lib/commission.ts` hasta la fase C. El portal usa
   la configuración por defecto de la cuenta del entrenador (sin cambio de
   periodicidad: se cambia cancelando y volviendo a pagar).
-- **Pendiente:** fase C y paso a live.
+- **C escrita:** `PlatformSettings` (tramos + cuota, fila única sembrada en la
+  migración), `lib/trainer-billing.ts` → `syncTrainerBilling()` idempotente, lanzado
+  con `after()` al aceptar una invitación, al cambiar un cliente (PATCH), al cambiar
+  el porcentaje propio y al guardar los ajustes. Cuota: suscripción en la cuenta de
+  TrueRep con `customer_account`, factura por email (`send_invoice`, 14 días), sin
+  prorrateo. Entrenador solo-efectivo: se le crea una cuenta v2 solo con la
+  configuración `customer` (sin alta); si luego conecta Stripe, el alta le añade la
+  parte `merchant` a esa misma cuenta (comprobado en pruebas). `/admin/trainers`:
+  tramos, cuota y porcentaje propio.
+- **Pendiente:** paso a live (sección 7).
 
 ## 1. Contexto de negocio (para el planificador)
 

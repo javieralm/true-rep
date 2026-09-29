@@ -1,14 +1,17 @@
 import { db } from "@/lib/db";
 import { ok, fail, parseBody, handler } from "@/lib/api";
 import { requireTrainer } from "@/lib/auth";
-import { stripe } from "@/lib/stripe";
+import { merchantAccountParams, merchantStatus, stripe } from "@/lib/stripe";
 import { requireEnv } from "@/lib/env";
 import { connectOnboardingSchema } from "@truerep/shared";
 
 /** Alta del entrenador en Stripe (onboarding alojado por Stripe). Crea su
  * cuenta conectada la primera vez y devuelve un enlace de alta de un solo uso.
  * También sirve para continuar un alta a medias: los enlaces caducan en minutos
- * y Stripe manda al refresh_url, que vuelve a pedir uno aquí. */
+ * y Stripe manda al refresh_url, que vuelve a pedir uno aquí.
+ *
+ * Si ya tenía cuenta solo para pagar la cuota de efectivo, se le añade la parte
+ * de cobro: es la misma cuenta y la cuota sigue igual. */
 export const POST = handler(async (req: Request) => {
   const trainer = await requireTrainer();
   const { country } = await parseBody(req, connectOnboardingSchema);
@@ -18,16 +21,11 @@ export const POST = handler(async (req: Request) => {
     let accountId = trainer.stripe_account_id;
     if (!accountId) {
       if (!country) return fail("Elige tu país", 400);
-      // Direct charges: el entrenador es el comercio, Stripe le cobra sus
-      // comisiones y asume las pérdidas, y tiene el panel de Stripe completo.
       const account = await stripe().v2.core.accounts.create({
         contact_email: trainer.email,
         display_name: trainer.username,
-        dashboard: "full",
-        identity: { country },
-        defaults: { responsibilities: { fees_collector: "stripe", losses_collector: "stripe" } },
-        configuration: { merchant: { capabilities: { card_payments: { requested: true } } } },
         metadata: { truerep_user_id: trainer.id },
+        ...merchantAccountParams(country),
       });
       // Solo si nadie se adelantó (doble clic): nunca pisar una cuenta ya guardada.
       const saved = await db.user.updateMany({
@@ -37,6 +35,9 @@ export const POST = handler(async (req: Request) => {
       accountId = saved.count
         ? account.id
         : (await db.user.findUniqueOrThrow({ where: { id: trainer.id } })).stripe_account_id!;
+    } else if ((await merchantStatus(accountId)) === "none") {
+      if (!country) return fail("Elige tu país", 400);
+      await stripe().v2.core.accounts.update(accountId, merchantAccountParams(country));
     }
 
     const link = await stripe().v2.core.accountLinks.create({

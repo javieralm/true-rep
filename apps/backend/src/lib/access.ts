@@ -1,5 +1,6 @@
 import type { Prisma, PrismaClient, TrainerClient, User } from "@prisma/client";
 import type { AccessState } from "@truerep/shared";
+import { syncTrainerBillingLater } from "@/lib/trainer-billing";
 
 type Db = PrismaClient | Prisma.TransactionClient;
 
@@ -69,11 +70,14 @@ export async function clientRelation(db: Db, user: Pick<User, "id" | "email">) {
   });
   if (!invite) return null;
 
-  return db.trainerClient.update({
+  const accepted = await db.trainerClient.update({
     where: { id: invite.id },
     data: { client_id: user.id, status: "ACTIVE", accepted_at: new Date() },
     include: { trainer: { select: { username: true, avatar_url: true } } },
   });
+  // Un cliente activo más: puede cambiar de tramo o sumar a la cuota de efectivo.
+  syncTrainerBillingLater(accepted.trainer_id);
+  return accepted;
 }
 
 /** La relación viva del cliente con su entrenador, con lo que hace falta para

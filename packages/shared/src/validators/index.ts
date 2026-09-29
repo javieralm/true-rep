@@ -248,3 +248,33 @@ export const connectOnboardingSchema = z.object({
 
 /** POST /api/me/billing/checkout: el cliente elige una periodicidad de su entrenador. */
 export const clientCheckoutSchema = z.object({ interval: priceIntervalSchema });
+
+// ─── Ajustes de cobro de TrueRep (/admin) ───
+/** Porcentaje de comisión: 0–100 con hasta 2 decimales (columna Decimal(5,2)). */
+const percentSchema = z
+  .number()
+  .min(0)
+  .max(100)
+  .refine((n) => Math.round(n * 100) === n * 100, { message: "Máximo 2 decimales" });
+
+/** Tramos de comisión: "hasta max clientes activos, pct %". Límites en orden
+ * creciente y el último sin límite, para que todo entrenador caiga en uno. */
+export const commissionTiersSchema = z
+  .array(z.object({ max: z.number().int().positive().nullable(), pct: percentSchema }))
+  .min(1)
+  .max(10)
+  .refine((tiers) => tiers.at(-1)?.max === null && tiers.slice(0, -1).every((t) => t.max !== null), {
+    message: "Solo el último tramo va sin límite",
+  })
+  .refine((tiers) => tiers.every((t, i) => i === 0 || t.max === null || t.max > (tiers[i - 1].max ?? Infinity)), {
+    message: "Los límites deben ir de menor a mayor",
+  });
+
+export const platformSettingsSchema = z.object({
+  commission_tiers: commissionTiersSchema,
+  /** Cuota mensual por cliente en efectivo, en céntimos. 0 = no se cobra. */
+  cash_fee_amount: z.number().int().min(0).max(100_000),
+});
+
+/** Porcentaje propio de un entrenador (ofertas). null = vuelve a los tramos. */
+export const commissionOverrideSchema = z.object({ commission_percent_override: percentSchema.nullable() });

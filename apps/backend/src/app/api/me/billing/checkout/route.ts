@@ -3,6 +3,7 @@ import { ok, fail, parseBody, handler } from "@/lib/api";
 import { requireUser } from "@/lib/auth";
 import { ACCESS_SUBSCRIPTION_STATUSES, stripeRelation } from "@/lib/access";
 import { currentCommission } from "@/lib/commission";
+import { platformSettings } from "@/lib/platform";
 import { stripe, trainerCanCharge } from "@/lib/stripe";
 import { requireEnv } from "@/lib/env";
 import { clientCheckoutSchema } from "@truerep/shared";
@@ -31,7 +32,8 @@ export const POST = handler(async (req: Request) => {
     if (!(await trainerCanCharge(trainer))) return fail("Tu entrenador aún no puede cobrar con Stripe", 409);
     const activeClients = await db.trainerClient.count({ where: { trainer_id: trainer.id, status: "ACTIVE" } });
     const override = trainer.commission_percent_override;
-    const fee = currentCommission(activeClients, override == null ? null : Number(override));
+    const { commission_tiers } = await platformSettings(db);
+    const fee = currentCommission(activeClients, override == null ? null : Number(override), commission_tiers);
 
     const session = await stripe().checkout.sessions.create(
       {
